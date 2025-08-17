@@ -52,7 +52,7 @@ public class Cliente{
     public String atualizarEndereco(String novoEndereco) {
         try {
             if (novoEndereco == null || novoEndereco.trim().isEmpty()) {
-                throw new IllegalArgumentException("Endereço não pode ser vazio");
+                throw new IllegalArgumentException("Endereço não pode ser vazio!");
             }
             
             this.endereco = novoEndereco.trim();
@@ -66,7 +66,7 @@ public class Cliente{
     public String atualizarTelefone(String novoTelefone){
         try {
             if(novoTelefone == null || novoTelefone.trim().isEmpty()){
-                throw new IllegalArgumentException("Digite algo e apenas números!");
+                throw new IllegalArgumentException("Telefone não pode ser vazio!");
             }
             this.telefone = novoTelefone.trim();
             return "Telefone atualizado com sucesso!";
