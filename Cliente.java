@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Cliente{
     private String endereco, telefone, nome, email, CPF;
-    public List<Pedido> pedidos; 
+    private List<Pedido> pedidos; 
 
     public Cliente(String endereco, String telefone, String nome, String email,String CPF){
         this.endereco = endereco;
@@ -34,10 +34,10 @@ public class Cliente{
     }
     
     public void setEndereco(String endereco){
-        this.nome = endereco;
+        this.endereco = endereco;
     }
     public void setTelefone(String telefone){
-        this.nome = telefone;
+        this.telefone = telefone;
     }
     public void setNome(String nome){
         this.nome = nome;
@@ -47,6 +47,10 @@ public class Cliente{
     }
     public void setCPF(String CPF){
         this.CPF = CPF;
+    }
+
+    public void adicionarPedido(Pedido pedido){
+        pedidos.add(pedido);
     }
 
     public String atualizarEndereco(String novoEndereco) {
@@ -76,14 +80,8 @@ public class Cliente{
         }
     }
 
-    public List<Pedido> getHistoricoPedidos(List<Pedido> todosPedidos) {
-        List<Pedido> historico = new ArrayList<>();
-        for (Pedido item : todosPedidos) { // Para cada item em todos os pedidos
-            if (item.getCliente().getCPF().equals(this.CPF)) {
-                historico.add(item);
-            }
-        }
-        return historico;
+    public List<Pedido> getHistoricoPedidos(){
+        return new ArrayList<>(pedidos); // retorna uma cópia da lista de pedidos do cliente
     }
 
 }
