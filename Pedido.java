@@ -1,32 +1,48 @@
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatter; //Formatar a data para o padrão ex: dd/mm/yyyy
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-    private int id_pedido, quantProduto;
-    private double precoUnidade;
-    private  String local, status;
+    private int idPedido, quantProduto;
+    private String local, status;
     private LocalDateTime data;
     private Cliente cliente;
     private List<Produto> produtos;
+    private Entrega entrega;
 
-    public Pedido(int id_pedido, int quantProduto,double precoUnidade, String local, String status, Cliente cliente){
-        this.id_pedido = id_pedido;
-        this.quantProduto = quantProduto;
-        this.precoUnidade = precoUnidade;
+    public Pedido(int idPedido, String local, Cliente cliente, String status) {
+        this.idPedido = idPedido;
         this.local = local;
+        this.data = LocalDateTime.now();
         this.status = status;
         this.cliente = cliente;
-        this.data = LocalDateTime.now();
         this.produtos = new ArrayList<>();
+        this.quantProduto = 0;
     }
 
-    public int getId_pedido(){
-        return id_pedido;
+    public void adicionarProduto(Produto produto) {
+        if (produto.isDisponivel()) {
+            produtos.add(produto);
+            quantProduto++;
+        }
     }
-    public int getQuantProduto(){
-        return quantProduto;
+
+    public double calcularValorTotal() {
+        double total = 0;
+        for (Produto p : produtos) {
+            total += p.getPreco();
+        }
+        return total;
+    }
+
+    public String getDataFormatada() {
+        DateTimeFormatter formatar = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        return data.format(formatar);
+    }
+
+    public int getIdPedido(){ 
+        return idPedido;
     }
     public String getLocal(){
         return local;
@@ -35,53 +51,30 @@ public class Pedido {
         return status;
     }
     public Cliente getCliente(){
-        return cliente;
+        return cliente; 
     }
-    public LocalDateTime getData(){
-        return data;
+    public List<Produto> getProdutos(){ 
+        return produtos;
     }
-
-    public void adicionarProduto(Produto produto) {
-        produtos.add(produto);
+    public int getQuantProduto(){
+        return quantProduto; 
     }
-    
-    public String getDataFormatter(){
-        DateTimeFormatter formatar = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        return data.format(formatar);
+    public Entrega getEntrega(){
+        return entrega;
     }
 
-    public void setId_pedido(int id_pedido){
-        this.id_pedido = id_pedido;
-    }
-    public void setQuantProduto(int quantProduto){
-        this.quantProduto = quantProduto;
-    }
-    public void setLocal(String local){
-        this.local = local;
-    }
-    public void setStatus(String status){
-        this.status = status;
+    public void setEntrega(Entrega entrega){
+        this.entrega = entrega;
     }
 
-    public void atualizarStatus(){
-        switch (this.status) {
-            case "PREPARANDO":
-                this.status = "A CAMINHO";
+    public void atualizarStatus() {
+        switch (status) {
+            case "PREPARANDO": 
+                status = "A CAMINHO"; 
                 break;
-            case "A CAMINHO":
-                this.status = "ENTREGUE";
+            case "A CAMINHO": 
+                status = "ENTREGUE"; 
                 break;
-            default:
-                throw new IllegalStateException("Não foi possível avançar informações sobre o status atual: " + this.status);
         }
     }
-
-    public void cancelarPedido(){
-        this.status = "CANCELADO";
-    }
-
-    public double calcularValorTotal(){
-        return quantProduto * precoUnidade;
-    }
-
 }

@@ -1,21 +1,12 @@
 public class Cafe extends Produto {
-    private String grao;
-    private double peso;
+    private String tipoCafe;
 
-    public Cafe(int id_produto, String nome, double preco, String grao, double peso){
-        super(id_produto, nome, preco);
-        this.grao = grao;
-        this.peso = peso;
+    public Cafe(int idProduto, String nome, double preco, boolean disponivel, String tipoCafe) {
+        super(idProduto, nome, preco, disponivel);
+        this.tipoCafe = tipoCafe;
     }
 
-    public String getGrao(){
-        return grao;
-    }
-    public double getPeso(){
-        return peso;
-    }
-
-    public String getDescricao(){
-        return getNome()  + " (" + grao + ", " + peso + "g) - R$" + getPreco();
+    public String getDescricao() {
+        return getNome() + " - " + tipoCafe;
     }
 }

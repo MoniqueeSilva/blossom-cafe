@@ -1,87 +1,48 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente{
-    private String endereco, telefone, nome, email, CPF;
-    private List<Pedido> pedidos; 
+public class Cliente {
+    private String nome;
+    private String endereco;
+    private String telefone;
+    private String email;
+    private String cpf;
+    private List<Pedido> pedidos;
 
-    public Cliente(String endereco, String telefone, String nome, String email,String CPF){
+    public Cliente(String nome, String endereco, String telefone, String email, String cpf) {
+        this.nome = nome;
         this.endereco = endereco;
         this.telefone = telefone;
-        this.nome = nome;
         this.email = email;
-        this.CPF = CPF;
+        this.cpf = cpf;
         this.pedidos = new ArrayList<>();
     }
 
-    public String getEndereco(){
-        return endereco;
+    public String getNome(){ 
+        return nome; 
     }
-    public String getTelefone(){
-        return telefone;
+    public String getEndereco(){ 
+        return endereco; 
     }
-    public String getNome(){
-        return nome;
+    public String getTelefone(){ 
+        return telefone; 
     }
-    public String getEmail(){
-        return email;
+    public String getEmail(){ 
+        return email; 
     }
-    public String getCPF(){
-        return CPF;
+    public String getCpf(){ 
+        return cpf; 
     }
-    public List<Pedido> getPedidos() {
+    public List<Pedido> getPedidos(){ 
         return pedidos;
     }
-    
-    public void setEndereco(String endereco){
-        this.endereco = endereco;
-    }
-    public void setTelefone(String telefone){
-        this.telefone = telefone;
-    }
-    public void setNome(String nome){
-        this.nome = nome;
-    }
-    public void setEmail(String email){
-        this.email =  email;
-    }
-    public void setCPF(String CPF){
-        this.CPF = CPF;
-    }
 
-    public void adicionarPedido(Pedido pedido){
+    public void adicionarPedido(Pedido pedido) {
         pedidos.add(pedido);
     }
 
-    public String atualizarEndereco(String novoEndereco) {
-        try {
-            if (novoEndereco == null || novoEndereco.trim().isEmpty()) {
-                throw new IllegalArgumentException("Endereço não pode ser vazio!");
-            }
-            
-            this.endereco = novoEndereco.trim();
-            return "Endereço atualizado com sucesso!";
-            
-        } catch (IllegalArgumentException e) {
-            return "Erro: " + e.getMessage();
-        }
+    //Histórico de pedidos
+    public List<Pedido> getHistoricoPedidos() {
+        return new ArrayList<>(pedidos); //Retorna uma cópia da lista
     }
-
-    public String atualizarTelefone(String novoTelefone){
-        try {
-            if(novoTelefone == null || novoTelefone.trim().isEmpty()){
-                throw new IllegalArgumentException("Telefone não pode ser vazio!");
-            }
-            this.telefone = novoTelefone.trim();
-            return "Telefone atualizado com sucesso!";
-
-        } catch (IllegalArgumentException e){
-            return "Erro: " + e.getMessage();
-        }
-    }
-
-    public List<Pedido> getHistoricoPedidos(){
-        return new ArrayList<>(pedidos); // retorna uma cópia da lista de pedidos do cliente
-    }
-
 }
