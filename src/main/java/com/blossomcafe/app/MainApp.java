@@ -1,5 +1,6 @@
 package com.blossomcafe.app;
 
+import com.blossomcafe.model.Cafe;
 import com.blossomcafe.view.TelaInicial;
 
 import javafx.application.Application;
@@ -14,8 +15,8 @@ public void start(Stage primaryStage) {
     telaInicial.mostrar();
 }
     
-    // MÉTODO MAIN CORRETO - não mude esta assinatura!
     public static void main(String[] args) {
         launch(args);
+        Cafe cafe1 = new Cafe(1, "Café Expresso", 7.50, true, "Expresso");
     }
 }
