@@ -1,0 +1,67 @@
+CREATE TABLE cliente ( 
+id_cliente SERIAL PRIMARY KEY,
+telefone varchar(20),  
+nome varchar(60),  
+email varchar(60),  
+cpf varchar(11)
+); 
+
+CREATE TABLE produto ( 
+ nome varchar(100),  
+ preco FLOAT,  
+ disponivel BOOLEAN,  
+ id_produto SERIAL PRIMARY KEY,  
+ idPedido INT
+); 
+
+CREATE TABLE item_pedido(
+	id_item_pedido SERIAL PRIMARY KEY,
+	id_produto INT,
+	id_pedido INT,
+	quantidade_item INT
+);
+
+CREATE TABLE pedido (   
+ data date,  
+ status boolean,  
+ quantProduto INT,  
+ id_pedido INT PRIMARY KEY,  
+ idCliente INT,  
+ idEntrega INT,  
+ idEndereco INT
+); 
+CREATE TABLE entrega 
+( 
+ codRastreio INT PRIMARY KEY,  
+ idEntregador INT 
+); 
+
+CREATE TABLE entregador 
+( 
+ veiculo varchar(60),  
+ nome varchar(100),  
+ placa varchar(10),  
+ cnh INT PRIMARY KEY 
+); 
+
+CREATE TABLE endereco 
+( 
+ rua VARCHAR(40) NOT NULL,  
+ numero INT NOT NULL,  
+ bairro VARCHAR(40),  
+ cep varchar(10) NOT NULL,  
+ cidade VARCHAR(60),  
+ estado VARCHAR(60),  
+ pontoRef VARCHAR(100),  
+ id_endereco INT PRIMARY KEY,  
+ idCliente INT
+); 
+
+ALTER TABLE Produto ADD FOREIGN KEY(idPedido) REFERENCES Pedido (id_Pedido);
+ALTER TABLE Pedido ADD FOREIGN KEY(idCliente) REFERENCES Cliente (id_cliente);
+ALTER TABLE Pedido ADD FOREIGN KEY(idEntrega) REFERENCES Entrega (codRastreio);
+ALTER TABLE Pedido ADD FOREIGN KEY(idEndereco) REFERENCES Endereco (id_endereco);
+ALTER TABLE Entrega ADD FOREIGN KEY(idEntregador) REFERENCES Entregador (cnh);
+ALTER TABLE Endereco ADD FOREIGN KEY(idCliente) REFERENCES Cliente (id_cliente);
+ALTER TABLE item_pedido ADD FOREIGN KEY(id_produto) REFERENCES produto (id_produto);
+ALTER TABLE item_pedido ADD FOREIGN KEY(id_pedido) REFERENCES pedido (id_pedido);
