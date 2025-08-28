@@ -1,3 +1,4 @@
+package com.blossomcafe.model;
 public class Flores extends Produto {
     private String cor;
     private String tipo;

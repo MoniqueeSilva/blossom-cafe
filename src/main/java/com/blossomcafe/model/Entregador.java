@@ -1,3 +1,4 @@
+package com.blossomcafe.model;
 public class Entregador {
     private String nome;
     private String veiculo;

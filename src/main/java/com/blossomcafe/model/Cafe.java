@@ -1,3 +1,4 @@
+package com.blossomcafe.model;
 public class Cafe extends Produto {
     private String tipoCafe;
 

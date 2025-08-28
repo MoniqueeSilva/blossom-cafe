@@ -1,3 +1,4 @@
+package com.blossomcafe.model;
 public class Entrega {
     private String codRastreio;
     private Entregador entregador;
