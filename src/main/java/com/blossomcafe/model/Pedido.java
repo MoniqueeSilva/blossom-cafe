@@ -7,10 +7,6 @@ public class Pedido {
     private int id;
     private List<Produto> produtos;
 
-    public Pedido() {
-        this.produtos = new ArrayList<>();
-    }
-
     public Pedido(int id) {
         this.id = id;
         this.produtos = new ArrayList<>();
@@ -27,5 +23,29 @@ public class Pedido {
         } else {
             System.out.println("Produto indisponível: " + produto.getNome());
         }
+    }
+
+    // Método para remover produto
+    public boolean removerProduto(Produto produto) {
+        return produtos.remove(produto);
+    }
+
+    // Método para limpar todos os produtos
+    public void limparProdutos() {
+        produtos.clear();
+    }
+
+    // Método para calcular valor total
+    public double calcularValorTotal() {
+        double total = 0.0;
+        for (Produto produto : produtos) {
+            total += produto.getPreco();
+        }
+        return total;
+    }
+
+    // Método para obter quantidade de produtos
+    public int getQuantidadeProdutos() {
+        return produtos.size();
     }
 }

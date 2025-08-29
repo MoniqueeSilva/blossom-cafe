@@ -9,6 +9,13 @@ public class Flores extends Produto {
         this.tipo = tipo;
     }
 
+    public String getCor(){
+        return cor;
+    }
+    public String getTipo(){
+        return tipo;
+    }
+
     public String getDescricao() {
         return getNome() + " - " + tipo + " (" + cor + ")";
     }

@@ -36,4 +36,9 @@ public class Produto {
 
     public boolean isDisponivel() { return disponivel; }
     public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
+
+    public String toString(){
+        return String.format("Id: %d, Nome: %s, Preço: %.2f, Disponível: %s", id, nome, preco, disponivel ? "Sim" : "Não" ); 
+    }
+
 }

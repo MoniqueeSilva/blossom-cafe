@@ -1,4 +1,4 @@
-package com.blossomcafe.app;
+/*package com.blossomcafe.app;
 
 import com.blossomcafe.model.Cafe;
 import com.blossomcafe.view.TelaInicial;
@@ -19,4 +19,4 @@ public void start(Stage primaryStage) {
         launch(args);
         Cafe cafe1 = new Cafe(1, "Café Expresso", 7.50, true, "Expresso");
     }
-}
+}*/

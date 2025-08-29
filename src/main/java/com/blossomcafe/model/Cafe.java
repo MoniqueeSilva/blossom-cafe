@@ -7,6 +7,14 @@ public class Cafe extends Produto {
         this.tipoCafe = tipoCafe;
     }
 
+    public String getTipoCafe(){
+        return tipoCafe;
+    }
+
+    public void setTipocafe(String tipoCafe){
+        this.tipoCafe = tipoCafe;
+    }
+
     public String getDescricao() {
         return getNome() + " - " + tipoCafe;
     }

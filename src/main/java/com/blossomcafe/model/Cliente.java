@@ -3,47 +3,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
-    private String nome;
-    private String endereco;
-    private String telefone;
-    private String email;
-    private String cpf;
+    private int idCliente;
+    private String nome, telefone, email, cpf;
     private List<Pedido> pedidos;
 
-    public Cliente(String nome, String endereco, String telefone, String email, String cpf) {
+    public Cliente(int idCliente, String nome, String telefone, String email, String cpf) {
+        this.idCliente = idCliente;
         this.nome = nome;
-        this.endereco = endereco;
         this.telefone = telefone;
         this.email = email;
         this.cpf = cpf;
         this.pedidos = new ArrayList<>();
     }
 
-    public String getNome(){ 
-        return nome; 
-    }
-    public String getEndereco(){ 
-        return endereco; 
-    }
-    public String getTelefone(){ 
-        return telefone; 
-    }
-    public String getEmail(){ 
-        return email; 
-    }
-    public String getCpf(){ 
-        return cpf; 
-    }
-    public List<Pedido> getPedidos(){ 
-        return pedidos;
-    }
+    // Getters
+    public int getIdCliente() { return idCliente; }
+    public String getNome() { return nome; }
+    public String getTelefone() { return telefone; }
+    public String getEmail() { return email; }
+    public String getCpf() { return cpf; }
+    public List<Pedido> getPedidos() { return pedidos; }
+
+    // Setters
+    public void setNome(String nome) { this.nome = nome; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public void setEmail(String email) { this.email = email; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
 
     public void adicionarPedido(Pedido pedido) {
         pedidos.add(pedido);
     }
 
-    //Histórico de pedidos
+    public boolean removerPedido(Pedido pedido) {
+        return pedidos.remove(pedido);
+    }
+
     public List<Pedido> getHistoricoPedidos() {
-        return new ArrayList<>(pedidos); //Retorna uma cópia da lista
+        return new ArrayList<>(pedidos);
+    }
+
+    public String toString() {
+        return String.format("Id: %d, Nome: %s, Telefone: %s, Email: %s, CPF: %s", 
+                idCliente, nome, telefone, email, cpf);
     }
 }
