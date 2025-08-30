@@ -10,30 +10,30 @@ import java.util.List;
 
 public class PedidoDAO {
 
-    // CREATE
+    // CREATE - CORRIGIDO para o novo schema
     public void inserir(Pedido pedido, int idCliente) {
-            String sql = "INSERT INTO pedido (id_cliente, status) VALUES (?, ?) RETURNING id_pedido";
+        String sql = "INSERT INTO pedido (id_cliente, status) VALUES (?, 'PENDENTE') RETURNING id_pedido";
+        
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             
-            try (Connection conn = ConexaoBD.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-                
-                stmt.setInt(1, idCliente);
-                stmt.setString(2, "PENDENTE");
-                
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    int idPedido = rs.getInt("id_pedido");
-                    pedido.setId(idPedido);
-                    inserirItensPedido(pedido);
-                }
-                
-            } catch (SQLException e) {
-                e.printStackTrace();
+            stmt.setInt(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                int idPedido = rs.getInt("id_pedido");
+                pedido.setId(idPedido);
+                inserirItensPedido(pedido);
             }
+            
+        } catch (SQLException e) {
+            System.out.println("❌ Erro ao inserir pedido: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
-     private void inserirItensPedido(Pedido pedido) {
-        String sql = "INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES (?, ?, ?, ?)";
+    private void inserirItensPedido(Pedido pedido) {
+        String sql = "INSERT INTO item_pedido (id_pedido, id_produto, quantidade_item) VALUES (?, ?, ?)";
         
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -42,42 +42,47 @@ public class PedidoDAO {
                 stmt.setInt(1, pedido.getId());
                 stmt.setInt(2, produto.getId());
                 stmt.setInt(3, 1); // quantidade fixa 1 por enquanto
-                stmt.setDouble(4, produto.getPreco());
                 stmt.addBatch();
             }
             stmt.executeBatch();
             
         } catch (SQLException e) {
+            System.out.println("❌ Erro ao inserir itens do pedido: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // READ (um pedido)
+    // READ - CORRIGIDO
     public Pedido buscarPorId(int id) {
-        String sql = "SELECT * FROM pedido WHERE id_pedido = ?";
+        String sql = "SELECT p.* FROM pedido p WHERE p.id_pedido = ?";
+        
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 Pedido pedido = new Pedido(rs.getInt("id_pedido"));
-                // Carregar produtos do pedido
-                carregarProdutosPedido(pedido);
+                carregarItensPedido(pedido);
                 return pedido;
             }
+            
         } catch (SQLException e) {
+            System.out.println("❌ Erro ao buscar pedido: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
 
-    private void carregarProdutosPedido(Pedido pedido) {
+    private void carregarItensPedido(Pedido pedido) {
         String sql = "SELECT p.* FROM produto p " +
-                    "JOIN pedido_produto pp ON p.id_produto = pp.id_produto " +
-                    "WHERE pp.id_pedido = ?";
+                    "JOIN item_pedido ip ON p.id_produto = ip.id_produto " +
+                    "WHERE ip.id_pedido = ?";
+        
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
             stmt.setInt(1, pedido.getId());
             ResultSet rs = stmt.executeQuery();
 
@@ -90,63 +95,115 @@ public class PedidoDAO {
                 );
                 pedido.adicionarProduto(produto);
             }
+            
         } catch (SQLException e) {
+            System.out.println("❌ Erro ao carregar itens do pedido: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // READ (todos os pedidos)
+    // READ todos - CORRIGIDO
     public List<Pedido> listarTodos() {
         List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedido";
+        String sql = "SELECT * FROM pedido ORDER BY id_pedido";
+        
         try (Connection conn = ConexaoBD.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Pedido pedido = new Pedido(rs.getInt("id_pedido"));
-                carregarProdutosPedido(pedido);
+                carregarItensPedido(pedido);
                 pedidos.add(pedido);
             }
+            
         } catch (SQLException e) {
+            System.out.println("❌ Erro ao listar pedidos: " + e.getMessage());
             e.printStackTrace();
         }
         return pedidos;
     }
 
-    // UPDATE
+    // UPDATE - CORRIGIDO
     public void atualizar(Pedido pedido) {
-        // Primeiro remover todos os produtos do pedido
-        removerProdutosPedido(pedido.getId());
+        // Primeiro remove todos os itens antigos
+        removerItensPedido(pedido.getId());
         
-        // Depois inserir os novos produtos
-        inserirProdutosPedido(pedido);
-    }
-
-    private void removerProdutosPedido(int idPedido) {
-        String sql = "DELETE FROM pedido_produto WHERE id_pedido = ?";
+        // Depois insere os novos itens
+        inserirItensPedido(pedido);
+        
+        // Atualiza status se necessário
+        String sql = "UPDATE pedido SET status = ? WHERE id_pedido = ?";
+        
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, "ATUALIZADO"); // Você pode ajustar o status
+            stmt.setInt(2, pedido.getId());
+            stmt.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("❌ Erro ao atualizar pedido: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void removerItensPedido(int idPedido) {
+        String sql = "DELETE FROM item_pedido WHERE id_pedido = ?";
+        
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
             stmt.setInt(1, idPedido);
             stmt.executeUpdate();
+            
         } catch (SQLException e) {
+            System.out.println("❌ Erro ao remover itens do pedido: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // DELETE
+    // DELETE - CORRIGIDO
     public void deletar(int id) {
-        // Primeiro remover os produtos do pedido
-        removerProdutosPedido(id);
+        // Primeiro remove os itens
+        removerItensPedido(id);
         
-        // Depois remover o pedido
+        // Depois remove o pedido
         String sql = "DELETE FROM pedido WHERE id_pedido = ?";
+        
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
             stmt.setInt(1, id);
             stmt.executeUpdate();
+            
         } catch (SQLException e) {
+            System.out.println("❌ Erro ao deletar pedido: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    // NOVO: Buscar pedidos por cliente
+    public List<Pedido> buscarPorCliente(int idCliente) {
+        List<Pedido> pedidos = new ArrayList<>();
+        String sql = "SELECT * FROM pedido WHERE id_cliente = ? ORDER BY id_pedido";
+        
+        try (Connection conn = ConexaoBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Pedido pedido = new Pedido(rs.getInt("id_pedido"));
+                carregarItensPedido(pedido);
+                pedidos.add(pedido);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("❌ Erro ao buscar pedidos do cliente: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return pedidos;
     }
 }

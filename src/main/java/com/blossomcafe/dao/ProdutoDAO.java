@@ -1,6 +1,7 @@
 package com.blossomcafe.dao;
 
 import com.blossomcafe.model.Cafe;
+import com.blossomcafe.model.Flores;
 import com.blossomcafe.model.Produto;
 import com.blossomcafe.util.ConexaoBD;
 
@@ -83,6 +84,7 @@ public class ProdutoDAO {
                     "JOIN flores f ON p.id_produto = f.id_produto " +
                     "WHERE p.disponivel = true";
         // ... implementar
+        return flores;
     }
 
     // UPDATE - CORRIGIDO

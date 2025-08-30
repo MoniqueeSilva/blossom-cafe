@@ -151,7 +151,7 @@ public class TesteDAOs {
     
     private static void testarPedidoDAO() {
         System.out.println("\n🛒 Testando PedidoDAO...");
-        PedidoDAO dao = new PedidoDAO();
+        // PedidoDAO dao = new PedidoDAO();
         ClienteDAO clienteDAO = new ClienteDAO();
         ProdutoDAO produtoDAO = new ProdutoDAO();
         
