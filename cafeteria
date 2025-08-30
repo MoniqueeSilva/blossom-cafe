@@ -3,7 +3,8 @@ id_cliente SERIAL PRIMARY KEY,
 telefone varchar(20),  
 nome varchar(60),  
 email varchar(60),  
-cpf varchar(11)
+cpf varchar(11),
+senha varchar(50) NOT NULL
 ); 
 
 CREATE TABLE produto ( 
@@ -64,3 +65,5 @@ ALTER TABLE Entrega ADD FOREIGN KEY(idEntregador) REFERENCES Entregador (cnh);
 ALTER TABLE Endereco ADD FOREIGN KEY(idCliente) REFERENCES Cliente (id_cliente);
 ALTER TABLE item_pedido ADD FOREIGN KEY(id_produto) REFERENCES produto (id_produto);
 ALTER TABLE item_pedido ADD FOREIGN KEY(id_pedido) REFERENCES pedido (id_pedido);
+ALTER TABLE endereco ADD FOREIGN KEY(idCliente) REFERENCES cliente (id_cliente);
+
