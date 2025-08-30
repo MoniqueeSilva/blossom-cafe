@@ -34,7 +34,7 @@ public class ClienteDAO {
         }
     }
 
-    // READ (com endereços)
+    //ler endereços
     public List<Cliente> listar() {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM cliente";
@@ -74,7 +74,7 @@ public class ClienteDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Endereco e = new Endereco(rs.getInt("id_endereco"), rs.getString("rua"), rs.getInt("numero"), rs.getString("bairro"), rs.getString("cep"), rs.getString("cidade"), rs.getString("estado"), rs.getString("pontoRef"));
+                Endereco e = new Endereco(rs.getInt("idEndereco"), rs.getString("rua"), rs.getInt("numero"), rs.getString("bairro"), rs.getString("cep"), rs.getString("cidade"), rs.getString("estado"), rs.getString("pontoRef"));
                 enderecos.add(e);
             }
 

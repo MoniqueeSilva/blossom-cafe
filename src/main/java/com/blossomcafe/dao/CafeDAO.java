@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CafeDAO {
-
-    // CREATE
     public void inserir(Cafe cafe) {
         String sql = "INSERT INTO cafe (nome, preco, disponivel, tipo_cafe) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConexaoBD.getConnection();
@@ -24,7 +22,6 @@ public class CafeDAO {
         }
     }
 
-    // READ (um café)
     public Cafe buscarPorId(int id) {
         String sql = "SELECT * FROM cafe WHERE id_produto = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -47,7 +44,6 @@ public class CafeDAO {
         return null;
     }
 
-    // READ (todos os cafés)
     public List<Cafe> listarTodos() {
         List<Cafe> cafes = new ArrayList<>();
         String sql = "SELECT * FROM cafe";
@@ -56,13 +52,7 @@ public class CafeDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Cafe c = new Cafe(
-                    rs.getInt("id_produto"),
-                    rs.getString("nome"),
-                    rs.getDouble("preco"),
-                    rs.getBoolean("disponivel"),
-                    rs.getString("tipo_cafe")
-                );
+                Cafe c = new Cafe(rs.getInt("id_produto"), rs.getString("nome"), rs.getDouble("preco"),rs.getBoolean("disponivel"), rs.getString("tipo_cafe"));
                 cafes.add(c);
             }
         } catch (SQLException e) {
