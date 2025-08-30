@@ -10,12 +10,12 @@ import java.util.List;
 
 public class PedidoDAO {
 
-    // CREATE - CORRIGIDO para o novo schema
-    public void inserir(Pedido pedido, int idCliente) {
-        String sql = "INSERT INTO pedido (id_cliente, status) VALUES (?, 'PENDENTE') RETURNING id_pedido";
+    // CREATE - Versão simplificada
+    public boolean inserir(Pedido pedido, int idCliente) {
+        String sqlPedido = "INSERT INTO pedido (id_cliente, status) VALUES (?, 'PENDENTE') RETURNING id_pedido";
         
         try (Connection conn = ConexaoBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sqlPedido)) {
             
             stmt.setInt(1, idCliente);
             ResultSet rs = stmt.executeQuery();
@@ -23,16 +23,22 @@ public class PedidoDAO {
             if (rs.next()) {
                 int idPedido = rs.getInt("id_pedido");
                 pedido.setId(idPedido);
-                inserirItensPedido(pedido);
+                
+                // Inserir itens do pedido
+                if (inserirItensPedido(pedido)) {
+                    System.out.println("✅ Pedido " + idPedido + " criado com sucesso!");
+                    return true;
+                }
             }
             
         } catch (SQLException e) {
-            System.out.println("❌ Erro ao inserir pedido: " + e.getMessage());
+            System.out.println("❌ Erro ao criar pedido: " + e.getMessage());
             e.printStackTrace();
         }
+        return false;
     }
 
-    private void inserirItensPedido(Pedido pedido) {
+    private boolean inserirItensPedido(Pedido pedido) {
         String sql = "INSERT INTO item_pedido (id_pedido, id_produto, quantidade_item) VALUES (?, ?, ?)";
         
         try (Connection conn = ConexaoBD.getConnection();
@@ -41,18 +47,21 @@ public class PedidoDAO {
             for (Produto produto : pedido.getProdutos()) {
                 stmt.setInt(1, pedido.getId());
                 stmt.setInt(2, produto.getId());
-                stmt.setInt(3, 1); // quantidade fixa 1 por enquanto
+                stmt.setInt(3, 1); // quantidade fixa 1
                 stmt.addBatch();
             }
+            
             stmt.executeBatch();
+            return true;
             
         } catch (SQLException e) {
             System.out.println("❌ Erro ao inserir itens do pedido: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 
-    // READ - CORRIGIDO
+    // READ - Buscar pedido por ID
     public Pedido buscarPorId(int id) {
         String sql = "SELECT p.* FROM pedido p WHERE p.id_pedido = ?";
         
@@ -69,14 +78,14 @@ public class PedidoDAO {
             }
             
         } catch (SQLException e) {
-            System.out.println("❌ Erro ao buscar pedido: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("❌ Erro ao buscar pedido " + id + ": " + e.getMessage());
         }
         return null;
     }
 
     private void carregarItensPedido(Pedido pedido) {
-        String sql = "SELECT p.* FROM produto p " +
+        String sql = "SELECT p.id_produto, p.nome, p.preco, p.disponivel " +
+                    "FROM produto p " +
                     "JOIN item_pedido ip ON p.id_produto = ip.id_produto " +
                     "WHERE ip.id_pedido = ?";
         
@@ -97,15 +106,14 @@ public class PedidoDAO {
             }
             
         } catch (SQLException e) {
-            System.out.println("❌ Erro ao carregar itens do pedido: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("❌ Erro ao carregar itens do pedido " + pedido.getId() + ": " + e.getMessage());
         }
     }
 
-    // READ todos - CORRIGIDO
+    // READ - Listar todos os pedidos
     public List<Pedido> listarTodos() {
         List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedido ORDER BY id_pedido";
+        String sql = "SELECT id_pedido FROM pedido ORDER BY id_pedido";
         
         try (Connection conn = ConexaoBD.getConnection();
              Statement stmt = conn.createStatement();
@@ -119,91 +127,75 @@ public class PedidoDAO {
             
         } catch (SQLException e) {
             System.out.println("❌ Erro ao listar pedidos: " + e.getMessage());
-            e.printStackTrace();
         }
         return pedidos;
     }
 
-    // UPDATE - CORRIGIDO
-    public void atualizar(Pedido pedido) {
-        // Primeiro remove todos os itens antigos
-        removerItensPedido(pedido.getId());
+    // DELETE - Deletar pedido
+    public boolean deletar(int id) {
+        Connection conn = null;
         
-        // Depois insere os novos itens
-        inserirItensPedido(pedido);
-        
-        // Atualiza status se necessário
-        String sql = "UPDATE pedido SET status = ? WHERE id_pedido = ?";
-        
-        try (Connection conn = ConexaoBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, "ATUALIZADO"); // Você pode ajustar o status
-            stmt.setInt(2, pedido.getId());
-            stmt.executeUpdate();
-            
-        } catch (SQLException e) {
-            System.out.println("❌ Erro ao atualizar pedido: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+        try {
+            conn = ConexaoBD.getConnection();
+            conn.setAutoCommit(false); // Iniciar transação
 
-    private void removerItensPedido(int idPedido) {
-        String sql = "DELETE FROM item_pedido WHERE id_pedido = ?";
-        
-        try (Connection conn = ConexaoBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, idPedido);
-            stmt.executeUpdate();
-            
-        } catch (SQLException e) {
-            System.out.println("❌ Erro ao remover itens do pedido: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+            // 1. Primeiro deletar os itens do pedido
+            String sqlItens = "DELETE FROM item_pedido WHERE id_pedido = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlItens)) {
+                stmt.setInt(1, id);
+                stmt.executeUpdate();
+            }
 
-    // DELETE - CORRIGIDO
-    public void deletar(int id) {
-        // Primeiro remove os itens
-        removerItensPedido(id);
-        
-        // Depois remove o pedido
-        String sql = "DELETE FROM pedido WHERE id_pedido = ?";
-        
-        try (Connection conn = ConexaoBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-            
-        } catch (SQLException e) {
-            System.out.println("❌ Erro ao deletar pedido: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    // NOVO: Buscar pedidos por cliente
-    public List<Pedido> buscarPorCliente(int idCliente) {
-        List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM pedido WHERE id_cliente = ? ORDER BY id_pedido";
-        
-        try (Connection conn = ConexaoBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setInt(1, idCliente);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Pedido pedido = new Pedido(rs.getInt("id_pedido"));
-                carregarItensPedido(pedido);
-                pedidos.add(pedido);
+            // 2. Depois deletar o pedido
+            String sqlPedido = "DELETE FROM pedido WHERE id_pedido = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(sqlPedido)) {
+                stmt.setInt(1, id);
+                int affectedRows = stmt.executeUpdate();
+                
+                if (affectedRows > 0) {
+                    conn.commit(); // Confirmar transação
+                    System.out.println("✅ Pedido " + id + " deletado com sucesso!");
+                    return true;
+                }
             }
             
         } catch (SQLException e) {
-            System.out.println("❌ Erro ao buscar pedidos do cliente: " + e.getMessage());
+            try {
+                if (conn != null) conn.rollback(); // Reverter em caso de erro
+            } catch (SQLException ex) {
+                System.out.println("❌ Erro no rollback: " + ex.getMessage());
+            }
+            System.out.println("❌ Erro ao deletar pedido " + id + ": " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (conn != null) {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("❌ Erro ao fechar conexão: " + e.getMessage());
+            }
         }
-        return pedidos;
+        return false;
+    }
+
+    // Método auxiliar para teste
+    public static void testarConexao() {
+        try (Connection conn = ConexaoBD.getConnection()) {
+            System.out.println("✅ Conexão com banco OK!");
+            
+            // Testar se tabelas existem
+            DatabaseMetaData meta = conn.getMetaData();
+            ResultSet tables = meta.getTables(null, null, "pedido", new String[]{"TABLE"});
+            if (tables.next()) {
+                System.out.println("✅ Tabela 'pedido' existe");
+            } else {
+                System.out.println("❌ Tabela 'pedido' NÃO existe");
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("❌ Erro de conexão: " + e.getMessage());
+        }
     }
 }

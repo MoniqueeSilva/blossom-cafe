@@ -4,8 +4,13 @@
     // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    
-
+        {
+            "type": "java",
+            "name": "TestePedidoDAO",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.app.TestePedidoDAO",
+            "projectName": "blossom-cafe-app"
+        },
         {
             "type": "java",
             "name": "Current File",
