@@ -1,5 +1,6 @@
 package com.blossomcafe.dao;
 
+import com.blossomcafe.model.Cafe;
 import com.blossomcafe.model.Produto;
 import com.blossomcafe.util.ConexaoBD;
 
@@ -66,6 +67,22 @@ public class ProdutoDAO {
             e.printStackTrace();
         }
         return produtos;
+    }
+
+    public List<Cafe> listarCafes() {
+        List<Cafe> cafes = new ArrayList<>();
+        String sql = "SELECT p.*, c.tipo_cafe FROM produto p " +
+                    "JOIN cafe c ON p.id_produto = c.id_produto " +
+                    "WHERE p.disponivel = true";
+        // ... implementar
+        return cafes;
+    }
+    public List<Flores> listarFlores() {
+        List<Flores> flores = new ArrayList<>();
+        String sql = "SELECT p.*, f.cor, f.tipo_flor FROM produto p " +
+                    "JOIN flores f ON p.id_produto = f.id_produto " +
+                    "WHERE p.disponivel = true";
+        // ... implementar
     }
 
     // UPDATE - CORRIGIDO

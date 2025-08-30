@@ -11,29 +11,38 @@ import java.util.List;
 public class PedidoDAO {
 
     // CREATE
-    public void inserir(Pedido pedido) {
-        String sql = "INSERT INTO pedido (id_pedido) VALUES (?)";
-        try (Connection conn = ConexaoBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, pedido.getId());
-            stmt.executeUpdate();
+    public void inserir(Pedido pedido, int idCliente) {
+            String sql = "INSERT INTO pedido (id_cliente, status) VALUES (?, ?) RETURNING id_pedido";
             
-            // Inserir produtos do pedido
-            inserirProdutosPedido(pedido);
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            try (Connection conn = ConexaoBD.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+                
+                stmt.setInt(1, idCliente);
+                stmt.setString(2, "PENDENTE");
+                
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    int idPedido = rs.getInt("id_pedido");
+                    pedido.setId(idPedido);
+                    inserirItensPedido(pedido);
+                }
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
-    private void inserirProdutosPedido(Pedido pedido) {
-        String sql = "INSERT INTO pedido_produto (id_pedido, id_produto) VALUES (?, ?)";
+     private void inserirItensPedido(Pedido pedido) {
+        String sql = "INSERT INTO item_pedido (id_pedido, id_produto, quantidade, preco_unitario) VALUES (?, ?, ?, ?)";
+        
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             for (Produto produto : pedido.getProdutos()) {
                 stmt.setInt(1, pedido.getId());
                 stmt.setInt(2, produto.getId());
+                stmt.setInt(3, 1); // quantidade fixa 1 por enquanto
+                stmt.setDouble(4, produto.getPreco());
                 stmt.addBatch();
             }
             stmt.executeBatch();
