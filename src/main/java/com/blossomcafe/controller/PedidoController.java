@@ -1,11 +1,11 @@
 package com.blossomcafe.controller;
 
+import java.util.List;
+
 import com.blossomcafe.dao.PedidoDAO;
 import com.blossomcafe.dao.ProdutoDAO;
 import com.blossomcafe.model.Pedido;
 import com.blossomcafe.model.Produto;
-import java.util.List;
-import java.util.ArrayList;
 
 public class PedidoController {
     public PedidoDAO pedidoDAO;
@@ -19,7 +19,7 @@ public class PedidoController {
     public boolean criarPedido(int idPedido) {
         try {
             Pedido pedido = new Pedido(idPedido);
-            pedidoDAO.inserir(pedido);
+            pedidoDAO.inserir(pedido, 1); // ID cliente temporário
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao criar pedido: " + e.getMessage());

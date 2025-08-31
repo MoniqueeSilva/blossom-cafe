@@ -1,9 +1,11 @@
 package com.blossomcafe.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.blossomcafe.dao.ProdutoDAO;
 import com.blossomcafe.model.Produto;
-import java.util.List;
-import java.util.ArrayList;
 
 public class ProdutoController {
     private ProdutoDAO produtoDAO;
@@ -35,21 +37,13 @@ public class ProdutoController {
     }
 
     public List<Produto> listarTodosProdutos() {
-        return produtoDAO.listarTodos().stream()
-        .filter(Produto::isDisponivel)
-        .collect(Collectors.toList());
+        return produtoDAO.listarTodos();
     }
 
     public List<Produto> listarProdutosDisponiveis() {
-        List<Produto> todosProdutos = produtoDAO.listarTodos();
-        List<Produto> disponiveis = new ArrayList<>();
-        
-        for (Produto produto : todosProdutos) {
-            if (produto.isDisponivel()) {
-                disponiveis.add(produto);
-            }
-        }
-        return disponiveis;
+        return produtoDAO.listarTodos().stream()
+            .filter(Produto::isDisponivel)
+            .collect(Collectors.toList());
     }
 
     public boolean atualizarProduto(int id, String nome, double preco, boolean disponivel) {

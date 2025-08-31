@@ -9,6 +9,7 @@ public class Cliente {
     private List<Endereco> enderecos;
     private List<Pedido> pedidos;
 
+    // Construtor com senha
     public Cliente(int idCliente, String nome, String telefone, String email, String cpf, String senha) {
         this.idCliente = idCliente;
         this.nome = nome;
@@ -20,59 +21,32 @@ public class Cliente {
         this.pedidos = new ArrayList<>();
     }
 
-    // getters
-    public int getIdCliente(){
-        return idCliente;
-    }
-    public String getNome(){
-        return nome;
-    }
-    public String getTelefone(){
-        return telefone;
-    }
-    public String getEmail(){
-        return email;
-    }
-    public String getCpf(){
-        return cpf;
-    }
-    public String getSenha(){
-        return senha;
-    }
-    public List<Endereco> getEnderecos(){
-        return enderecos;
-    }
-    public List<Pedido> getPedidos(){
-        return pedidos;
-    }
+    // Getters e Setters
+    public int getIdCliente() { return idCliente; }
+    public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
+    
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+    
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
+    
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
+    
+    public List<Endereco> getEnderecos() { return enderecos; }
+    public void setEnderecos(List<Endereco> enderecos) { this.enderecos = enderecos; }
+    
+    public List<Pedido> getPedidos() { return pedidos; }
+    public void setPedidos(List<Pedido> pedidos) { this.pedidos = pedidos; }
 
-    // setters
-    public void setIdCliente(int idCliente){
-        this.idCliente = idCliente;
-    }
-    public void setNome(String nome){
-        this.nome = nome;
-    }
-    public void setTelefone(String telefone){
-        this.telefone = telefone;
-    }
-    public void setEmail(String email){
-        this.email = email;
-    }
-    public void setCpf(String cpf){
-        this.cpf = cpf;
-    }
-    public void setEnderecos(List<Endereco> enderecos){
-        this.enderecos = enderecos;
-    }
-    public void setSenha(String senha){
-        this.senha = senha;
-    }
-    public void setPedidos(List<Pedido> pedidos){
-        this.pedidos = pedidos;
-    }
-
-    //metódos
+    // Métodos
     public void adicionarPedido(Pedido pedido) {
         pedidos.add(pedido);
     }
@@ -85,8 +59,13 @@ public class Cliente {
         return new ArrayList<>(pedidos);
     }
 
-    //toString de cliente
     public String toString() {
-        return String.format("Id: %d, Nome: %s, Telefone: %s, Email: %s, CPF: %s, Endereço: %s",idCliente, nome, telefone, email, cpf, enderecos);
+        return String.format("Id: %d, Nome: %s, Telefone: %s, Email: %s, CPF: %s", 
+            idCliente, nome, telefone, email, cpf);
+    }
+
+    // Método para verificar senha (opcional)
+    public boolean verificarSenha(String senha) {
+        return this.senha.equals(senha);
     }
 }

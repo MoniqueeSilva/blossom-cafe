@@ -1,8 +1,9 @@
 package com.blossomcafe.controller;
 
+import java.util.List;
+
 import com.blossomcafe.dao.ClienteDAO;
 import com.blossomcafe.model.Cliente;
-import java.util.List;
 
 public class ClienteController {
     private ClienteDAO clienteDAO;
@@ -11,6 +12,7 @@ public class ClienteController {
         this.clienteDAO = new ClienteDAO();
     }
 
+    // Login com email e senha
     public Cliente fazerLogin(String email, String senha) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email não pode ser vazio");
@@ -23,7 +25,8 @@ public class ClienteController {
         return clienteDAO.buscarPorEmailSenha(email, senha);
     }
 
-    public boolean cadastrarCliente(String nome, String telefone, String email, String cpf) {
+    // Cadastrar cliente com senha
+    public boolean cadastrarCliente(String nome, String telefone, String email, String cpf, String senha) {
         if (nome == null || nome.isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
@@ -36,21 +39,41 @@ public class ClienteController {
         if (cpf == null || cpf.isEmpty()) {
             throw new IllegalArgumentException("CPF não pode ser vazio");
         }
+        if (senha == null || senha.isEmpty()) {
+            throw new IllegalArgumentException("Senha não pode ser vazia");
+        }
+
+        // Verificar se email já existe
+        if (clienteDAO.emailExiste(email)) {
+            throw new IllegalArgumentException("Email já cadastrado");
+        }
 
         try {
-            Cliente cliente = new Cliente(0, nome, telefone, email, cpf);
-            clienteDAO.inserir(cliente);
-            System.out.println("Cliente cadastrado com sucesso: " + nome);
-            return true;
+            Cliente cliente = new Cliente(0, nome, telefone, email, cpf, senha);
+            return clienteDAO.inserir(cliente);
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
             return false;
         }
     }
 
+    // Atualizar senha
+    public boolean alterarSenha(int idCliente, String novaSenha) {
+        if (novaSenha == null || novaSenha.isEmpty()) {
+            throw new IllegalArgumentException("Nova senha não pode ser vazia");
+        }
+
+        return clienteDAO.atualizarSenha(idCliente, novaSenha);
+    }
+
+    // Buscar cliente por CPF
     public Cliente buscarClientePorCpf(String cpf) {
-        // Você precisará implementar este método no ClienteDAO
-        System.out.println("Método buscarClientePorCpf não implementado ainda");
+        List<Cliente> clientes = clienteDAO.listarTodos();
+        for (Cliente cliente : clientes) {
+            if (cliente.getCpf().equals(cpf)) {
+                return cliente;
+            }
+        }
         return null;
     }
 
@@ -58,21 +81,23 @@ public class ClienteController {
         return clienteDAO.listarTodos();
     }
 
-    public boolean atualizarCliente(String cpf, String nome, String telefone, String email) {
-        if (cpf == null || cpf.isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser vazio");
+    public boolean atualizarCliente(String cpf, String nome, String telefone, String email, String senha) {
+        Cliente cliente = buscarClientePorCpf(cpf);
+        if (cliente == null) {
+            return false;
         }
-        
-        // Você precisará implementar este método no ClienteDAO
-        System.out.println("Método atualizarCliente não implementado ainda");
-        return false;
+
+        cliente.setNome(nome);
+        cliente.setTelefone(telefone);
+        cliente.setEmail(email);
+        cliente.setSenha(senha);
+
+        return clienteDAO.atualizar(cliente);
     }
 
     public boolean deletarCliente(int id) {
         try {
-            clienteDAO.deletar(id);
-            System.out.println("Cliente deletado com sucesso");
-            return true;
+            return clienteDAO.deletar(id);
         } catch (Exception e) {
             System.out.println("Erro ao deletar cliente: " + e.getMessage());
             return false;

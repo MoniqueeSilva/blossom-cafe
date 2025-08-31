@@ -23,6 +23,8 @@
             <version>21.0.2</version>
         </dependency>
 
+        
+
         <!-- JavaFX FXML (se usar arquivos .fxml na interface) -->
         <dependency>
             <groupId>org.openjfx</groupId>
