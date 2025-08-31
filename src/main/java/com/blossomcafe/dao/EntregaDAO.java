@@ -25,7 +25,8 @@ public class EntregaDAO {
 
     // READ (uma entrega)
     public Entrega buscarPorCodRastreio(String codRastreio) {
-        String sql = "SELECT e.*, ent.* FROM entrega e " +
+        String sql = "SELECT e.*, ent.nome, ent.veiculo, ent.placa, ent.cnh " +
+                    "FROM entrega e " +
                     "JOIN entregador ent ON e.cnh_entregador = ent.cnh " +
                     "WHERE e.cod_rastreio = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -35,13 +36,13 @@ public class EntregaDAO {
 
             if (rs.next()) {
                 Entregador entregador = new Entregador(
-                    rs.getString("ent.nome"),
-                    rs.getString("ent.veiculo"),
-                    rs.getString("ent.placa"),
-                    rs.getString("ent.cnh")
+                    rs.getString("nome"),
+                    rs.getString("veiculo"),
+                    rs.getString("placa"),
+                    rs.getString("cnh")
                 );
                 return new Entrega(
-                    rs.getString("e.cod_rastreio"),
+                    rs.getString("cod_rastreio"),
                     entregador
                 );
             }

@@ -1,69 +1,82 @@
+-- CLIENTE (CORRETO)
 CREATE TABLE cliente ( 
-id_cliente SERIAL PRIMARY KEY,
-telefone varchar(20),  
-nome varchar(60),  
-email varchar(60),  
-cpf varchar(11),
-senha varchar(50) NOT NULL
-); 
-
-CREATE TABLE produto ( 
- nome varchar(100),  
- preco FLOAT,  
- disponivel BOOLEAN,  
- id_produto SERIAL PRIMARY KEY
-); 
-
-CREATE TABLE item_pedido(
-	id_item_pedido SERIAL PRIMARY KEY,
-	id_produto INT,
-	id_pedido INT,
-	quantidade_item INT
+    id_cliente SERIAL PRIMARY KEY,
+    telefone VARCHAR(20),  
+    nome VARCHAR(60) NOT NULL,  
+    email VARCHAR(60) UNIQUE,  
+    cpf VARCHAR(11) UNIQUE
 );
 
-CREATE TABLE pedido (   
- data date,  
- status boolean,  
- quantProduto INT,  
- id_pedido INT PRIMARY KEY,  
- idCliente INT,  
- idEntrega INT,  
- idEndereco INT
-); 
-CREATE TABLE entrega 
-( 
- codRastreio INT PRIMARY KEY,  
- idEntregador INT 
-); 
+-- PRODUTO (CORRETO)
+CREATE TABLE produto ( 
+    nome VARCHAR(100) NOT NULL,  
+    preco DECIMAL(10,2) NOT NULL,  
+    disponivel BOOLEAN DEFAULT TRUE,  
+    id_produto SERIAL PRIMARY KEY
+);
 
-CREATE TABLE entregador 
-( 
- veiculo varchar(60),  
- nome varchar(100),  
- placa varchar(10),  
- cnh INT PRIMARY KEY 
-); 
+-- ENTREGADOR (CORRIGIDO)
+CREATE TABLE entregador ( 
+    veiculo VARCHAR(60) NOT NULL,  
+    nome VARCHAR(100) NOT NULL,  
+    placa VARCHAR(10) UNIQUE NOT NULL,  
+    cnh VARCHAR(20) PRIMARY KEY UNIQUE NOT NULL
+);
 
-CREATE TABLE endereco 
-( 
- rua VARCHAR(40) NOT NULL,  
- numero INT NOT NULL,  
- bairro VARCHAR(40),  
- cep varchar(10) NOT NULL,  
- cidade VARCHAR(60),  
- estado VARCHAR(60),  
- pontoRef VARCHAR(100),  
- id_endereco INT PRIMARY KEY,  
- idCliente INT
-); 
+-- ENTREGA (CORRIGIDO)
+CREATE TABLE entrega ( 
+    cod_rastreio VARCHAR(20) PRIMARY KEY,  
+    cnh_entregador VARCHAR(20) REFERENCES entregador(cnh)
+);
 
-ALTER TABLE Produto ADD FOREIGN KEY(idPedido) REFERENCES Pedido (id_Pedido);
-ALTER TABLE Pedido ADD FOREIGN KEY(idCliente) REFERENCES Cliente (id_cliente);
-ALTER TABLE Pedido ADD FOREIGN KEY(idEntrega) REFERENCES Entrega (codRastreio);
-ALTER TABLE Pedido ADD FOREIGN KEY(idEndereco) REFERENCES Endereco (id_endereco);
-ALTER TABLE Entrega ADD FOREIGN KEY(idEntregador) REFERENCES Entregador (cnh);
-ALTER TABLE Endereco ADD FOREIGN KEY(idCliente) REFERENCES Cliente (id_cliente);
-ALTER TABLE item_pedido ADD FOREIGN KEY(id_produto) REFERENCES produto (id_produto);
-ALTER TABLE item_pedido ADD FOREIGN KEY(id_pedido) REFERENCES pedido (id_pedido);
-ALTER TABLE endereco ADD FOREIGN KEY(idCliente) REFERENCES cliente (id_cliente);
+-- ENDEREÇO (CORRIGIDO)
+CREATE TABLE endereco ( 
+    rua VARCHAR(40) NOT NULL,  
+    numero INT NOT NULL,  
+    bairro VARCHAR(40),  
+    cep VARCHAR(10) NOT NULL,  
+    cidade VARCHAR(60),  
+    estado VARCHAR(2),  
+    ponto_ref VARCHAR(100),  
+    id_endereco SERIAL PRIMARY KEY,
+    id_cliente INT REFERENCES cliente(id_cliente)
+);
 
+-- PEDIDO (CORRIGIDO)
+CREATE TABLE pedido ( 
+    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+    status VARCHAR(20) DEFAULT 'PENDENTE', -- 'PENDENTE', 'PREPARANDO', 'ENTREGUE', etc.
+    id_pedido SERIAL PRIMARY KEY,  
+    id_cliente INT REFERENCES cliente(id_cliente),  
+    cod_rastreio VARCHAR(20) REFERENCES entrega(cod_rastreio),  
+    id_endereco INT REFERENCES endereco(id_endereco)
+);
+
+-- ITEM_PEDIDO (CORRIGIDO)
+CREATE TABLE item_pedido(
+    id_item_pedido SERIAL PRIMARY KEY,
+    id_produto INT REFERENCES produto(id_produto),
+    id_pedido INT REFERENCES pedido(id_pedido),
+    quantidade INT NOT NULL DEFAULT 1,
+    preco_unitario DECIMAL(10,2) NOT NULL,
+    UNIQUE(id_produto, id_pedido) -- Evita duplicatas
+);
+
+CREATE TABLE cafe (
+    id_produto INT PRIMARY KEY REFERENCES produto(id_produto),
+    tipo_cafe VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE flores (
+    id_produto INT PRIMARY KEY REFERENCES produto(id_produto),
+    cor VARCHAR(30) NOT NULL,
+    tipo_flor VARCHAR(50) NOT NULL
+);
+
+DROP TABLE IF EXISTS item_pedido CASCADE;
+DROP TABLE IF EXISTS pedido CASCADE;
+DROP TABLE IF EXISTS entrega CASCADE;
+DROP TABLE IF EXISTS endereco CASCADE;
+DROP TABLE IF EXISTS entregador CASCADE;
+DROP TABLE IF EXISTS produto CASCADE;
+DROP TABLE IF EXISTS cliente CASCADE;

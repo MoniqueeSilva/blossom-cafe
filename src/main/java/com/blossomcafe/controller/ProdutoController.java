@@ -3,6 +3,7 @@ package com.blossomcafe.controller;
 import com.blossomcafe.dao.ProdutoDAO;
 import com.blossomcafe.model.Produto;
 import java.util.List;
+import java.util.ArrayList;
 
 public class ProdutoController {
     private ProdutoDAO produtoDAO;
@@ -34,7 +35,9 @@ public class ProdutoController {
     }
 
     public List<Produto> listarTodosProdutos() {
-        return produtoDAO.listarTodos();
+        return produtoDAO.listarTodos().stream()
+        .filter(Produto::isDisponivel)
+        .collect(Collectors.toList());
     }
 
     public List<Produto> listarProdutosDisponiveis() {

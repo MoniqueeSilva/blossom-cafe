@@ -63,10 +63,58 @@ public class ClienteDAO {
         return clientes;
     }
 
-    //busca endereços de um cliente
-    private List<Endereco> buscarEnderecosPorCliente(int idCliente) {
-        List<Endereco> enderecos = new ArrayList<>();
-        String sql = "SELECT * FROM endereco WHERE idCliente = ?";
+    public Cliente buscarPorEmailSenha(String email, String senha) {
+    String sql = "SELECT * FROM cliente WHERE email = ? AND senha = ?";
+    try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+        stmt.setString(1, email);
+        stmt.setString(2, senha);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return new Cliente(
+                rs.getInt("id_cliente"),
+                rs.getString("nome"),
+                rs.getString("telefone"),
+                rs.getString("email"),
+                rs.getString("cpf")
+            );
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+
+
+
+
+
+    // READ - Adicione buscar por CPF
+    // public Cliente buscarPorCpf(String cpf) {
+    //     String sql = "SELECT * FROM cliente WHERE cpf = ?";
+    //     try (Connection conn = ConexaoBD.getConnection();
+    //         PreparedStatement stmt = conn.prepareStatement(sql)) {
+    //         stmt.setString(1, cpf);
+    //         ResultSet rs = stmt.executeQuery();
+
+    //         if (rs.next()) {
+    //             return new Cliente(
+    //                 rs.getInt("id_cliente"),
+    //                 rs.getString("nome"),
+    //                 rs.getString("telefone"),
+    //                 rs.getString("email"),
+    //                 rs.getString("cpf")
+    //             );
+    //         }
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //     }
+    //     return null;
+    // }
+
+    // UPDATE
+    public void atualizar(Cliente cliente) {
+        String sql = "UPDATE cliente SET nome = ?, telefone = ?, email = ?, cpf = ? WHERE id_cliente = ?";
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 

@@ -1,0 +1,78 @@
+/* Fundo da tela */
+.root {
+    -fx-background-color: #EADED0;
+}
+
+/* Logo fallback */
+.logo-texto {
+    -fx-font-family: Arial;
+    -fx-font-weight: bold;
+    -fx-font-size: 28px;
+    -fx-fill: #4C2B0B;
+}
+
+/* Título do formulário */
+.titulo-login {
+    -fx-font-family: Arial;
+    -fx-font-weight: bold;
+    -fx-font-size: 22px;
+    -fx-fill: #4C2B0B;
+}
+
+/* Campos de input */
+.input-campo {
+    -fx-padding: 10;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #D3B8A5;
+    -fx-background-color: #FFFFFF;
+    -fx-pref-width: 250px;
+}
+
+/* Checkbox */
+.checkbox {
+    -fx-text-fill: #4C2B0B;
+}
+
+/* Hyperlinks */
+.link {
+    -fx-text-fill: #4C2B0B;
+    -fx-border-color: transparent;
+    -fx-underline: true;
+}
+
+/* Botão Entrar */
+.btn-entrar {
+    -fx-background-color: #4C2B0B;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 12;
+    -fx-pref-width: 250px;
+}
+
+/* Botão Voltar */
+.btn-voltar {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4C2B0B;
+    -fx-border-color: #4C2B0B;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-pref-width: 100px;
+}
+
+/* Texto “Não tem conta?” */
+.texto-cadastro {
+    -fx-fill: #4C2B0B;
+    -fx-font-size: 12px;
+}
+
+/* Layout do formulário */
+.layout-form {
+    -fx-background-color: #EADED0;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #D3B8A5;
+    -fx-border-width: 1;
+}

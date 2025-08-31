@@ -1,0 +1,49 @@
+{
+    // Use o IntelliSense para saber mais sobre os atributos possíveis.
+    // Focalizar para exibir as descrições dos atributos existentes.
+    // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "MainApp",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.app.MainApp",
+            "projectName": "blossom-cafe-app"
+        },
+        {
+            "type": "java",
+            "name": "TestePedidoDAO",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.app.TestePedidoDAO",
+            "projectName": "blossom-cafe-app"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "TesteDAOs",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.app.TesteDAOs",
+            "projectName": "blossom-cafe-app"
+        },
+        {
+            "type": "java",
+            "name": "ClienteDAO",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.dao.ClienteDAO",
+            "projectName": "blossom-cafe-app"
+        },
+        {
+            "type": "java",
+            "name": "ProdutoDAO",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.dao.ProdutoDAO",
+            "projectName": "blossom-cafe-app"
+        }
+    ]
+}

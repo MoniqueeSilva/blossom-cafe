@@ -11,7 +11,7 @@ public class ClienteController {
         this.clienteDAO = new ClienteDAO();
     }
 
-    public boolean fazerLogin(String email, String senha) {
+    public Cliente fazerLogin(String email, String senha) {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email não pode ser vazio");
         }
@@ -20,8 +20,7 @@ public class ClienteController {
             throw new IllegalArgumentException("Senha não pode ser vazia");
         }
 
-        // Implementação temporária - sempre retorna true para teste
-        return true;
+        return clienteDAO.buscarPorEmailSenha(email, senha);
     }
 
     public boolean cadastrarCliente(String nome, String telefone, String email, String cpf) {
