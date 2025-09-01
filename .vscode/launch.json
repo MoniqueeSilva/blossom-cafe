@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TelaAcompanharEntrega",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.view.TelaAcompanharEntrega",
+            "projectName": "blossom-cafe-app"
+        },
+        {
+            "type": "java",
+            "name": "TelaPerfil",
+            "request": "launch",
+            "mainClass": "com.blossomcafe.view.TelaPerfil",
+            "projectName": "blossom-cafe-app"
+        },
+        {
+            "type": "java",
             "name": "MainApp",
             "request": "launch",
             "mainClass": "com.blossomcafe.app.MainApp",

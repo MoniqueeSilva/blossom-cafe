@@ -6,17 +6,24 @@ import java.util.List;
 public class Pedido {
     private int id;
     private List<Produto> produtos;
+    private String status; // "Preparando", "A caminho", "Entregue"
 
     public Pedido(int id) {
         this.id = id;
         this.produtos = new ArrayList<>();
+        this.status = "Preparando"; // status inicial
     }
 
+    // ====================== GETTERS E SETTERS ======================
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
     public List<Produto> getProdutos() { return produtos; }
 
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    // ====================== MÉTODOS DE PRODUTOS ======================
     public void adicionarProduto(Produto produto) {
         if (produto.isDisponivel()) {
             produtos.add(produto);
@@ -25,17 +32,14 @@ public class Pedido {
         }
     }
 
-    // Método para remover produto
     public boolean removerProduto(Produto produto) {
         return produtos.remove(produto);
     }
 
-    // Método para limpar todos os produtos
     public void limparProdutos() {
         produtos.clear();
     }
 
-    // Método para calcular valor total
     public double calcularValorTotal() {
         double total = 0.0;
         for (Produto produto : produtos) {
@@ -44,8 +48,20 @@ public class Pedido {
         return total;
     }
 
-    // Método para obter quantidade de produtos
     public int getQuantidadeProdutos() {
         return produtos.size();
+    }
+
+    // ====================== MÉTODOS DE STATUS ======================
+    public void marcarComoPreparando() {
+        status = "Preparando";
+    }
+
+    public void marcarComoACaminho() {
+        status = "A caminho";
+    }
+
+    public void marcarComoEntregue() {
+        status = "Entregue";
     }
 }

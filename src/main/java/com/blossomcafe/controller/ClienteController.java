@@ -1,7 +1,6 @@
 package com.blossomcafe.controller;
 
 import java.util.List;
-
 import com.blossomcafe.dao.ClienteDAO;
 import com.blossomcafe.model.Cliente;
 
@@ -17,82 +16,57 @@ public class ClienteController {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email não pode ser vazio");
         }
-
         if (senha == null || senha.isEmpty()) {
             throw new IllegalArgumentException("Senha não pode ser vazia");
         }
-
-        return clienteDAO.buscarPorEmailSenha(email, senha);
+        return clienteDAO.buscarPorEmailSenha(email, senha); // deve retornar Cliente ou null
     }
 
     // Cadastrar cliente com senha
     public boolean cadastrarCliente(String nome, String telefone, String email, String cpf, String senha) {
-        if (nome == null || nome.isEmpty()) {
-            throw new IllegalArgumentException("Nome não pode ser vazio");
-        }
-        if (telefone == null || telefone.isEmpty()) {
-            throw new IllegalArgumentException("Telefone não pode ser vazio");
-        }
-        if (email == null || email.isEmpty()) {
-            throw new IllegalArgumentException("Email não pode ser vazio");
-        }
-        if (cpf == null || cpf.isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser vazio");
-        }
-        if (senha == null || senha.isEmpty()) {
-            throw new IllegalArgumentException("Senha não pode ser vazia");
-        }
+        if (nome == null || nome.isEmpty()) throw new IllegalArgumentException("Nome não pode ser vazio");
+        if (telefone == null || telefone.isEmpty()) throw new IllegalArgumentException("Telefone não pode ser vazio");
+        if (email == null || email.isEmpty()) throw new IllegalArgumentException("Email não pode ser vazio");
+        if (cpf == null || cpf.isEmpty()) throw new IllegalArgumentException("CPF não pode ser vazio");
+        if (senha == null || senha.isEmpty()) throw new IllegalArgumentException("Senha não pode ser vazia");
 
-        // Verificar se email já existe
         if (clienteDAO.emailExiste(email)) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
 
+        Cliente cliente = new Cliente(0, nome, telefone, email, cpf, senha);
+        return clienteDAO.inserir(cliente);
+    }
+
+    // Atualizar cliente completo
+    public boolean atualizarCliente(Cliente cliente) {
+        if (cliente == null) {
+            throw new IllegalArgumentException("Cliente não pode ser nulo");
+        }
         try {
-            Cliente cliente = new Cliente(0, nome, telefone, email, cpf, senha);
-            return clienteDAO.inserir(cliente);
+            return clienteDAO.atualizar(cliente); // Atualizar todos os dados do cliente
         } catch (Exception e) {
-            System.out.println("Erro ao cadastrar cliente: " + e.getMessage());
+            System.out.println("Erro ao atualizar cliente: " + e.getMessage());
             return false;
         }
     }
 
-    // Atualizar senha
+    // Alterar somente a senha
     public boolean alterarSenha(int idCliente, String novaSenha) {
         if (novaSenha == null || novaSenha.isEmpty()) {
             throw new IllegalArgumentException("Nova senha não pode ser vazia");
         }
-
         return clienteDAO.atualizarSenha(idCliente, novaSenha);
     }
 
     // Buscar cliente por CPF
-    public Cliente buscarClientePorCpf(String cpf) {
-        List<Cliente> clientes = clienteDAO.listarTodos();
-        for (Cliente cliente : clientes) {
-            if (cliente.getCpf().equals(cpf)) {
-                return cliente;
-            }
-        }
-        return null;
-    }
+    // public Cliente buscarClientePorCpf(String cpf) {
+    //     if (cpf == null || cpf.isEmpty()) return null;
+    //     return clienteDAO.buscarPorCpf(cpf); // se ClienteDAO tiver esse método
+    // }
 
     public List<Cliente> listarTodosClientes() {
         return clienteDAO.listarTodos();
-    }
-
-    public boolean atualizarCliente(String cpf, String nome, String telefone, String email, String senha) {
-        Cliente cliente = buscarClientePorCpf(cpf);
-        if (cliente == null) {
-            return false;
-        }
-
-        cliente.setNome(nome);
-        cliente.setTelefone(telefone);
-        cliente.setEmail(email);
-        cliente.setSenha(senha);
-
-        return clienteDAO.atualizar(cliente);
     }
 
     public boolean deletarCliente(int id) {
