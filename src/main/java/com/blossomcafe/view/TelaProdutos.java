@@ -1,7 +1,9 @@
 package com.blossomcafe.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.blossomcafe.controller.ProdutoController;
 import com.blossomcafe.model.Produto;
@@ -27,10 +29,27 @@ import javafx.stage.Stage;
 public class TelaProdutos {
     private Stage stage;
     private ProdutoController produtoController;
+    private Map<String, String> mapeamentoImagens;
 
     public TelaProdutos(Stage stage) {
         this.stage = stage;
         this.produtoController = new ProdutoController();
+        this.mapeamentoImagens = new HashMap<>();
+        
+        // Inicializar o mapeamento de imagens
+        inicializarMapeamentoImagens();
+    }
+    
+    private void inicializarMapeamentoImagens() {
+        // Mapeie cada produto para sua imagem
+        mapeamentoImagens.put("Café Expresso", "/images/produtos/cafe-expresso.jpg");
+        mapeamentoImagens.put("Cappuccino Special", "/images/produtos/cappuccino-special.jpg");
+        mapeamentoImagens.put("Buquê de Rosas", "/images/produtos/buque-rosas.jpg");
+        mapeamentoImagens.put("Girassóis", "/images/produtos/girassois.jpg");
+        mapeamentoImagens.put("Combo Romance", "/images/produtos/combo-romance.jpg");
+        mapeamentoImagens.put("Kit Surpresa", "/images/produtos/kit-surpresa.jpg");
+        
+        // Adicione mais mapeamentos conforme necessário
     }
 
     public void mostrar() {
@@ -63,13 +82,6 @@ public class TelaProdutos {
         scrollPane.setStyle("-fx-background: transparent; -fx-border: none;");
         scrollPane.setPadding(new Insets(5));
         
-        // No método mostrar() da TelaProdutos, adicione este teste:
-    System.out.println("=== TESTE PRODUTOS DO BANCO ===");
-    List<Produto> todosProdutos = produtoController.listarProdutosDisponiveis();
-    System.out.println("Total de produtos encontrados: " + todosProdutos.size());
-    for (Produto p : todosProdutos) {
-        System.out.println("- " + p.getNome() + " (R$ " + p.getPreco() + ")");
-    }
         // ==================== LAYOUT PRINCIPAL ====================
         VBox layoutPrincipal = new VBox(15);
         layoutPrincipal.setAlignment(Pos.TOP_CENTER);
@@ -122,51 +134,43 @@ public class TelaProdutos {
         return secao;
     }
 
-private List<Produto> filtrarProdutosPorCategoria(String tipo) {
-    List<Produto> todosProdutos = produtoController.listarProdutosDisponiveis();
-    List<Produto> filtrados = new ArrayList<>();
-    
-    System.out.println("Filtrando categoria: " + tipo); // DEBUG
-    System.out.println("Total de produtos: " + todosProdutos.size()); // DEBUG
-    
-    for (Produto produto : todosProdutos) {
-        String nome = produto.getNome().toLowerCase();
-        System.out.println("Produto: " + nome + " - R$ " + produto.getPreco()); // DEBUG
+    private List<Produto> filtrarProdutosPorCategoria(String tipo) {
+        List<Produto> todosProdutos = produtoController.listarProdutosDisponiveis();
+        List<Produto> filtrados = new ArrayList<>();
         
-        switch (tipo) {
-            case "cafe":
-                if (nome.contains("café") || nome.contains("cafe") || nome.contains("expresso") || 
-                    nome.contains("cappuccino") || nome.contains("latte") || nome.contains("coffee") ||
-                    nome.contains("café") || nome.contains("espresso")) {
-                    filtrados.add(produto);
-                    System.out.println("✅ Adicionado em Cafés: " + nome); // DEBUG
-                }
-                break;
-                
-            case "flores":
-                if (nome.contains("flor") || nome.contains("rosa") || nome.contains("orquídea") || 
-                    nome.contains("orquidea") || nome.contains("girassol") || 
-                    nome.contains("tulipa") || nome.contains("buquê") || nome.contains("buque") ||
-                    nome.contains("flores") || nome.contains("flower")) {
-                    filtrados.add(produto);
-                    System.out.println("✅ Adicionado em Flores: " + nome); // DEBUG
-                }
-                break;
-                
-            case "combo":
-                if (nome.contains("combo") || nome.contains("kit") || nome.contains("pacote") ||
-                    nome.contains("presente") || nome.contains("special") || nome.contains("kit") ||
-                    produto.getPreco() > 20.0) {
-                    filtrados.add(produto);
-                    System.out.println("✅ Adicionado em Combos: " + nome + " (R$ " + produto.getPreco() + ")"); // DEBUG
-                }
-                break;
+        for (Produto produto : todosProdutos) {
+            String nome = produto.getNome().toLowerCase();
+            
+            switch (tipo) {
+                case "cafe":
+                    if (nome.contains("café") || nome.contains("cafe") || nome.contains("expresso") || 
+                        nome.contains("cappuccino") || nome.contains("latte") || nome.contains("coffee") ||
+                        nome.contains("café") || nome.contains("espresso")) {
+                        filtrados.add(produto);
+                    }
+                    break;
+                    
+                case "flores":
+                    if (nome.contains("flor") || nome.contains("rosa") || nome.contains("orquídea") || 
+                        nome.contains("orquidea") || nome.contains("girassol") || 
+                        nome.contains("tulipa") || nome.contains("buquê") || nome.contains("buque") ||
+                        nome.contains("flores") || nome.contains("flower")) {
+                        filtrados.add(produto);
+                    }
+                    break;
+                    
+                case "combo":
+                    if (nome.contains("combo") || nome.contains("kit") || nome.contains("pacote") ||
+                        nome.contains("presente") || nome.contains("special") || nome.contains("kit") ||
+                        produto.getPreco() > 20.0) {
+                        filtrados.add(produto);
+                    }
+                    break;
+            }
         }
+        
+        return filtrados;
     }
-    
-    System.out.println("Encontrados na categoria " + tipo + ": " + filtrados.size()); // DEBUG
-    return filtrados;
-}
 
     private HBox criarNavbar() {
         HBox navbar = new HBox(15);
@@ -236,8 +240,6 @@ private List<Produto> filtrarProdutosPorCategoria(String tipo) {
         return button;
     }
 
-    
-
     private VBox criarCardProduto(Produto produto) {
         VBox card = new VBox(10);
         card.setAlignment(Pos.TOP_CENTER);
@@ -248,21 +250,8 @@ private List<Produto> filtrarProdutosPorCategoria(String tipo) {
         card.setPrefWidth(200);
         card.setMinHeight(250);
 
-        // Imagem do produto
-        ImageView imgProduto;
-        try {
-            Image img = new Image(getClass().getResourceAsStream("/images/produto-placeholder.jpg"));
-            imgProduto = new ImageView(img);
-        } catch (Exception e) {
-            // Placeholder colorido baseado no tipo
-            StackPane placeholder = new StackPane();
-            String corFundo = produto.getNome().toLowerCase().contains("café") ? "#8B4513" : 
-                             produto.getNome().toLowerCase().contains("flor") ? "#FF69B4" : "#4C2B0B";
-            placeholder.setStyle("-fx-background-color: " + corFundo + "; -fx-min-width: 100; -fx-min-height: 100; -fx-background-radius: 10;");
-            placeholder.getChildren().add(new Text(produto.getNome().contains("Café") ? "☕" : "🌺"));
-            imgProduto = new ImageView();
-        }
-        
+        // Imagem do produto - busca imagem específica
+        ImageView imgProduto = carregarImagemProduto(produto);
         imgProduto.setFitWidth(100);
         imgProduto.setFitHeight(100);
         imgProduto.setPreserveRatio(true);
@@ -297,4 +286,53 @@ private List<Produto> filtrarProdutosPorCategoria(String tipo) {
         return card;
     }
 
+    private ImageView carregarImagemProduto(Produto produto) {
+        String caminhoImagem = mapeamentoImagens.get(produto.getNome());
+        
+        if (caminhoImagem == null) {
+            // Usa placeholder se não encontrar imagem específica
+            return criarPlaceholder(produto);
+        }
+        
+        try {
+            Image imagem = new Image(getClass().getResourceAsStream(caminhoImagem));
+            return new ImageView(imagem);
+        } catch (Exception e) {
+            System.out.println("Imagem não encontrada: " + caminhoImagem);
+            return criarPlaceholder(produto);
+        }
+    }
+
+    private ImageView criarPlaceholder(Produto produto) {
+        // Cria um placeholder colorido baseado no tipo de produto
+        StackPane placeholder = new StackPane();
+        String corFundo;
+        String emoji;
+        
+        if (produto.getNome().toLowerCase().contains("café") || 
+            produto.getNome().toLowerCase().contains("cafe")) {
+            corFundo = "#8B4513"; // Marrom para café
+            emoji = "☕";
+        } else if (produto.getNome().toLowerCase().contains("flor")) {
+            corFundo = "#FF69B4"; // Rosa para flores
+            emoji = "🌺";
+        } else {
+            corFundo = "#4C2B0B"; // Marrom escuro para combos
+            emoji = "🎁";
+        }
+        
+        placeholder.setStyle("-fx-background-color: " + corFundo + "; -fx-min-width: 100; -fx-min-height: 100; -fx-background-radius: 10;");
+        
+        Text textoEmoji = new Text(emoji);
+        textoEmoji.setStyle("-fx-font-size: 24; -fx-fill: white;");
+        
+        placeholder.getChildren().add(textoEmoji);
+        
+        // Converte StackPane para ImageView (aproximação)
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        
+        return imageView;
+    }
 }
