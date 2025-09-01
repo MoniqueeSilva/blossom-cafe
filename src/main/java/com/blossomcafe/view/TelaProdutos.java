@@ -42,8 +42,8 @@ public class TelaProdutos {
     
     private void inicializarMapeamentoImagens() {
         // Mapeie cada produto para sua imagem
-        mapeamentoImagens.put("Café Expresso", "/images/produtos/cafe-expresso.jpg");
-        mapeamentoImagens.put("Cappuccino Special", "/images/produtos/cappuccino-special.jpg");
+        mapeamentoImagens.put("Café Expresso", "/images/produtos/cafes/cafe-expresso.jpg");
+        mapeamentoImagens.put("Cappuccino Italiano", "/images/produtos/cafes/cappuccino-italiano.jpg");
         mapeamentoImagens.put("Buquê de Rosas", "/images/produtos/buque-rosas.jpg");
         mapeamentoImagens.put("Girassóis", "/images/produtos/girassois.jpg");
         mapeamentoImagens.put("Combo Romance", "/images/produtos/combo-romance.jpg");
