@@ -15,6 +15,13 @@ public class Entrega {
         return entregador;
     }
 
+    public void setCodigoRastreio(String codRastreio){
+        this.codRastreio = codRastreio;
+    }
+    public void setEntregador(Entregador entregador){
+        this.entregador = entregador;
+    }
+
     public void detalhesEntrega() {
         System.out.println("Entrega - Código de Rastreio: " + codRastreio);
         System.out.println("Entregador: " + entregador.getNome() + " (" + entregador.getVeiculo() + ")");

@@ -25,10 +25,10 @@ public class EntregaDAO {
 
     // READ (uma entrega)
     public Entrega buscarPorCodRastreio(String codRastreio) {
-        String sql = "SELECT e.*, ent.nome, ent.veiculo, ent.placa, ent.cnh " +
-                    "FROM entrega e " +
-                    "JOIN entregador ent ON e.cnh_entregador = ent.cnh " +
-                    "WHERE e.cod_rastreio = ?";
+        String sql = "SELECT e.cod_rastreio, ent.nome AS nome_entregador, ent.veiculo, ent.placa, ent.cnh " +
+                     "FROM entrega e " +
+                     "JOIN entregador ent ON e.cnh_entregador = ent.cnh " +
+                     "WHERE e.cod_rastreio = ?";
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, codRastreio);
@@ -36,7 +36,7 @@ public class EntregaDAO {
 
             if (rs.next()) {
                 Entregador entregador = new Entregador(
-                    rs.getString("nome"),
+                    rs.getString("nome_entregador"),
                     rs.getString("veiculo"),
                     rs.getString("placa"),
                     rs.getString("cnh")
@@ -55,9 +55,10 @@ public class EntregaDAO {
     // READ (entregas por entregador)
     public List<Entrega> buscarPorEntregador(String cnhEntregador) {
         List<Entrega> entregas = new ArrayList<>();
-        String sql = "SELECT e.*, ent.* FROM entrega e " +
-                    "JOIN entregador ent ON e.cnh_entregador = ent.cnh " +
-                    "WHERE e.cnh_entregador = ?";
+        String sql = "SELECT e.cod_rastreio, ent.nome AS nome_entregador, ent.veiculo, ent.placa, ent.cnh " +
+                     "FROM entrega e " +
+                     "JOIN entregador ent ON e.cnh_entregador = ent.cnh " +
+                     "WHERE e.cnh_entregador = ?";
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cnhEntregador);
@@ -65,13 +66,13 @@ public class EntregaDAO {
 
             while (rs.next()) {
                 Entregador entregador = new Entregador(
-                    rs.getString("ent.nome"),
-                    rs.getString("ent.veiculo"),
-                    rs.getString("ent.placa"),
-                    rs.getString("ent.cnh")
+                    rs.getString("nome_entregador"),
+                    rs.getString("veiculo"),
+                    rs.getString("placa"),
+                    rs.getString("cnh")
                 );
                 Entrega entrega = new Entrega(
-                    rs.getString("e.cod_rastreio"),
+                    rs.getString("cod_rastreio"),
                     entregador
                 );
                 entregas.add(entrega);
@@ -85,21 +86,22 @@ public class EntregaDAO {
     // READ (todas as entregas)
     public List<Entrega> listarTodas() {
         List<Entrega> entregas = new ArrayList<>();
-        String sql = "SELECT e.*, ent.* FROM entrega e " +
-                    "JOIN entregador ent ON e.cnh_entregador = ent.cnh";
+        String sql = "SELECT e.cod_rastreio, ent.nome AS nome_entregador, ent.veiculo, ent.placa, ent.cnh " +
+                     "FROM entrega e " +
+                     "JOIN entregador ent ON e.cnh_entregador = ent.cnh";
         try (Connection conn = ConexaoBD.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Entregador entregador = new Entregador(
-                    rs.getString("ent.nome"),
-                    rs.getString("ent.veiculo"),
-                    rs.getString("ent.placa"),
-                    rs.getString("ent.cnh")
+                    rs.getString("nome_entregador"),
+                    rs.getString("veiculo"),
+                    rs.getString("placa"),
+                    rs.getString("cnh")
                 );
                 Entrega entrega = new Entrega(
-                    rs.getString("e.cod_rastreio"),
+                    rs.getString("cod_rastreio"),
                     entregador
                 );
                 entregas.add(entrega);

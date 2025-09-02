@@ -15,13 +15,24 @@ public class Pedido {
     }
 
     // ====================== GETTERS E SETTERS ======================
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
 
-    public List<Produto> getProdutos() { return produtos; }
+    public List<Produto> getProdutos(){
+        return produtos;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getStatus(){
+        return status; 
+    }
+    
+    public void setStatus(String status){
+        this.status = status;
+    }
 
     // ====================== MÉTODOS DE PRODUTOS ======================
     public void adicionarProduto(Produto produto) {

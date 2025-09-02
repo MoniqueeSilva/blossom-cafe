@@ -1,78 +1,128 @@
-/* Fundo da tela */
+/* ===== ESTILOS GERAIS ===== */
 .root {
+    -fx-font-family: 'Arial';
     -fx-background-color: #EADED0;
 }
 
-/* Logo fallback */
+/* ===== LOGO ===== */
 .logo-texto {
-    -fx-font-family: Arial;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-font-size: 28px;
     -fx-fill: #4C2B0B;
 }
 
-/* Título do formulário */
+/* ===== TÍTULOS ===== */
 .titulo-login {
-    -fx-font-family: Arial;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
-    -fx-font-size: 22px;
     -fx-fill: #4C2B0B;
 }
 
-/* Campos de input */
-.input-campo {
-    -fx-padding: 10;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-    -fx-border-color: #D3B8A5;
-    -fx-background-color: #FFFFFF;
-    -fx-pref-width: 250px;
+.slogan {
+    -fx-font-size: 14px;
+    -fx-fill: #6B4C35;
+    -fx-font-style: italic;
 }
 
-/* Checkbox */
-.checkbox {
-    -fx-text-fill: #4C2B0B;
-}
-
-/* Hyperlinks */
-.link {
-    -fx-text-fill: #4C2B0B;
-    -fx-border-color: transparent;
-    -fx-underline: true;
-}
-
-/* Botão Entrar */
-.btn-entrar {
-    -fx-background-color: #4C2B0B;
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
+/* ===== FORMULÁRIOS ===== */
+.layout-form {
+    -fx-background-color: #F8F2EA;
     -fx-background-radius: 10;
-    -fx-padding: 12;
-    -fx-pref-width: 250px;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);
 }
 
-/* Botão Voltar */
+.input-campo {
+    -fx-pref-width: 250px;
+    -fx-padding: 8px;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #CCB9A3;
+    -fx-background-color: white;
+}
+
+.input-campo:focused {
+    -fx-border-color: #4C2B0B;
+    -fx-effect: dropshadow(gaussian, rgba(76, 43, 11, 0.2), 5, 0, 0, 1);
+}
+
+/* ===== BOTÕES ===== */
+.btn-entrar {
+    -fx-background-color: linear-gradient(to bottom, #4C2B0B, #6B4C35);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 30px;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-cursor: hand;
+}
+
+.btn-entrar:hover {
+    -fx-background-color: linear-gradient(to bottom, #6B4C35, #8A6D5B);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+}
+
 .btn-voltar {
     -fx-background-color: transparent;
     -fx-text-fill: #4C2B0B;
     -fx-border-color: #4C2B0B;
-    -fx-border-width: 1;
+    -fx-border-width: 1px;
     -fx-border-radius: 5;
-    -fx-pref-width: 100px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
 }
 
-/* Texto “Não tem conta?” */
+.btn-voltar:hover {
+    -fx-background-color: #4C2B0B;
+    -fx-text-fill: white;
+}
+
+/* ===== LINKS ===== */
+.link {
+    -fx-text-fill: #4C2B0B;
+    -fx-border-color: transparent;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}
+
+.link:hover {
+    -fx-text-fill: #6B4C35;
+}
+
+.link-sem-login {
+    -fx-text-fill: #6B4C35;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.link-sem-login:hover {
+    -fx-text-fill: #4C2B0B;
+    -fx-underline: true;
+}
+
+/* ===== CHECKBOX ===== */
+.checkbox {
+    -fx-text-fill: #4C2B0B;
+}
+
+.checkbox .box {
+    -fx-background-color: white;
+    -fx-border-color: #CCB9A3;
+    -fx-border-radius: 3;
+}
+
+.checkbox:selected .mark {
+    -fx-background-color: #4C2B0B;
+}
+
+/* ===== TEXTOS ===== */
 .texto-cadastro {
-    -fx-fill: #4C2B0B;
     -fx-font-size: 12px;
+    -fx-fill: #6B4C35;
 }
 
-/* Layout do formulário */
-.layout-form {
-    -fx-background-color: #EADED0;
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
-    -fx-border-color: #D3B8A5;
-    -fx-border-width: 1;
+/* ===== LABELS ===== */
+.label {
+    -fx-text-fill: #4C2B0B;
+    -fx-font-weight: bold;
 }

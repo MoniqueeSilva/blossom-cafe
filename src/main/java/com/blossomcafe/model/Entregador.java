@@ -24,4 +24,17 @@ public class Entregador {
     public String getCnh(){
         return cnh;
     }
+
+    public void setNome(String nome){
+        this.nome = nome;
+    }
+    public void setVeiculo(String veiculo){
+        this.veiculo = veiculo;
+    }
+    public void setPlaco(String placa){
+        this.placa = placa;
+    }
+    public void setCnh(String cnh){
+        this.cnh = cnh;
+    }
 }

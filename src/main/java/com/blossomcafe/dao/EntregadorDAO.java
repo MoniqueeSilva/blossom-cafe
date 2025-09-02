@@ -9,11 +9,11 @@ import java.util.List;
 
 public class EntregadorDAO {
 
-    // CREATE
+    // ====================== CREATE ======================
     public void inserir(Entregador entregador) {
         String sql = "INSERT INTO entregador (nome, veiculo, placa, cnh) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConexaoBD.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, entregador.getNome());
             stmt.setString(2, entregador.getVeiculo());
             stmt.setString(3, entregador.getPlaca());
@@ -24,51 +24,33 @@ public class EntregadorDAO {
         }
     }
 
-    // READ (um entregador por CNH - único)
+    // ====================== READ ======================
     public Entregador buscarPorCnh(String cnh) {
         String sql = "SELECT * FROM entregador WHERE cnh = ?";
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, cnh);
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Entregador(
-                    rs.getString("nome"),
-                    rs.getString("veiculo"),
-                    rs.getString("placa"),
-                    rs.getString("cnh")
-                );
-            }
+            if (rs.next()) return montarEntregador(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    // READ (um entregador por placa - único)
     public Entregador buscarPorPlaca(String placa) {
         String sql = "SELECT * FROM entregador WHERE placa = ?";
         try (Connection conn = ConexaoBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, placa);
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Entregador(
-                    rs.getString("nome"),
-                    rs.getString("veiculo"),
-                    rs.getString("placa"),
-                    rs.getString("cnh")
-                );
-            }
+            if (rs.next()) return montarEntregador(rs);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    // READ (todos)
     public List<Entregador> listarTodos() {
         List<Entregador> entregadores = new ArrayList<>();
         String sql = "SELECT * FROM entregador";
@@ -77,13 +59,7 @@ public class EntregadorDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Entregador e = new Entregador(
-                    rs.getString("nome"),
-                    rs.getString("veiculo"),
-                    rs.getString("placa"),
-                    rs.getString("cnh")
-                );
-                entregadores.add(e);
+                entregadores.add(montarEntregador(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,7 +67,7 @@ public class EntregadorDAO {
         return entregadores;
     }
 
-    // UPDATE (por CNH, que é único)
+    // ====================== UPDATE ======================
     public void atualizarPorCnh(String cnh, Entregador entregador) {
         String sql = "UPDATE entregador SET nome = ?, veiculo = ?, placa = ? WHERE cnh = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -106,7 +82,6 @@ public class EntregadorDAO {
         }
     }
 
-    // UPDATE (por placa, que é única)
     public void atualizarPorPlaca(String placa, Entregador entregador) {
         String sql = "UPDATE entregador SET nome = ?, veiculo = ?, cnh = ? WHERE placa = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -121,7 +96,7 @@ public class EntregadorDAO {
         }
     }
 
-    // DELETE (por CNH)
+    // ====================== DELETE ======================
     public void deletarPorCnh(String cnh) {
         String sql = "DELETE FROM entregador WHERE cnh = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -133,7 +108,6 @@ public class EntregadorDAO {
         }
     }
 
-    // DELETE (por placa)
     public void deletarPorPlaca(String placa) {
         String sql = "DELETE FROM entregador WHERE placa = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -143,5 +117,15 @@ public class EntregadorDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    // ====================== HELPER ======================
+    private Entregador montarEntregador(ResultSet rs) throws SQLException {
+        return new Entregador(
+            rs.getString("nome"),
+            rs.getString("veiculo"),
+            rs.getString("placa"),
+            rs.getString("cnh")
+        );
     }
 }

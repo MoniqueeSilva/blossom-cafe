@@ -117,6 +117,26 @@ public class ClienteDAO {
         return null;
     }
 
+    public Cliente buscarPorCpf(String cpf){
+        String sql = "SELECT * FROM  cliente WHERE cpf = ?";
+        try(PreparedStatement stmt = conexao.prepareStatement(sql)){
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                return new Cliente(rs.getInt("id_cliente"), // consistente com o resto
+                rs.getString("nome"),
+                rs.getString("telefone"),
+                rs.getString("email"),
+                rs.getString("cpf"),
+                rs.getString("senha"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // READ - Listar todos
     public List<Cliente> listarTodos() {
         List<Cliente> clientes = new ArrayList<>();
