@@ -2,6 +2,7 @@ package com.blossomcafe.view;
 
 import com.blossomcafe.controller.ClienteController;
 import com.blossomcafe.model.Cliente;
+import com.blossomcafe.util.Sessao;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -100,28 +101,24 @@ public class TelaLogin {
             String email = campoEmail.getText().trim();
             String senha = campoSenha.getText().trim();
 
-            if (email.isEmpty() || senha.isEmpty()) {
-                mostrarAlerta("❌ Erro", "Por favor, preencha todos os campos.");
-                return;
-            }
+            System.out.println("📧 Tentando login com: " + email);
+            System.out.println("🔑 Senha: " + senha);
 
-            if (!email.contains("@")) {
-                mostrarAlerta("❌ Erro", "Por favor, insira um e-mail válido.");
-                return;
-            }
-
-            try {
-                Cliente logado = controller.fazerLogin(email, senha);
-
-                if (logado != null) {
-                    mostrarAlerta("✅ Sucesso", "Login realizado com sucesso! 🌸\n\nBem-vindo(a) " + logado.getNome() + "!");
-                    TelaProdutos telaProdutos = new TelaProdutos(stage);
-                    telaProdutos.mostrar();
-                } else {
-                    mostrarAlerta("❌ Erro", "E-mail ou senha incorretos.");
-                }
-            } catch (IllegalArgumentException e) {
-                mostrarAlerta("❌ Erro", e.getMessage());
+            Cliente logado = controller.fazerLogin(email, senha);
+            
+            System.out.println("🔍 Resultado do login: " + (logado != null ? "SUCESSO" : "FALHA"));
+            if (logado != null) {
+                System.out.println("👤 Usuário logado: " + logado.getNome());
+                
+                Sessao.setClienteLogado(logado); // Armazena na sessão
+                System.out.println("💾 Sessão salva: " + (Sessao.getClienteLogado() != null));
+                
+                mostrarAlerta("✅ Sucesso", "Login realizado com sucesso!");
+                TelaProdutos telaProdutos = new TelaProdutos(stage);
+                telaProdutos.mostrar();
+            } else {
+                System.out.println("❌ Login falhou");
+                mostrarAlerta("❌ Erro", "E-mail ou senha incorretos.");
             }
         });
 
