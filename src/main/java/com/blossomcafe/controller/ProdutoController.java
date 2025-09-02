@@ -2,7 +2,6 @@ package com.blossomcafe.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.blossomcafe.dao.ProdutoDAO;
 import com.blossomcafe.model.Produto;
@@ -40,11 +39,11 @@ public class ProdutoController {
         return produtoDAO.listarTodos();
     }
 
-    public List<Produto> listarProdutosDisponiveis() {
-        return produtoDAO.listarTodos().stream()
-            .filter(Produto::isDisponivel)
-            .collect(Collectors.toList());
-    }
+    // public List<Produto> listarProdutosDisponiveis() {
+    //     return produtoDAO.listarTodos().stream()
+    //         .filter(Produto::isDisponivel)
+    //         .collect(Collectors.toList());
+    // }
 
     public boolean atualizarProduto(int id, String nome, double preco, boolean disponivel) {
         try {
@@ -89,6 +88,32 @@ public class ProdutoController {
             System.out.println("Erro ao deletar produto: " + e.getMessage());
             return false;
         }
+    }
+
+    public List<Produto> listarProdutosDisponiveis() {
+    // ⚠️ TEMPORÁRIO: Retorna dados mock se o banco estiver vazio
+        List<Produto> produtosDoBanco = produtoDAO.listarTodos();
+        
+        if (produtosDoBanco.isEmpty()) {
+            System.out.println("📦 Usando dados mock temporários...");
+            List<Produto> mockProdutos = new ArrayList<>();
+            
+            // Cafés
+            mockProdutos.add(new Produto(1, "Café Expresso", 8.90, true));
+            mockProdutos.add(new Produto(2, "Cappuccino Special", 12.50, true));
+            
+            // Flores
+            mockProdutos.add(new Produto(3, "Buquê de Rosas", 89.90, true));
+            mockProdutos.add(new Produto(4, "Girassóis", 45.90, true));
+            
+            // Combos
+            mockProdutos.add(new Produto(5, "Combo Romance", 120.00, true));
+            mockProdutos.add(new Produto(6, "Kit Surpresa", 75.00, true));
+            
+            return mockProdutos;
+        }
+        
+        return produtosDoBanco;
     }
 
     public List<Produto> buscarProdutosPorNome(String nome) {
