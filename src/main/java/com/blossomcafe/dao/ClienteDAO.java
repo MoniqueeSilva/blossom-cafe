@@ -18,16 +18,18 @@ public class ClienteDAO {
         try {
             this.conexao = ConexaoBD.getConnection();
         } catch (SQLException e) {
+            System.err.println("Erro ao conectar com o banco: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    // CREATE - Inserir cliente com senha
+    // CREATE - Inserir cliente
     public boolean inserir(Cliente cliente) {
-        String sql = "INSERT INTO cliente (telefone, nome, email, cpf, senha) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente (nome, telefone, email, cpf, senha) VALUES (?, ?, ?, ?, ?)";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, cliente.getTelefone());
-            stmt.setString(2, cliente.getNome());
+            stmt.setString(1, cliente.getNome());
+            stmt.setString(2, cliente.getTelefone());
             stmt.setString(3, cliente.getEmail());
             stmt.setString(4, cliente.getCpf());
             stmt.setString(5, cliente.getSenha());
@@ -35,60 +37,54 @@ public class ClienteDAO {
             int affectedRows = stmt.executeUpdate();
             
             if (affectedRows > 0) {
-                ResultSet rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    cliente.setIdCliente(rs.getInt(1));
-                    return true;
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        cliente.setIdCliente(rs.getInt(1));
+                        return true;
+                    }
                 }
             }
         } catch (SQLException e) {
+            System.err.println("Erro ao inserir cliente: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
     }
 
-    // READ - Buscar por email e senha (para login)
+    // READ - Buscar por email e senha
     public Cliente buscarPorEmailSenha(String email, String senha) {
         String sql = "SELECT * FROM cliente WHERE email = ? AND senha = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.setString(2, senha);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Cliente(
-                    rs.getInt("id_cliente"),
-                    rs.getString("nome"),
-                    rs.getString("telefone"),
-                    rs.getString("email"),
-                    rs.getString("cpf"),
-                    rs.getString("senha")
-                );
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return criarClienteFromResultSet(rs);
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Erro ao buscar cliente por email/senha: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
     }
 
-    // READ - Buscar apenas por email
+    // READ - Buscar por email
     public Cliente buscarPorEmail(String email) {
         String sql = "SELECT * FROM cliente WHERE email = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Cliente(
-                    rs.getInt("id_cliente"),
-                    rs.getString("nome"),
-                    rs.getString("telefone"),
-                    rs.getString("email"),
-                    rs.getString("cpf"),
-                    rs.getString("senha")
-                );
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return criarClienteFromResultSet(rs);
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Erro ao buscar cliente por email: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -97,41 +93,17 @@ public class ClienteDAO {
     // READ - Buscar por ID
     public Cliente buscarPorId(int id) {
         String sql = "SELECT * FROM cliente WHERE id_cliente = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return new Cliente(
-                    rs.getInt("id_cliente"),
-                    rs.getString("nome"),
-                    rs.getString("telefone"),
-                    rs.getString("email"),
-                    rs.getString("cpf"),
-                    rs.getString("senha")
-                );
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return criarClienteFromResultSet(rs);
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Cliente buscarPorCpf(String cpf){
-        String sql = "SELECT * FROM  cliente WHERE cpf = ?";
-        try(PreparedStatement stmt = conexao.prepareStatement(sql)){
-            stmt.setString(1, cpf);
-            ResultSet rs = stmt.executeQuery();
-
-            if(rs.next()){
-                return new Cliente(rs.getInt("id_cliente"), // consistente com o resto
-                rs.getString("nome"),
-                rs.getString("telefone"),
-                rs.getString("email"),
-                rs.getString("cpf"),
-                rs.getString("senha"));
-            }
-        }catch (SQLException e){
+            System.err.println("Erro ao buscar cliente por ID: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -146,28 +118,22 @@ public class ClienteDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
-                Cliente cliente = new Cliente(
-                    rs.getInt("id_cliente"),
-                    rs.getString("nome"),
-                    rs.getString("telefone"),
-                    rs.getString("email"),
-                    rs.getString("cpf"),
-                    rs.getString("senha")
-                );
-                clientes.add(cliente);
+                clientes.add(criarClienteFromResultSet(rs));
             }
         } catch (SQLException e) {
+            System.err.println("Erro ao listar clientes: " + e.getMessage());
             e.printStackTrace();
         }
         return clientes;
     }
 
-    // UPDATE - Atualizar cliente (incluindo senha)
+    // UPDATE - Atualizar cliente
     public boolean atualizar(Cliente cliente) {
-        String sql = "UPDATE cliente SET telefone = ?, nome = ?, email = ?, cpf = ?, senha = ? WHERE id_cliente = ?";
+        String sql = "UPDATE cliente SET nome = ?, telefone = ?, email = ?, cpf = ?, senha = ? WHERE id_cliente = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setString(1, cliente.getTelefone());
-            stmt.setString(2, cliente.getNome());
+            stmt.setString(1, cliente.getNome());
+            stmt.setString(2, cliente.getTelefone());
             stmt.setString(3, cliente.getEmail());
             stmt.setString(4, cliente.getCpf());
             stmt.setString(5, cliente.getSenha());
@@ -175,20 +141,23 @@ public class ClienteDAO {
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.err.println("Erro ao atualizar cliente: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
     }
 
-    // UPDATE - Apenas atualizar senha
+    // UPDATE - Atualizar apenas senha
     public boolean atualizarSenha(int idCliente, String novaSenha) {
         String sql = "UPDATE cliente SET senha = ? WHERE id_cliente = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, novaSenha);
             stmt.setInt(2, idCliente);
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.err.println("Erro ao atualizar senha: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -197,10 +166,12 @@ public class ClienteDAO {
     // DELETE
     public boolean deletar(int id) {
         String sql = "DELETE FROM cliente WHERE id_cliente = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.err.println("Erro ao deletar cliente: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
@@ -209,16 +180,61 @@ public class ClienteDAO {
     // Verificar se email já existe
     public boolean emailExiste(String email) {
         String sql = "SELECT COUNT(*) FROM cliente WHERE email = ?";
+        
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
             stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
             
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Erro ao verificar email: " + e.getMessage());
             e.printStackTrace();
         }
         return false;
+    }
+
+    // Verificar se CPF já existe
+    public boolean cpfExiste(String cpf) {
+        String sql = "SELECT COUNT(*) FROM cliente WHERE cpf = ?";
+        
+        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao verificar CPF: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Método auxiliar para criar objeto Cliente do ResultSet
+    private Cliente criarClienteFromResultSet(ResultSet rs) throws SQLException {
+        return new Cliente(
+            rs.getInt("id_cliente"),
+            rs.getString("nome"),
+            rs.getString("telefone"),
+            rs.getString("email"),
+            rs.getString("cpf"),
+            rs.getString("senha")
+        );
+    }
+
+    // Fechar conexão
+    public void fecharConexao() {
+        try {
+            if (conexao != null && !conexao.isClosed()) {
+                conexao.close();
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao fechar conexão: " + e.getMessage());
+        }
     }
 }

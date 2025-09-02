@@ -1,12 +1,16 @@
 package com.blossomcafe.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.blossomcafe.model.Pedido;
 import com.blossomcafe.model.Produto;
 import com.blossomcafe.util.ConexaoBD;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PedidoDAO {
 
@@ -52,8 +56,7 @@ public class PedidoDAO {
             for (Produto produto : pedido.getProdutos()) {
                 stmt.setInt(1, pedido.getId());
                 stmt.setInt(2, produto.getId());
-                stmt.setInt(3, produto.getQuantidade()); // usa quantidade real
-                stmt.setDouble(4, produto.getPreco());
+                stmt.setDouble(3, produto.getPreco());
                 stmt.addBatch();
             }
             stmt.executeBatch();
@@ -96,8 +99,6 @@ public class PedidoDAO {
                     rs.getDouble("preco"),
                     rs.getBoolean("disponivel")
                 );
-                produto.setQuantidade(rs.getInt("quantidade")); // pega quantidade correta
-                pedido.adicionarProduto(produto);
             }
         } catch (SQLException e) {
             e.printStackTrace();

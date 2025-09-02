@@ -1,5 +1,7 @@
 package com.blossomcafe.view;
 
+import com.blossomcafe.controller.ClienteController;
+import com.blossomcafe.model.Cliente;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +10,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,25 +22,23 @@ import javafx.stage.Stage;
 
 public class TelaCadastro {
     private Stage stage;
+    private ClienteController clienteController;
 
     public TelaCadastro(Stage stage) {
         this.stage = stage;
+        this.clienteController = new ClienteController();
     }
 
     public void mostrar() {
         // ==================== LOGO ====================
         ImageView logoView = null;
         try {
-            // ⚡ MESMA LOGO DA TELA DE LOGIN
             Image logoImage = new Image(getClass().getResourceAsStream("/images/logo-blossom.jpeg"));
             logoView = new ImageView(logoImage);
-            logoView.setFitWidth(200);  // Tamanho um pouco menor para o cadastro
+            logoView.setFitWidth(200);
             logoView.setPreserveRatio(true);
             logoView.setSmooth(true);
-            
         } catch (Exception e) {
-            System.err.println("Erro ao carregar imagem: " + e.getMessage());
-            // Fallback para texto se a imagem não carregar
             Text logoTxt = new Text("🌺 BLOSSOM CAFÉ 🌸");
             logoTxt.setFont(Font.font("Arial", FontWeight.BOLD, 20));
             logoTxt.setStyle("-fx-fill: #4C2B0B;");
@@ -70,13 +69,6 @@ public class TelaCadastro {
         TextField campoCPF = new TextField();
         campoCPF.setPromptText("123.456.789-00");
         campoCPF.setPrefWidth(250);
-
-        Label labelEndereco = new Label("Endereço:");
-        TextArea campoEndereco = new TextArea();
-        campoEndereco.setPromptText("Rua, número, bairro, cidade");
-        campoEndereco.setPrefWidth(250);
-        campoEndereco.setPrefHeight(60);
-        campoEndereco.setWrapText(true);
 
         Label labelSenha = new Label("Senha:");
         PasswordField campoSenha = new PasswordField();
@@ -113,21 +105,18 @@ public class TelaCadastro {
         formulario.add(campoTelefone, 1, 2);
         formulario.add(labelCPF, 0, 3);
         formulario.add(campoCPF, 1, 3);
-        formulario.add(labelEndereco, 0, 4);
-        formulario.add(campoEndereco, 1, 4);
-        formulario.add(labelSenha, 0, 5);
-        formulario.add(campoSenha, 1, 5);
-        formulario.add(labelConfirmarSenha, 0, 6);
-        formulario.add(campoConfirmarSenha, 1, 6);
-        formulario.add(btnCadastrar, 1, 7);
-        formulario.add(btnVoltar, 1, 8);
+        formulario.add(labelSenha, 0, 4);
+        formulario.add(campoSenha, 1, 4);
+        formulario.add(labelConfirmarSenha, 0, 5);
+        formulario.add(campoConfirmarSenha, 1, 5);
+        formulario.add(btnCadastrar, 1, 6);
+        formulario.add(btnVoltar, 1, 7);
 
         VBox layoutPrincipal = new VBox(15);
         layoutPrincipal.setAlignment(Pos.CENTER);
         layoutPrincipal.setPadding(new Insets(20));
         layoutPrincipal.setStyle("-fx-background-color: #EADED0;");
         
-        // ⚡ ADICIONA A LOGO NO TOPO
         if (logoView != null) {
             layoutPrincipal.getChildren().add(logoView);
         }
@@ -136,16 +125,45 @@ public class TelaCadastro {
 
         // ==================== EVENTOS ====================
         btnCadastrar.setOnAction(event -> {
-            if (validarCampos(campoNome, campoEmail, campoTelefone, campoCPF, campoEndereco, campoSenha, campoConfirmarSenha)) {
-                String mensagem = "Cadastro simulado:\n" +
-                                 "Nome: " + campoNome.getText() + "\n" +
-                                 "Email: " + campoEmail.getText() + "\n" +
-                                 "Telefone: " + campoTelefone.getText() + "\n" +
-                                 "CPF: " + campoCPF.getText() + "\n" +
-                                 "Endereço: " + campoEndereco.getText();
-                
-                mostrarAlerta("✅ Cadastro Realizado", mensagem);
-                limparCampos(campoNome, campoEmail, campoTelefone, campoCPF, campoEndereco, campoSenha, campoConfirmarSenha);
+            if (validarCampos(campoNome, campoEmail, campoTelefone, campoCPF, campoSenha, campoConfirmarSenha)) {
+                try {
+                    // CADASTRO REAL NO BANCO DE DADOS
+                    boolean cadastrado = clienteController.cadastrarCliente(
+                        campoNome.getText().trim(),
+                        campoTelefone.getText().trim(),
+                        campoEmail.getText().trim(),
+                        campoCPF.getText().trim(),
+                        campoSenha.getText()
+                    );
+                    
+                    if (cadastrado) {
+                        // LOGIN AUTOMÁTICO APÓS CADASTRO
+                        Cliente clienteLogado = clienteController.fazerLogin(
+                            campoEmail.getText().trim(),
+                            campoSenha.getText()
+                        );
+                        
+                        if (clienteLogado != null) {
+                            mostrarAlerta("✅ Sucesso", "Conta criada e login realizado com sucesso!\n\nBem-vindo(a) ao Blossom Café!");
+                            
+                            // REDIRECIONAR PARA TELA DE PRODUTOS
+                            TelaProdutos telaProdutos = new TelaProdutos(stage);
+                            telaProdutos.mostrar();
+                        } else {
+                            mostrarAlerta("⚠️ Aviso", "Conta criada, mas não foi possível fazer login automaticamente.\n\nPor favor, faça login manualmente.");
+                            
+                            // VOLTAR PARA LOGIN
+                            TelaLogin telaLogin = new TelaLogin(stage);
+                            telaLogin.mostrar();
+                        }
+                    } else {
+                        mostrarAlerta("❌ Erro", "Não foi possível criar a conta. Tente novamente.");
+                    }
+                } catch (IllegalArgumentException e) {
+                    mostrarAlerta("❌ Erro no Cadastro", e.getMessage());
+                } catch (Exception e) {
+                    mostrarAlerta("❌ Erro", "Ocorreu um erro inesperado: " + e.getMessage());
+                }
             }
         });
 
@@ -155,7 +173,7 @@ public class TelaCadastro {
         });
 
         // ==================== EXIBIR TELA ====================
-        Scene scene = new Scene(layoutPrincipal, 500, 800); // Aumentei a altura para caber a logo
+        Scene scene = new Scene(layoutPrincipal, 500, 650);
         stage.setTitle("Blossom Café - Cadastro");
         stage.setScene(scene);
         stage.show();
@@ -163,57 +181,39 @@ public class TelaCadastro {
 
     // ==================== MÉTODOS AUXILIARES ====================
     private boolean validarCampos(TextField nome, TextField email, TextField telefone,
-                                 TextField cpf, TextArea endereco, 
-                                 PasswordField senha, PasswordField confirmarSenha) {
+                                 TextField cpf, PasswordField senha, PasswordField confirmarSenha) {
         
         if (nome.getText().trim().isEmpty()) {
-            mostrarAlerta("Erro", "Por favor, digite seu nome completo.");
+            mostrarAlerta("❌ Erro", "Por favor, digite seu nome completo.");
             return false;
         }
 
         if (email.getText().trim().isEmpty() || !email.getText().contains("@")) {
-            mostrarAlerta("Erro", "Por favor, digite um e-mail válido.");
+            mostrarAlerta("❌ Erro", "Por favor, digite um e-mail válido.");
             return false;
         }
 
         if (telefone.getText().trim().isEmpty()) {
-            mostrarAlerta("Erro", "Por favor, digite seu telefone.");
+            mostrarAlerta("❌ Erro", "Por favor, digite seu telefone.");
             return false;
         }
 
         if (cpf.getText().trim().isEmpty()) {
-            mostrarAlerta("Erro", "Por favor, digite seu CPF.");
-            return false;
-        }
-
-        if (endereco.getText().trim().isEmpty()) {
-            mostrarAlerta("Erro", "Por favor, digite seu endereço.");
+            mostrarAlerta("❌ Erro", "Por favor, digite seu CPF.");
             return false;
         }
 
         if (senha.getText().length() < 4) {
-            mostrarAlerta("Erro", "A senha deve ter pelo menos 4 caracteres.");
+            mostrarAlerta("❌ Erro", "A senha deve ter pelo menos 4 caracteres.");
             return false;
         }
 
         if (!senha.getText().equals(confirmarSenha.getText())) {
-            mostrarAlerta("Erro", "As senhas não coincidem.");
+            mostrarAlerta("❌ Erro", "As senhas não coincidem.");
             return false;
         }
 
         return true;
-    }
-
-    private void limparCampos(TextField nome, TextField email, TextField telefone,
-                             TextField cpf, TextArea endereco, 
-                             PasswordField senha, PasswordField confirmarSenha) {
-        nome.clear();
-        email.clear();
-        telefone.clear();
-        cpf.clear();
-        endereco.clear();
-        senha.clear();
-        confirmarSenha.clear();
     }
 
     private void mostrarAlerta(String titulo, String mensagem) {

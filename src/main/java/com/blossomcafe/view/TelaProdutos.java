@@ -46,30 +46,30 @@ public class TelaProdutos {
         mapeamentoImagens.put("Café Expresso", "/images/produtos/cafes/cafe-expresso.jpg");
         mapeamentoImagens.put("Cappuccino Italiano", "/images/produtos/cafes/cappuccino-italiano.jpg");
         mapeamentoImagens.put("Café com Leite", "/images/produtos/cafes/cafe-com-leite.jpg");
-        mapeamentoImagens.put("Café Filtrado ou Coado", "/images/produtos/cafes/cafe-filtrado-ou-coado.jpg");
-        mapeamentoImagens.put("Café Gelado", "/images/produtos/cafes/cafe-gelado.jpg");
-        mapeamentoImagens.put("Café Java", "/images/produtos/cafes/cafe-java.jpg");
-        mapeamentoImagens.put("Chá", "/images/produtos/cafes/cha.jpg");
-        mapeamentoImagens.put("Chocolate Quente", "/images/produtos/cafes/chocolate-quente.jpg");
-        mapeamentoImagens.put("Machiatto", "/images/produtos/cafes/machiatto.jpg");
-        mapeamentoImagens.put("Nesquik", "/images/produtos/cafes/nesquik.jpeg");
+        // mapeamentoImagens.put("Café Filtrado ou Coado", "/images/produtos/cafes/cafe-filtrado-ou-coado.jpg");
+        // mapeamentoImagens.put("Café Gelado", "/images/produtos/cafes/cafe-gelado.jpg");
+        // mapeamentoImagens.put("Café Java", "/images/produtos/cafes/cafe-java.jpg");
+        // mapeamentoImagens.put("Chá", "/images/produtos/cafes/cha.jpg");
+        // mapeamentoImagens.put("Chocolate Quente", "/images/produtos/cafes/chocolate-quente.jpg");
+        // mapeamentoImagens.put("Machiatto", "/images/produtos/cafes/machiatto.jpg");
+        // mapeamentoImagens.put("Nesquik", "/images/produtos/cafes/nesquik.jpeg");
 
         // Flores
         mapeamentoImagens.put("Astromélia", "/images/produtos/flores/astromelia.jpg");
         mapeamentoImagens.put("Flores do Campo", "/images/produtos/flores/flores-do-campo.jpg");
-        mapeamentoImagens.put("Girassois", "/images/produtos/flores/girassois.jpg");
-        mapeamentoImagens.put("Lírio Rosa", "/images/produtos/flores/lirio-rosa.jpg");
-        mapeamentoImagens.put("Margaridas", "/images/produtos/flores/margaridas.jpg");
-        mapeamentoImagens.put("Orquidea Azul", "/images/produtos/flores/orquidea-azul.jpg");
-        mapeamentoImagens.put("Rosas Brancas Buquê", "/images/produtos/flores/rosas-brancas-buque.jpg");
-        mapeamentoImagens.put("Tulipas", "/images/produtos/flores/tulipas.jpg");
+        // mapeamentoImagens.put("Girassois", "/images/produtos/flores/girassois.jpg");
+        // mapeamentoImagens.put("Lírio Rosa", "/images/produtos/flores/lirio-rosa.jpg");
+        // mapeamentoImagens.put("Margaridas", "/images/produtos/flores/margaridas.jpg");
+        // mapeamentoImagens.put("Orquidea Azul", "/images/produtos/flores/orquidea-azul.jpg");
+        // mapeamentoImagens.put("Rosas Brancas Buquê", "/images/produtos/flores/rosas-brancas-buque.jpg");
+        // mapeamentoImagens.put("Tulipas", "/images/produtos/flores/tulipas.jpg");
         
         // Combos
         mapeamentoImagens.put("Caixa de Café da Manhã", "/images/produtos/combos/caixa-cafe-da-manha.png");
-        mapeamentoImagens.put("Cesta Romance", "/images/produtos/combos/cesta-romance.jpg");
-        mapeamentoImagens.put("Combo Café e Croissant", "/images/produtos/combos/combo-cafe-croissant.png");
-        mapeamentoImagens.put("Combo de Girassois", "/images/produtos/combos/girassois-combo.png");
-        mapeamentoImagens.put("Kit Presente com Flores", "/images/produtos/combos/kit-presente-flores.png");
+        // mapeamentoImagens.put("Cesta Romance", "/images/produtos/combos/cesta-romance.jpg");
+        // mapeamentoImagens.put("Combo Café e Croissant", "/images/produtos/combos/combo-cafe-croissant.png");
+        // mapeamentoImagens.put("Combo de Girassois", "/images/produtos/combos/girassois-combo.png");
+        // mapeamentoImagens.put("Kit Presente com Flores", "/images/produtos/combos/kit-presente-flores.png");
     }
 
     public void mostrar() {

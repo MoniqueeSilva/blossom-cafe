@@ -19,7 +19,7 @@ public class PedidoController {
     public boolean criarPedido(int idPedido) {
         try {
             Pedido pedido = new Pedido(idPedido);
-            pedidoDAO.inserir(pedido, 1); // ID cliente temporário
+            pedidoDAO.inserir(pedido, 1, idPedido); // ID cliente temporário
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao criar pedido: " + e.getMessage());

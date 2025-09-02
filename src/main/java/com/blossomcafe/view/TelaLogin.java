@@ -2,10 +2,16 @@ package com.blossomcafe.view;
 
 import com.blossomcafe.controller.ClienteController;
 import com.blossomcafe.model.Cliente;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -22,7 +28,6 @@ public class TelaLogin {
     public void mostrar() {
         // LOGO
         ImageView logoView = null;
-        Text logoTexto = null;
         try {
             Image logoImage = new Image(getClass().getResourceAsStream("/images/logo-blossom.jpeg"));
             logoView = new ImageView(logoImage);
@@ -30,58 +35,53 @@ public class TelaLogin {
             logoView.setPreserveRatio(true);
             logoView.setSmooth(true);
         } catch (Exception e) {
-            logoTexto = new Text("🌺 BLOSSOM CAFÉ 🌸");
-            logoTexto.getStyleClass().add("logo-texto");
+            Text logoTexto = new Text("🌺 BLOSSOM CAFÉ 🌸");
+            logoTexto.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #4C2B0B;");
         }
 
         // Título
         Text titulo = new Text("Faça seu login");
-        titulo.getStyleClass().add("titulo-login");
+        titulo.setStyle("-fx-font-size: 18px; -fx-fill: #4C2B0B;");
 
         // Campos de entrada
         TextField campoEmail = new TextField();
         campoEmail.setPromptText("seu@email.com");
-        campoEmail.getStyleClass().add("input-campo");
+        campoEmail.setStyle("-fx-padding: 8; -fx-background-radius: 5; -fx-border-radius: 5;");
 
         PasswordField campoSenha = new PasswordField();
         campoSenha.setPromptText("Sua senha");
-        campoSenha.getStyleClass().add("input-campo");
-
-        CheckBox checkLembrar = new CheckBox("Lembrar meus dados");
-        checkLembrar.getStyleClass().add("checkbox");
+        campoSenha.setStyle("-fx-padding: 8; -fx-background-radius: 5; -fx-border-radius: 5;");
 
         Hyperlink linkEsqueciSenha = new Hyperlink("Esqueci minha senha");
-        linkEsqueciSenha.getStyleClass().add("link");
+        linkEsqueciSenha.setStyle("-fx-text-fill: #4C2B0B;");
 
         Button btnEntrar = new Button("ENTRAR");
-        btnEntrar.getStyleClass().add("btn-entrar");
+        btnEntrar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 5;");
 
         Text textoCadastro = new Text("Não tem uma conta?");
-        textoCadastro.getStyleClass().add("texto-cadastro");
+        textoCadastro.setStyle("-fx-fill: #4C2B0B;");
 
         Hyperlink linkCadastrar = new Hyperlink("Cadastre-se");
-        linkCadastrar.getStyleClass().add("link");
+        linkCadastrar.setStyle("-fx-text-fill: #4C2B0B;");
 
         Button btnVoltar = new Button("← Voltar");
-        btnVoltar.getStyleClass().add("btn-voltar");
+        btnVoltar.setStyle("-fx-background-color: transparent; -fx-text-fill: #4C2B0B; -fx-border-color: #4C2B0B; -fx-border-width: 1; -fx-border-radius: 5;");
 
         // Layout do formulário
         VBox layoutForm = new VBox(15);
         layoutForm.setAlignment(Pos.CENTER);
         layoutForm.setPadding(new Insets(30));
-        layoutForm.getStyleClass().add("layout-form");
+        layoutForm.setStyle("-fx-background-color: #F8F2EA; -fx-background-radius: 10;");
 
         if (logoView != null) {
             layoutForm.getChildren().add(logoView);
-        } else {
-            layoutForm.getChildren().add(logoTexto);
         }
 
         layoutForm.getChildren().addAll(
                 titulo,
                 new Label("E-mail:"), campoEmail,
                 new Label("Senha:"), campoSenha,
-                checkLembrar, linkEsqueciSenha,
+                linkEsqueciSenha,
                 btnEntrar,
                 textoCadastro, linkCadastrar,
                 btnVoltar
@@ -90,6 +90,7 @@ public class TelaLogin {
         VBox layoutPrincipal = new VBox();
         layoutPrincipal.setAlignment(Pos.CENTER);
         layoutPrincipal.setPadding(new Insets(40));
+        layoutPrincipal.setStyle("-fx-background-color: #EADED0;");
         layoutPrincipal.getChildren().add(layoutForm);
 
         // ================= EVENTOS =================
@@ -100,23 +101,27 @@ public class TelaLogin {
             String senha = campoSenha.getText().trim();
 
             if (email.isEmpty() || senha.isEmpty()) {
-                mostrarAlerta("Erro", "Por favor, preencha todos os campos.");
+                mostrarAlerta("❌ Erro", "Por favor, preencha todos os campos.");
                 return;
             }
 
             if (!email.contains("@")) {
-                mostrarAlerta("Erro", "Por favor, insira um e-mail válido.");
+                mostrarAlerta("❌ Erro", "Por favor, insira um e-mail válido.");
                 return;
             }
 
-            Cliente logado = controller.fazerLogin(email, senha);
+            try {
+                Cliente logado = controller.fazerLogin(email, senha);
 
-            if (logado != null) {
-                mostrarAlerta("Sucesso", "Login realizado com sucesso! 🌸");
-                TelaProdutos telaProdutos = new TelaProdutos(stage);
-                telaProdutos.mostrar();
-            } else {
-                mostrarAlerta("Erro", "E-mail ou senha incorretos.");
+                if (logado != null) {
+                    mostrarAlerta("✅ Sucesso", "Login realizado com sucesso! 🌸\n\nBem-vindo(a) " + logado.getNome() + "!");
+                    TelaProdutos telaProdutos = new TelaProdutos(stage);
+                    telaProdutos.mostrar();
+                } else {
+                    mostrarAlerta("❌ Erro", "E-mail ou senha incorretos.");
+                }
+            } catch (IllegalArgumentException e) {
+                mostrarAlerta("❌ Erro", e.getMessage());
             }
         });
 
@@ -126,7 +131,7 @@ public class TelaLogin {
         });
 
         linkEsqueciSenha.setOnAction(event -> {
-            mostrarAlerta("Recuperar Senha", "Em breve você poderá recuperar sua senha por aqui! 📧");
+            mostrarAlerta("📧 Recuperar Senha", "Em breve você poderá recuperar sua senha por aqui!");
         });
 
         linkCadastrar.setOnAction(event -> {
@@ -135,8 +140,7 @@ public class TelaLogin {
         });
 
         // ================= SCENE ==================
-        Scene scene = new Scene(layoutPrincipal, 500, 650);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        Scene scene = new Scene(layoutPrincipal, 500, 600);
         stage.setTitle("Blossom Café - Login");
         stage.setScene(scene);
         stage.show();
