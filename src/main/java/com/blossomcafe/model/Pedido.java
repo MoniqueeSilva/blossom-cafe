@@ -7,7 +7,8 @@ public class Pedido {
     private int id;
     private String enderecoEntrega;
     private List<Produto> produtos;
-    private String status; // "Preparando", "A caminho", "Entregue"
+    private String status;
+    private Entregador entregador;
 
     public Pedido(int id) {
         this.id = id;
@@ -42,6 +43,14 @@ public class Pedido {
     
     public void setStatus(String status){
         this.status = status;
+    }
+
+    public Entregador getEntregador(){
+        return entregador;
+    }
+
+    public void setEntregador(Entregador entregador){
+        this.entregador = entregador;
     }
 
     // ====================== MÉTODOS DE PRODUTOS ======================

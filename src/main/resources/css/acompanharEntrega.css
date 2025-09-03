@@ -185,3 +185,37 @@
 .barra-progresso .track {
     -fx-background-radius: 3;
 }
+
+/* Estilos para as informações do entregador */
+.entregador-container {
+    -fx-background-color: #f8f9fa;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 15;
+    -fx-spacing: 8;
+    -fx-border-color: #e9ecef;
+    -fx-border-width: 1;
+    -fx-margin: 0 0 20 0;
+}
+
+.entregador-titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.entregador-info {
+    -fx-font-size: 14px;
+    -fx-text-fill: #34495e;
+}
+
+.veiculo-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #7f8c8d;
+}
+
+/* Quando o pedido está a caminho, destaque o entregador */
+.etapa-ativa ~ .entregador-container {
+    -fx-background-color: #e3f2fd;
+    -fx-border-color: #bbdefb;
+}
