@@ -47,7 +47,7 @@ public class TelaInicial {
 
         //pedir sem logar. vai jogar ditero para a tela de menu de produtos
         linkPedirSemLogin.setOnAction(event -> {
-            TelaProdutos telaProdutos = new TelaProdutos(stage);
+            TelaProdutos telaProdutos = new TelaProdutos(stage,null);
             telaProdutos.mostrar();
         });
 

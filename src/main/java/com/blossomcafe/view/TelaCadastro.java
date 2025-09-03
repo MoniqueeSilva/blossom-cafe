@@ -147,6 +147,10 @@ public class TelaCadastro {
                             mostrarAlerta("✅ Sucesso", "Conta criada e login realizado com sucesso!\n\nBem-vindo(a) ao Blossom Café!");
                             
                             // REDIRECIONAR PARA TELA DE PRODUTOS
+                            btnVoltar.setOnAction(event ->){
+                                TelaProdutos telaProdutos = new TelaProdutos(stage, null);
+                                telaProdutos.mostrar();
+                            }
                             TelaProdutos telaProdutos = new TelaProdutos(stage);
                             telaProdutos.mostrar();
                         } else {

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.blossomcafe.controller.ProdutoController;
 import com.blossomcafe.model.Produto;
+import com.blossomcafe.model.Cliente;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -32,9 +33,11 @@ public class TelaProdutos {
     private Stage stage;
     private ProdutoController produtoController;
     private Map<String, String> mapeamentoImagens;
+    private Cliente clienteLogado;
 
-    public TelaProdutos(Stage stage) {
+    public TelaProdutos(Stage stage, Cliente cliente) {
         this.stage = stage;
+        this.clienteLogado = cliente;
         this.produtoController = new ProdutoController();
         this.mapeamentoImagens = new HashMap<>();
         
@@ -216,7 +219,7 @@ public class TelaProdutos {
         Button btnContato = criarBotaoNav("Contato");
         
         // Ícone de perfil
-        Button btnPerfil = new Button("👤");
+        Button btnPerfil = new Button("Perfil");
         btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; " +
                           "-fx-border: none; -fx-cursor: hand; -fx-padding: 8;");
         btnPerfil.setOnMouseEntered(e -> btnPerfil.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8; -fx-background-radius: 5;"));
@@ -228,14 +231,18 @@ public class TelaProdutos {
         
         // Eventos dos botoes
         btnHome.setOnAction(e -> {
-            TelaProdutos telaProdutos = new TelaProdutos(stage);
+            TelaProdutos telaProdutos = new TelaProdutos(stage, clienteLogado);
             telaProdutos.mostrar();
         });
         
         btnPerfil.setOnAction(e -> {
-            TelaPerfil telaPerfil = new TelaPerfil(stage, null); 
-            telaPerfil.mostrar();
-            //NECESSARIO AJUSTE 
+            if(clienteLogado != null){
+                TelaPerfil telaPerfil = new TelaPerfil(stage, clienteLogado);
+                telaPerfil.mostrar();
+            }else{
+                TelaLogin telaLogin = new TelaLogin(stage);
+                telaLogin.mostrar();
+            }
         });
         
         return navbar;
