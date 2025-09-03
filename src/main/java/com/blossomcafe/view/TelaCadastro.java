@@ -164,6 +164,7 @@ public class TelaCadastro {
         // ==================== EXIBIR TELA ====================
         Scene scene = new Scene(layoutPrincipal, 500, 650);
         scene.getStylesheets().add(getClass().getResource("/css/cadastro.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
         stage.setTitle("Blossom Café - Cadastro");
         stage.setScene(scene);

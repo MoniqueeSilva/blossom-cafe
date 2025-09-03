@@ -1,0 +1,37 @@
+/* Layout principal */
+.layout-principal {
+    -fx-background-color: #EADED0;
+}
+
+/* Texto da logo alternativa */
+.logo-texto {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-fill: #4C2B0B;
+}
+
+/* Slogan */
+.slogan {
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+    -fx-fill: #6B4C35;
+}
+
+/* Botão principal */
+.btn-primario {
+    -fx-background-color: #4C2B0B;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20;
+    -fx-background-radius: 5;
+}
+.btn-primario:hover {
+    -fx-background-color: #8B5A2B;
+}
+
+/* Link */
+.link {
+    -fx-text-fill: #4C2B0B;
+    -fx-underline: true;
+    -fx-cursor: hand;
+}

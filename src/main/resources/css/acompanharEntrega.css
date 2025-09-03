@@ -1,0 +1,187 @@
+/* ===== ESTILOS GERAIS ===== */
+.container-principal {
+    -fx-background-color: linear-gradient(to bottom, #F8F6F2 0%, #E8E2D6 100%);
+    -fx-alignment: top-center;
+    -fx-padding: 40 30 40 30;
+    -fx-spacing: 30;
+}
+
+/* ===== CABEÇALHO ===== */
+.cabecalho {
+    -fx-alignment: center;
+    -fx-padding: 0 0 20 0;
+}
+
+.logo {
+    -fx-fit-width: 60;
+    -fx-fit-height: 60;
+    -fx-preserve-ratio: true;
+}
+
+.logo-fallback {
+    -fx-font-size: 32px;
+}
+
+/* ===== CARD PRINCIPAL ===== */
+.card {
+    -fx-alignment: center;
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 15, 0, 0, 5);
+    -fx-max-width: 450;
+    -fx-padding: 35 40 35 40;
+    -fx-spacing: 25;
+}
+
+.titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4C2B0B;
+}
+
+.numero-pedido {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6B4C35;
+    -fx-font-weight: 500;
+}
+
+/* ===== TIMELINE ===== */
+.timeline-container {
+    -fx-alignment: center-left;
+    -fx-padding: 0 20 0 20;
+    -fx-spacing: 15;
+}
+
+.etapa-box {
+    -fx-alignment: center-left;
+    -fx-spacing: 15;
+}
+
+.etapa-icone {
+    -fx-font-size: 20px;
+    -fx-min-width: 30;
+}
+
+.etapa-conector {
+    -fx-min-height: 2;
+    -fx-pref-width: 25;
+    -fx-background-color: #D4C6B0;
+}
+
+.etapa-conteudo {
+    -fx-spacing: 5;
+}
+
+.etapa-ativa {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4C2B0B;
+}
+
+.etapa-concluida {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6B4C35;
+}
+
+.etapa-pendente {
+    -fx-font-size: 16px;
+    -fx-text-fill: #A89F8E;
+}
+
+.etapa-conteudo .etapa-ativa {
+    -fx-font-size: 12px;
+}
+
+.etapa-conteudo .etapa-concluida {
+    -fx-font-size: 12px;
+}
+
+.etapa-conteudo .etapa-pendente {
+    -fx-font-size: 12px;
+}
+
+/* ===== BARRA DE PROGRESSO ===== */
+.progresso-container {
+    -fx-alignment: center;
+    -fx-padding: 15 0 0 0;
+    -fx-spacing: 8;
+}
+
+.label-progresso {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B4C35;
+    -fx-font-weight: 500;
+}
+
+.barra-progresso {
+    -fx-pref-width: 380;
+    -fx-pref-height: 6;
+    -fx-accent: linear-gradient(to right, #8B4513, #D2691E);
+    -fx-background-color: #E8D6C0;
+    -fx-background-radius: 3;
+    -fx-border-radius: 3;
+    -fx-padding: 0;
+    -fx-effect: dropshadow(one-pass-box, rgba(139, 69, 19, 0.3), 2, 0, 0, 1);
+}
+
+.barra-container {
+    -fx-background-color: transparent;
+    -fx-padding: 4 0;
+}
+
+.porcentagem-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8B4513;
+    -fx-font-weight: bold;
+    -fx-padding: 2 0 0 0;
+}
+
+/* ===== TEMPO ESTIMADO ===== */
+.tempo-estimado {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B4C35;
+    -fx-font-style: italic;
+}
+
+/* ===== BOTÕES ===== */
+.botoes-container {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+}
+
+.btn-voltar {
+    -fx-background-color: #6B4C35;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.btn-voltar:hover {
+    -fx-background-color: #5A3D2A;
+}
+
+.btn-acelerar {
+    -fx-background-color: #8B4513;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+}
+
+.btn-acelerar:hover {
+    -fx-background-color: #6B2F0F;
+}
+
+/* ===== ANIMAÇÕES ===== */
+.barra-progresso .bar {
+    -fx-background-insets: 0;
+    -fx-background-radius: 3;
+}
+
+.barra-progresso .track {
+    -fx-background-radius: 3;
+}

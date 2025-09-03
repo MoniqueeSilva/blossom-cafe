@@ -1,0 +1,57 @@
+/* Layout principal */
+.layout-principal {
+    -fx-background-color: #EADED0;
+}
+
+/* Formulário */
+.formulario {
+    -fx-background-color: #F8F2EA;
+    -fx-background-radius: 10;
+}
+
+/* Título */
+.titulo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-fill: #4C2B0B;
+}
+
+/* Campos de texto */
+.campo-texto {
+    -fx-pref-width: 250;
+    -fx-padding: 8;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+/* Botões */
+.btn-primario {
+    -fx-background-color: #4C2B0B;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+    -fx-pref-width: 250;
+    -fx-background-radius: 5;
+}
+.btn-primario:hover {
+    -fx-background-color: #8B5A2B;
+}
+
+.btn-secundario {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4C2B0B;
+    -fx-border-color: #4C2B0B;
+    -fx-border-width: 1;
+    -fx-pref-width: 250;
+    -fx-padding: 8;
+}
+.btn-secundario:hover {
+    -fx-background-color: #EADAC2;
+}
+
+/* Logo alternativa */
+.logo-texto {
+    -fx-fill: #4C2B0B;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}

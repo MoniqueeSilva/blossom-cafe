@@ -5,7 +5,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,11 +34,11 @@ public class TelaAcompanharEntrega {
     public void mostrar() {
         stage.setTitle("Acompanhamento de Entrega - Blossom Café");
 
-        // ====================== CONTAINER PRINCIPAL ======================
-        VBox containerPrincipal = new VBox(30);
-        containerPrincipal.getStyleClass().add("tela-acompanhamento");
+        // Container Principal
+        VBox containerPrincipal = new VBox();
+        containerPrincipal.getStyleClass().add("container-principal");
 
-        // ====================== CABEÇALHO ======================
+        // Cabeçalho
         HBox cabecalho = new HBox();
         cabecalho.getStyleClass().add("cabecalho");
 
@@ -48,12 +47,10 @@ public class TelaAcompanharEntrega {
         try {
             Image logoImage = new Image(getClass().getResource("/images/logo-blossom-small.png").toString());
             logoView = new ImageView(logoImage);
-            logoView.setFitWidth(60);
-            logoView.setFitHeight(60);
-            logoView.setPreserveRatio(true);
+            logoView.getStyleClass().add("logo");
         } catch (Exception e) {
             Label logoFallback = new Label("🌺");
-            logoFallback.getStyleClass().add("titulo-card");
+            logoFallback.getStyleClass().add("logo-fallback");
             cabecalho.getChildren().add(logoFallback);
         }
 
@@ -61,83 +58,82 @@ public class TelaAcompanharEntrega {
             cabecalho.getChildren().add(logoView);
         }
 
-        // ====================== CARD PRINCIPAL ======================
-        VBox card = new VBox(25);
-        card.getStyleClass().add("card-principal");
+        // Card Principal
+        VBox card = new VBox();
+        card.getStyleClass().add("card");
 
         // Título
         Label titulo = new Label("Acompanhe sua Entrega");
-        titulo.getStyleClass().add("titulo-card");
+        titulo.getStyleClass().add("titulo");
 
         // Número do Pedido
         Label numeroPedido = new Label("Pedido #" + pedido.getId());
         numeroPedido.getStyleClass().add("numero-pedido");
 
-        // ====================== TIMELINE VISUAL ======================
-        timelineContainer = new VBox(15);
+        // Timeline Visual
+        timelineContainer = new VBox();
         timelineContainer.getStyleClass().add("timeline-container");
 
-        // ====================== BARRA DE PROGRESSO ======================
-        progressoContainer = new VBox(8);
+        // Barra de Progresso
+        progressoContainer = new VBox();
         progressoContainer.getStyleClass().add("progresso-container");
 
         labelProgresso = new Label();
-        labelProgresso.getStyleClass().add("progress-label");
+        labelProgresso.getStyleClass().add("label-progresso");
 
         barraProgresso = new ProgressBar();
-        barraProgresso.getStyleClass().add("progress-bar");
+        barraProgresso.getStyleClass().add("barra-progresso");
 
         StackPane barraContainer = new StackPane();
+        barraContainer.getStyleClass().add("barra-container");
         barraContainer.getChildren().add(barraProgresso);
 
         porcentagemLabel = new Label();
-        porcentagemLabel.getStyleClass().add("progress-porcentagem");
+        porcentagemLabel.getStyleClass().add("porcentagem-label");
 
         progressoContainer.getChildren().addAll(labelProgresso, barraContainer, porcentagemLabel);
 
-        // ====================== TEMPO ESTIMADO ======================
+        // Tempo Estimado
         tempoEstimado = new Label();
         tempoEstimado.getStyleClass().add("tempo-estimado");
 
-        // ====================== BOTÕES ======================
-        HBox botoesContainer = new HBox(20);
-        botoesContainer.setAlignment(Pos.CENTER);
+        // Botões
+        HBox botoesContainer = new HBox();
+        botoesContainer.getStyleClass().add("botoes-container");
 
-        Button btnVoltar = criarBotao("← Voltar ao Menu", "botao-voltar");
+        Button btnVoltar = new Button("← Voltar ao Menu");
+        btnVoltar.getStyleClass().add("btn-voltar");
         btnVoltar.setOnAction(e -> {
             pararProgressaoAutomatica();
             TelaProdutos telaProdutos = new TelaProdutos(stage, null);
             telaProdutos.mostrar();
         });
 
-        Button btnAcelerar = criarBotao("⏩ Simular Progresso", "botao-acelerar");
+        Button btnAcelerar = new Button("⏩ Simular Progresso");
+        btnAcelerar.getStyleClass().add("btn-acelerar");
         btnAcelerar.setOnAction(e -> avancarStatus());
 
         botoesContainer.getChildren().addAll(btnVoltar, btnAcelerar);
 
-        // ====================== MONTAGEM FINAL ======================
+        // Montagem Final
         card.getChildren().addAll(titulo, numeroPedido, timelineContainer, progressoContainer, tempoEstimado, botoesContainer);
         containerPrincipal.getChildren().addAll(cabecalho, card);
 
-        // Atualizar interface com status atual
+        // Atualizar interface
         atualizarInterface();
 
         // Iniciar progressão automática
         iniciarProgressaoAutomatica();
 
         Scene scene = new Scene(containerPrincipal, 550, 700);
-
-        try {
-            scene.getStylesheets().add(getClass().getResource("/css/style-acompanhamento.css").toExternalForm());
-        } catch (Exception e) {
-            System.out.println("CSS não carregado: " + e.getMessage());
-        }
+        scene.getStylesheets().add(getClass().getResource("/css/acompanharEntrega.css").toExternalForm());
 
         stage.setScene(scene);
         stage.show();
     }
 
     // ====================== PROGRESSÃO AUTOMÁTICA ======================
+
     private void iniciarProgressaoAutomatica() {
         pararProgressaoAutomatica();
         timelineProgressao = new Timeline(new KeyFrame(Duration.seconds(5), e -> avancarStatus()));
@@ -167,24 +163,27 @@ public class TelaAcompanharEntrega {
         pedido.setStatus(novoStatus);
         atualizarInterface();
 
-        if (novoStatus.equalsIgnoreCase("Entregue")) pararProgressaoAutomatica();
+        if (novoStatus.equalsIgnoreCase("Entregue")) {
+            pararProgressaoAutomatica();
+        }
     }
 
     // ====================== ATUALIZAÇÃO DA INTERFACE ======================
+
     private void atualizarInterface() {
         timelineContainer.getChildren().clear();
 
         String[] etapas = {"Confirmado", "Preparando", "A caminho", "Entregue"};
         String[] icones = {"✅", "👨‍🍳", "🚗", "🎉"};
         String[] descricoes = {
-                "Pedido confirmado e em processamento",
-                "Seu pedido está sendo preparado",
-                "Seu entregador está a caminho!",
-                "Entrega realizada com sucesso!"
+            "Pedido confirmado e em processamento",
+            "Seu pedido está sendo preparado",
+            "Seu entregador está a caminho!",
+            "Entrega realizada com sucesso!"
         };
 
         for (int i = 0; i < etapas.length; i++) {
-            HBox etapaBox = new HBox(15);
+            HBox etapaBox = new HBox();
             etapaBox.getStyleClass().add("etapa-box");
 
             Label icone = new Label(icones[i]);
@@ -192,20 +191,29 @@ public class TelaAcompanharEntrega {
 
             Pane conector = new Pane();
             conector.getStyleClass().add("etapa-conector");
-            if (i == etapas.length - 1) conector.setVisible(false);
+            if (i == etapas.length - 1) {
+                conector.setVisible(false);
+            }
 
-            VBox conteudoEtapa = new VBox(5);
+            VBox conteudoEtapa = new VBox();
+            conteudoEtapa.getStyleClass().add("etapa-conteudo");
+
             Label labelEtapa = new Label(etapas[i]);
             Label labelDesc = new Label(descricoes[i]);
-
+            
             boolean etapaAtiva = isEtapaAtiva(i, pedido.getStatus());
             boolean etapaConcluida = isEtapaConcluida(i, pedido.getStatus());
-
-            if (etapaAtiva) labelEtapa.getStyleClass().add("etapa-titulo-ativa");
-            else if (etapaConcluida) labelEtapa.getStyleClass().add("etapa-titulo-concluida");
-            else labelEtapa.getStyleClass().add("etapa-titulo-pendente");
-
-            labelDesc.getStyleClass().add("etapa-descricao");
+            
+            if (etapaAtiva) {
+                labelEtapa.getStyleClass().add("etapa-ativa");
+                labelDesc.getStyleClass().add("etapa-ativa");
+            } else if (etapaConcluida) {
+                labelEtapa.getStyleClass().add("etapa-concluida");
+                labelDesc.getStyleClass().add("etapa-concluida");
+            } else {
+                labelEtapa.getStyleClass().add("etapa-pendente");
+                labelDesc.getStyleClass().add("etapa-pendente");
+            }
 
             conteudoEtapa.getChildren().addAll(labelEtapa, labelDesc);
             etapaBox.getChildren().addAll(icone, conector, conteudoEtapa);
@@ -214,22 +222,19 @@ public class TelaAcompanharEntrega {
 
         double progresso = calcularProgresso(pedido.getStatus());
         Timeline animacao = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(barraProgresso.progressProperty(), barraProgresso.getProgress())),
-                new KeyFrame(Duration.seconds(0.8), new KeyValue(barraProgresso.progressProperty(), progresso))
+            new KeyFrame(Duration.ZERO, new KeyValue(barraProgresso.progressProperty(), barraProgresso.getProgress())),
+            new KeyFrame(Duration.seconds(0.8), new KeyValue(barraProgresso.progressProperty(), progresso))
         );
         animacao.play();
 
         labelProgresso.setText(getTextoProgresso(pedido.getStatus()));
         tempoEstimado.setText("⏰ " + getTempoEstimado(pedido.getStatus()));
-        porcentagemLabel.setText((int)(progresso*100) + "% completo");
+        
+        int porcentagem = (int) (progresso * 100);
+        porcentagemLabel.setText(porcentagem + "% completo");
     }
 
     // ====================== MÉTODOS AUXILIARES ======================
-    private Button criarBotao(String texto, String classe) {
-        Button botao = new Button(texto);
-        botao.getStyleClass().addAll("botao", classe);
-        return botao;
-    }
 
     private boolean isEtapaAtiva(int index, String status) {
         String[] statusMap = {"Confirmado", "Preparando", "A caminho", "Entregue"};
@@ -239,7 +244,9 @@ public class TelaAcompanharEntrega {
     private boolean isEtapaConcluida(int index, String status) {
         String[] statusMap = {"Confirmado", "Preparando", "A caminho", "Entregue"};
         for (int i = 0; i < statusMap.length; i++) {
-            if (status.equalsIgnoreCase(statusMap[i])) return index < i;
+            if (status.equalsIgnoreCase(statusMap[i])) {
+                return index < i;
+            }
         }
         return false;
     }
