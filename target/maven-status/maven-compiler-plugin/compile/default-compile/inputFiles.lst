@@ -11,11 +11,11 @@
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/view/TelaCadastro.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/model/Cafe.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/app/MainApp.java
+/home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/view/TelaCarrinho.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/controller/ClienteController.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/model/Entrega.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/dao/EntregadorDAO.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/dao/ProdutoDAO.java
-/home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/app/Main.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/model/Endereco.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/model/Entregador.java
 /home/monique/Documentos/projetoFinal/src/main/java/com/blossomcafe/view/TelaLogin.java
