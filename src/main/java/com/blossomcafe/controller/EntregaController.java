@@ -7,22 +7,24 @@ import com.blossomcafe.model.Entregador;
 import java.util.List;
 
 public class EntregaController {
-    private EntregaDAO entregaDAO;
-    private EntregadorDAO entregadorDAO;
+    private EntregaDAO entregaDAO; //OPERAÇÃO DE ENTREGA
+    private EntregadorDAO entregadorDAO; //OPERAÇÃO DE ENTREGADOR
 
     public EntregaController() {
         this.entregaDAO = new EntregaDAO();
         this.entregadorDAO = new EntregadorDAO();
     }
 
+    //VALIDAR CÓDIGO DE RASTREIO
     public boolean criarEntrega(String codRastreio, String cnhEntregador) {
         if (codRastreio == null || codRastreio.isEmpty()) {
             throw new IllegalArgumentException("Código de rastreio não pode ser vazio");
         }
+        //VALIDAR CNH
         if (cnhEntregador == null || cnhEntregador.isEmpty()) {
             throw new IllegalArgumentException("CNH do entregador não pode ser vazia");
         }
-
+        //BUSCAR ENTREGADOR
         try {
             Entregador entregador = entregadorDAO.buscarPorCnh(cnhEntregador);
             if (entregador == null) {
@@ -30,32 +32,36 @@ public class EntregaController {
             }
 
             Entrega entrega = new Entrega(codRastreio, entregador);
-            entregaDAO.inserir(entrega);
-            return true;
+            entregaDAO.inserir(entrega); //Insere no banco
+            return true; //Retorna sucesso
         } catch (Exception e) {
             System.out.println("Erro ao criar entrega: " + e.getMessage());
             return false;
         }
     }
 
+    //BUSCAR ENTREGA POR CÓDIGO
     public Entrega buscarEntregaPorCodigo(String codRastreio) {
-        if (codRastreio == null || codRastreio.isEmpty()) {
+        if (codRastreio == null || codRastreio.isEmpty()) { //Valida código
             throw new IllegalArgumentException("Código de rastreio não pode ser vazio");
         }
-        return entregaDAO.buscarPorCodRastreio(codRastreio);
+        return entregaDAO.buscarPorCodRastreio(codRastreio); //Busca no DAO
     }
 
+    //LISTAR ENTREGAS POR ENTREGADOR
     public List<Entrega> listarEntregasPorEntregador(String cnhEntregador) {
-        if (cnhEntregador == null || cnhEntregador.isEmpty()) {
+        if (cnhEntregador == null || cnhEntregador.isEmpty()) { //Valida cnh
             throw new IllegalArgumentException("CNH do entregador não pode ser vazia");
         }
-        return entregaDAO.buscarPorEntregador(cnhEntregador);
+        return entregaDAO.buscarPorEntregador(cnhEntregador); //Busca entregas do entregador
     }
 
+    //LISTAR TODAS AS ENTREGAS
     public List<Entrega> listarTodasEntregas() {
         return entregaDAO.listarTodas();
     }
 
+    //ATUALIZA ENTREGADOR E SUA ENTREGA
     public boolean atualizarEntregadorEntrega(String codRastreio, String novaCnhEntregador) {
         if (codRastreio == null || codRastreio.isEmpty()) {
             throw new IllegalArgumentException("Código de rastreio não pode ser vazio");
@@ -64,7 +70,7 @@ public class EntregaController {
             throw new IllegalArgumentException("CNH do entregador não pode ser vazia");
         }
 
-        try {
+        try { //Busca entrega e o novo entregador
             Entrega entrega = entregaDAO.buscarPorCodRastreio(codRastreio);
             Entregador novoEntregador = entregadorDAO.buscarPorCnh(novaCnhEntregador);
             
@@ -72,6 +78,7 @@ public class EntregaController {
                 return false;
             }
 
+            //Atualiza no BD para nova versão de entrega com novo entregador
             Entrega entregaAtualizada = new Entrega(codRastreio, novoEntregador);
             entregaDAO.atualizar(entregaAtualizada);
             return true;
@@ -81,6 +88,7 @@ public class EntregaController {
         }
     }
 
+    //DETETAR ENTREGA USANDO CÓDIGO DE RASTREIO
     public boolean deletarEntrega(String codRastreio) {
         if (codRastreio == null || codRastreio.isEmpty()) {
             throw new IllegalArgumentException("Código de rastreio não pode ser vazio");
@@ -95,6 +103,7 @@ public class EntregaController {
         }
     }
 
+    //MOSTRA DETALHES DA ENTREGA
     public void exibirDetalhesEntrega(String codRastreio) {
         Entrega entrega = buscarEntregaPorCodigo(codRastreio);
         if (entrega != null) {

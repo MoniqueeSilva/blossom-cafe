@@ -8,7 +8,6 @@ import java.util.Map;
 import com.blossomcafe.controller.ProdutoController;
 import com.blossomcafe.model.Cliente;
 import com.blossomcafe.model.Produto;
-import com.blossomcafe.model.Cliente;
 import com.blossomcafe.util.Sessao;
 
 import javafx.geometry.Insets;
@@ -26,8 +25,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -42,14 +39,11 @@ public class TelaProdutos {
         this.clienteLogado = cliente;
         this.produtoController = new ProdutoController();
         this.mapeamentoImagens = new HashMap<>();
-        this.cliente = Sessao.getClienteLogado(); 
-        
-        // Inicializar o mapeamento de imagens apenas para alguns produtos principais
+        this.clienteLogado = Sessao.getClienteLogado(); 
         inicializarMapeamentoImagensLimitado();
     }
-    
+
     private void inicializarMapeamentoImagensLimitado() {
-        // Apenas alguns produtos principais para não sobrecarregar
         mapeamentoImagens.put("Café Expresso", "/images/produtos/cafes/cafe-expresso.jpg");
         mapeamentoImagens.put("Cappuccino Italiano", "/images/produtos/cafes/cappuccino-italiano.jpg");
         mapeamentoImagens.put("Buquê de Rosas", "/images/produtos/flores/buque-rosas.jpg");
@@ -60,45 +54,39 @@ public class TelaProdutos {
     public void mostrar() {
         // ==================== NAVBAR ====================
         HBox navbar = criarNavbar();
-        
+
         // ==================== TÍTULO PRINCIPAL ====================
         Text tituloPrincipal = new Text("Cardápio Blossom Cafe");
-        tituloPrincipal.setFont(Font.font("Arial", FontWeight.BOLD, 28));
-        tituloPrincipal.setStyle("-fx-fill: #4C2B0B;");
-        
+        tituloPrincipal.getStyleClass().add("titulo-principal");
+
         // ==================== CONTEÚDO PRINCIPAL ====================
         VBox conteudoPrincipal = new VBox(20);
         conteudoPrincipal.setAlignment(Pos.TOP_CENTER);
         conteudoPrincipal.setPadding(new Insets(20));
-        conteudoPrincipal.setStyle("-fx-background-color: #EADED0;");
-        
-        // Café
+        conteudoPrincipal.getStyleClass().add("conteudo-principal");
+
         VBox secaoCafes = criarSecaoCategoria("☕ Nossos Cafés", "cafe", 4);
-        // Flores
         VBox secaoFlores = criarSecaoCategoria("🌺 Nossas Flores", "flores", 4);
-        // Combos
         VBox secaoCombos = criarSecaoCategoria("🎁 Combos Especiais", "combo", 3);
-        
+
         conteudoPrincipal.getChildren().addAll(secaoCafes, secaoFlores, secaoCombos);
-        
-        // ScrollPane para o conteúdo
+
         ScrollPane scrollPane = new ScrollPane(conteudoPrincipal);
         scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background: transparent; -fx-border: none;");
-        scrollPane.setPadding(new Insets(0));
-        
-        // ==================== LAYOUT PRINCIPAL ====================
+        scrollPane.getStyleClass().add("scroll");
+
         VBox layoutPrincipal = new VBox();
         layoutPrincipal.setAlignment(Pos.TOP_CENTER);
-        layoutPrincipal.setStyle("-fx-background-color: #EADED0;");
-        
+        layoutPrincipal.getStyleClass().add("layout-principal");
+
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        
         layoutPrincipal.getChildren().addAll(navbar, tituloPrincipal, scrollPane);
         VBox.setMargin(tituloPrincipal, new Insets(20, 0, 10, 0));
-        
+
         // ==================== SCENE ====================
         Scene scene = new Scene(layoutPrincipal, 1000, 700);
+        scene.getStylesheets().add(getClass().getResource("/css/produtos.css").toExternalForm());
+
         stage.setTitle("Blossom Café - Cardápio");
         stage.setScene(scene);
         stage.show();
@@ -108,38 +96,32 @@ public class TelaProdutos {
         VBox secao = new VBox(15);
         secao.setAlignment(Pos.TOP_CENTER);
         secao.setPadding(new Insets(20, 20, 30, 20));
-        secao.setStyle("-fx-background-color: #F8F2EA; -fx-background-radius: 15; -fx-border-color: #D2B48C; -fx-border-radius: 15; -fx-border-width: 1;");
-        secao.setMaxWidth(900);
+        secao.getStyleClass().add("secao");
 
-        // Título da categoria
         Text titulo = new Text(tituloCategoria);
-        titulo.setFont(Font.font("Arial", FontWeight.BOLD, 22));
-        titulo.setStyle("-fx-fill: #4C2B0B;");
-        
-        // Container para os produtos - usando FlowPane para layout responsivo
+        titulo.getStyleClass().add("titulo-categoria");
+
         FlowPane containerProdutos = new FlowPane();
         containerProdutos.setAlignment(Pos.TOP_CENTER);
         containerProdutos.setHgap(20);
         containerProdutos.setVgap(20);
         containerProdutos.setPadding(new Insets(10));
-        
-        // Obter produtos filtrados por categoria
+
         List<Produto> produtosFiltrados = filtrarProdutosPorCategoria(tipo);
-        
-        // Limitar o número de produtos exibidos
+
         int limite = Math.min(maxProdutos, produtosFiltrados.size());
         for (int i = 0; i < limite; i++) {
             VBox card = criarCardProduto(produtosFiltrados.get(i));
+            card.getStyleClass().add("card-produto");
             containerProdutos.getChildren().add(card);
         }
-        
-        // Se não houver produtos na categoria
+
         if (produtosFiltrados.isEmpty()) {
             Label labelVazio = new Label("Em breve novidades nesta categoria...");
-            labelVazio.setStyle("-fx-text-fill: #8B4513; -fx-font-style: italic; -fx-font-size: 14;");
+            labelVazio.getStyleClass().add("label-vazio");
             containerProdutos.getChildren().add(labelVazio);
         }
-        
+
         secao.getChildren().addAll(titulo, containerProdutos);
         return secao;
     }
@@ -147,41 +129,34 @@ public class TelaProdutos {
     private List<Produto> filtrarProdutosPorCategoria(String tipo) {
         List<Produto> todosProdutos = produtoController.listarProdutosDisponiveis();
         List<Produto> filtrados = new ArrayList<>();
-        
+
         for (Produto produto : todosProdutos) {
             String nome = produto.getNome().toLowerCase();
-            
+
             switch (tipo) {
                 case "cafe":
-                    if (nome.contains("café") || nome.contains("cafe") || 
-                        nome.contains("expresso") || nome.contains("cappuccino") || 
-                        nome.contains("latte") || nome.contains("coffee") ||
-                        nome.contains("chá") || nome.contains("cha") ||
-                        nome.contains("chocolate") || nome.contains("machiatto") ||
-                        nome.contains("nesquik")) {
+                    if (nome.contains("café") || nome.contains("cafe") || nome.contains("expresso") || 
+                        nome.contains("cappuccino") || nome.contains("latte") || nome.contains("coffee") ||
+                        nome.contains("chá") || nome.contains("cha") || nome.contains("chocolate") || 
+                        nome.contains("machiatto") || nome.contains("nesquik")) {
                         filtrados.add(produto);
                     }
                     break;
-                    
                 case "flores":
-                    if (nome.contains("astromélia") || nome.contains("astromelia") || 
-                        nome.contains("flores") || nome.contains("girassois") || 
-                        nome.contains("lírio") || nome.contains("lirio") || 
-                        nome.contains("margaridas") || nome.contains("orquidea") ||
-                        nome.contains("rosas") || nome.contains("tulipas")) {
+                    if (nome.contains("astromélia") || nome.contains("astromelia") || nome.contains("flores") || 
+                        nome.contains("girassois") || nome.contains("lírio") || nome.contains("lirio") || 
+                        nome.contains("margaridas") || nome.contains("orquidea") || nome.contains("rosas") || 
+                        nome.contains("tulipas")) {
                         filtrados.add(produto);
                     }
                     break;
-                    
                 case "combo":
-                    if (nome.contains("caixa") || nome.contains("cesta") || 
-                        nome.contains("combo") || nome.contains("kit")) {
+                    if (nome.contains("caixa") || nome.contains("cesta") || nome.contains("combo") || nome.contains("kit")) {
                         filtrados.add(produto);
                     }
                     break;
             }
         }
-        
         return filtrados;
     }
 
@@ -189,9 +164,8 @@ public class TelaProdutos {
         HBox navbar = new HBox(15);
         navbar.setAlignment(Pos.CENTER_LEFT);
         navbar.setPadding(new Insets(15, 20, 15, 20));
-        navbar.setStyle("-fx-background-color: #4C2B0B;");
-        
-        // Logo
+        navbar.getStyleClass().add("navbar");
+
         ImageView logoView = null;
         try {
             Image logoImage = new Image(getClass().getResourceAsStream("/images/logo-blossom.jpeg"));
@@ -201,70 +175,52 @@ public class TelaProdutos {
             logoView.setSmooth(true);
         } catch (Exception e) {
             Text logoTexto = new Text("🌺 BLOSSOM CAFÉ 🌸");
-            logoTexto.setStyle("-fx-fill: white; -fx-font-weight: bold; -fx-font-size: 16;");
+            logoTexto.getStyleClass().add("logo-navbar");
             navbar.getChildren().add(logoTexto);
         }
-        
+
         if (logoView != null) {
             navbar.getChildren().add(logoView);
         }
-        
-        // Espaço flexível
+
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        if (cliente != null) {
-        Label nomeUsuario = new Label("Olá, " + cliente.getNome() + "!");
-        nomeUsuario.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
-        navbar.getChildren().add(nomeUsuario);
-    }
-    
-        
-        // Links de navegação
+        navbar.getChildren().add(spacer);
+
+        if (clienteLogado != null) {
+            Label nomeUsuario = new Label("Olá, " + clienteLogado.getNome() + "!");
+            nomeUsuario.getStyleClass().add("nome-usuario");
+            navbar.getChildren().add(nomeUsuario);
+        }
+
         HBox linksContainer = new HBox(20);
         linksContainer.setAlignment(Pos.CENTER_RIGHT);
-        
+
         Button btnHome = criarBotaoNav("Home");
         Button btnSobre = criarBotaoNav("Sobre");
         Button btnContato = criarBotaoNav("Contato");
-        
-        // Ícone de perfil
+
         Button btnPerfil = new Button("Perfil");
-        btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; " +
-                          "-fx-border: none; -fx-cursor: hand; -fx-padding: 8;");
-        btnPerfil.setOnMouseEntered(e -> btnPerfil.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8; -fx-background-radius: 5;"));
-        btnPerfil.setOnMouseExited(e -> btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8;"));
-        
+        btnPerfil.getStyleClass().add("btn-perfil");
+
         linksContainer.getChildren().addAll(btnHome, btnSobre, btnContato, btnPerfil);
-        
-        navbar.getChildren().addAll(spacer, linksContainer);
-        
-        // Eventos dos botoes
-        btnHome.setOnAction(e -> {
-            TelaProdutos telaProdutos = new TelaProdutos(stage, clienteLogado);
-            telaProdutos.mostrar();
-        });
-        
+        navbar.getChildren().add(linksContainer);
+
+        btnHome.setOnAction(e -> new TelaProdutos(stage, clienteLogado).mostrar());
         btnPerfil.setOnAction(e -> {
-            if(clienteLogado != null){
-                TelaPerfil telaPerfil = new TelaPerfil(stage, clienteLogado);
-                telaPerfil.mostrar();
-            }else{
-                TelaLogin telaLogin = new TelaLogin(stage);
-                telaLogin.mostrar();
+            if (clienteLogado != null) {
+                new TelaPerfil(stage, clienteLogado).mostrar();
+            } else {
+                new TelaLogin(stage).mostrar();
             }
         });
-        
+
         return navbar;
     }
 
     private Button criarBotaoNav(String texto) {
         Button button = new Button(texto);
-        button.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; " +
-                       "-fx-border: none; -fx-cursor: hand; -fx-padding: 10 15; -fx-font-size: 14;");
-        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; " +
-                                                    "-fx-font-weight: bold; -fx-border: none; -fx-padding: 10 15; -fx-font-size: 14; -fx-background-radius: 5;"));
-        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: transparent; -fx-text-fill: white; " +
-                                                   "-fx-font-weight: bold; -fx-border: none; -fx-padding: 10 15; -fx-font-size: 14;"));
+        button.getStyleClass().add("btn-nav");
         return button;
     }
 
@@ -272,44 +228,25 @@ public class TelaProdutos {
         VBox card = new VBox(12);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPadding(new Insets(15));
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 10; " +
-                     "-fx-border-color: #D2B48C; -fx-border-radius: 10; -fx-border-width: 1; " +
-                     "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
-        card.setMinWidth(200);
-        card.setMaxWidth(200);
-        card.setMinHeight(250);
 
-        // Usar placeholder para economizar memória pois tivemos problemas de gerenciamento de memoria
         ImageView imgProduto = criarPlaceholder(produto);
         imgProduto.setFitWidth(80);
         imgProduto.setFitHeight(80);
         imgProduto.setPreserveRatio(true);
 
-        // Nome do produto
         Label nome = new Label(produto.getNome());
-        nome.setStyle("-fx-font-weight: bold; -fx-font-size: 13; -fx-text-fill: #4C2B0B;");
+        nome.getStyleClass().add("nome-produto");
         nome.setWrapText(true);
         nome.setMaxWidth(170);
         nome.setAlignment(Pos.CENTER);
         nome.setMinHeight(40);
 
-        // Preço
         Label preco = new Label(String.format("R$ %.2f", produto.getPreco()));
-        preco.setStyle("-fx-font-weight: bold; -fx-font-size: 16; -fx-text-fill: #4C2B0B;");
+        preco.getStyleClass().add("preco-produto");
 
-        // Botão de adicionar ao carrinho, carrinho ainda em processo
         Button btnAdicionar = new Button("Adicionar");
-        btnAdicionar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; -fx-font-weight: bold; " +
-                            "-fx-padding: 8 16; -fx-background-radius: 5; -fx-font-size: 12;");
-        btnAdicionar.setOnMouseEntered(e -> 
-            btnAdicionar.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; -fx-font-weight: bold; " +
-                                "-fx-padding: 8 16; -fx-background-radius: 5; -fx-font-size: 12;"));
-        btnAdicionar.setOnMouseExited(e -> 
-            btnAdicionar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; -fx-font-weight: bold; " +
-                                "-fx-padding: 8 16; -fx-background-radius: 5; -fx-font-size: 12;"));
-        
+        btnAdicionar.getStyleClass().add("btn-adicionar");
         btnAdicionar.setOnAction(e -> {
-            System.out.println("✅ " + produto.getNome() + " adicionado ao carrinho!");
             mostrarAlerta("Sucesso", produto.getNome() + " adicionado ao carrinho!");
         });
 
@@ -318,45 +255,37 @@ public class TelaProdutos {
     }
 
     private ImageView criarPlaceholder(Produto produto) {
-        // Cria um placeholder colorido baseado no tipo de produto
         StackPane placeholder = new StackPane();
         String corFundo;
         String emoji;
-        
+
         String nome = produto.getNome().toLowerCase();
-        
+
         if (nome.contains("café") || nome.contains("cafe") || nome.contains("expresso") || 
             nome.contains("cappuccino") || nome.contains("latte") || nome.contains("coffee") ||
             nome.contains("chá") || nome.contains("cha") || nome.contains("chocolate") ||
             nome.contains("machiatto") || nome.contains("nesquik")) {
-            corFundo = "#8B4513"; // Marrom para café
+            corFundo = "#8B4513";
             emoji = "☕";
         } else if (nome.contains("astromélia") || nome.contains("astromelia") || nome.contains("flores") || 
-                  nome.contains("girassois") || nome.contains("lírio") || nome.contains("lirio") || 
-                  nome.contains("margaridas") || nome.contains("orquidea") || nome.contains("rosas") || 
-                  nome.contains("tulipas")) {
-            corFundo = "#FF69B4"; // Rosa para flores
+                   nome.contains("girassois") || nome.contains("lírio") || nome.contains("lirio") || 
+                   nome.contains("margaridas") || nome.contains("orquidea") || nome.contains("rosas") || 
+                   nome.contains("tulipas")) {
+            corFundo = "#FF69B4";
             emoji = "🌺";
         } else {
-            corFundo = "#4C2B0B"; // Marrom escuro para combos
+            corFundo = "#4C2B0B";
             emoji = "🎁";
         }
-        
+
         placeholder.setStyle("-fx-background-color: " + corFundo + "; -fx-min-width: 80; -fx-min-height: 80; -fx-background-radius: 10;");
-        
         Text textoEmoji = new Text(emoji);
         textoEmoji.setStyle("-fx-font-size: 24; -fx-fill: white;");
-        
         placeholder.getChildren().add(textoEmoji);
-        
-        // Converte StackPane para ImageView
-        ImageView imageView = new ImageView();
-        imageView.setFitWidth(80);
-        imageView.setFitHeight(80);
-        
-        return imageView;
+
+        return new ImageView(); // apenas placeholder visual
     }
-    
+
     private void mostrarAlerta(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);

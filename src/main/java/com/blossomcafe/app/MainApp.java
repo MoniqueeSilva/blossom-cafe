@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application {
     
-    @Override
     public void start(Stage primaryStage) {
         // Mostra a tela inicial
         TelaInicial telaInicial = new TelaInicial(primaryStage);

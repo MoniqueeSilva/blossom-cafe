@@ -13,17 +13,19 @@ public class ProdutoController {
         this.produtoDAO = new ProdutoDAO();
     }
 
+    //CADASTRAR PRODUTO
     public boolean cadastrarProduto(String nome, double preco) {
+        //Validações de campos obrigatórios
         if (nome == null || nome.isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
-        if (preco <= 0) {
+        if (preco <= 0) { //Preço positivo
             throw new IllegalArgumentException("Preço deve ser maior que zero");
         }
 
         try {
-            Produto produto = new Produto(0, nome, preco, true);
-            produtoDAO.inserir(produto);
+            Produto produto = new Produto(0, nome, preco, true); //Cria produto (ID 0 = auto-increment)
+            produtoDAO.inserir(produto); //Insere no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar produto: " + e.getMessage());
@@ -31,32 +33,30 @@ public class ProdutoController {
         }
     }
 
+    //BUSCAR PRODUTO POR ID
     public Produto buscarProdutoPorId(int id) {
         return produtoDAO.buscarPorId(id);
     }
 
+    //LISTAR TODOS OS PRODUTOS
     public List<Produto> listarTodosProdutos() {
         return produtoDAO.listarTodos();
     }
 
-    // public List<Produto> listarProdutosDisponiveis() {
-    //     return produtoDAO.listarTodos().stream()
-    //         .filter(Produto::isDisponivel)
-    //         .collect(Collectors.toList());
-    // }
-
+    //ATUALIZAR PRODUTOS
     public boolean atualizarProduto(int id, String nome, double preco, boolean disponivel) {
         try {
-            Produto produto = produtoDAO.buscarPorId(id);
-            if (produto == null) {
+            Produto produto = produtoDAO.buscarPorId(id);//Busca produto
+            if (produto == null) { //Verifica se existe
                 return false;
             }
 
+            //Atualiza
             produto.setNome(nome);
             produto.setPreco(preco);
             produto.setDisponivel(disponivel);
             
-            produtoDAO.atualizar(produto);
+            produtoDAO.atualizar(produto); //Atualiza no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao atualizar produto: " + e.getMessage());
@@ -64,15 +64,16 @@ public class ProdutoController {
         }
     }
 
+    //DISPONIBILIDADE DO PRODUTO
     public boolean alternarDisponibilidadeProduto(int id) {
         try {
-            Produto produto = produtoDAO.buscarPorId(id);
-            if (produto == null) {
+            Produto produto = produtoDAO.buscarPorId(id); //Busca produto
+            if (produto == null) { //Verifica se existe
                 return false;
             }
 
-            produto.setDisponivel(!produto.isDisponivel());
-            produtoDAO.atualizar(produto);
+            produto.setDisponivel(!produto.isDisponivel()); //Inverte disponibilidade
+            produtoDAO.atualizar(produto); //Atualiza no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao alternar disponibilidade: " + e.getMessage());
@@ -80,6 +81,7 @@ public class ProdutoController {
         }
     }
 
+    //DELETAR PRODUTO
     public boolean deletarProduto(int id) {
         try {
             produtoDAO.deletar(id);
@@ -90,14 +92,15 @@ public class ProdutoController {
         }
     }
 
+    //LISTAR PRODUTOS DISPONIVEIS
     public List<Produto> listarProdutosDisponiveis() {
-    // ⚠️ TEMPORÁRIO: Retorna dados mock se o banco estiver vazio
-        List<Produto> produtosDoBanco = produtoDAO.listarTodos();
+        List<Produto> produtosDoBanco = produtoDAO.listarTodos(); //Busca produtos do banco
         
-        if (produtosDoBanco.isEmpty()) {
-            System.out.println("📦 Usando dados mock temporários...");
-            List<Produto> mockProdutos = new ArrayList<>();
+        if (produtosDoBanco.isEmpty()) { //Se banco for vazio
+            System.out.println("Usando dados mock temporários...");
+            List<Produto> mockProdutos = new ArrayList<>(); //Cria lista mock
             
+            //Adicionando produtos mock
             // Cafés
             mockProdutos.add(new Produto(1, "Café Expresso", 8.90, true));
             mockProdutos.add(new Produto(2, "Cappuccino Special", 12.50, true));
@@ -116,17 +119,19 @@ public class ProdutoController {
         return produtosDoBanco;
     }
 
+
+    //BUSCAR PRODUTOS POR NOME
     public List<Produto> buscarProdutosPorNome(String nome) {
-        if (nome == null || nome.isEmpty()) {
+        if (nome == null || nome.isEmpty()) { //Valida nome
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
 
-        List<Produto> todosProdutos = produtoDAO.listarTodos();
-        List<Produto> resultados = new ArrayList<>();
+        List<Produto> todosProdutos = produtoDAO.listarTodos(); //Busca todos os produtos
+        List<Produto> resultados = new ArrayList<>(); //Lista para os resultados
         
-        for (Produto produto : todosProdutos) {
-            if (produto.getNome().toLowerCase().contains(nome.toLowerCase())) {
-                resultados.add(produto);
+        for (Produto produto : todosProdutos) { //Percorre os produtos
+            if (produto.getNome().toLowerCase().contains(nome.toLowerCase())) { //Busca por substring 
+                resultados.add(produto); //Adiciona a lista de resultados
             }
         }
         return resultados;

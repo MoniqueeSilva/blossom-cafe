@@ -8,7 +8,7 @@ import com.blossomcafe.model.Pedido;
 import com.blossomcafe.model.Produto;
 
 public class PedidoController {
-    public PedidoDAO pedidoDAO;
+    private PedidoDAO pedidoDAO;
     private ProdutoDAO produtoDAO;
 
     public PedidoController() {
@@ -16,10 +16,11 @@ public class PedidoController {
         this.produtoDAO = new ProdutoDAO();
     }
 
+    //CRIAR PEDIDOS
     public boolean criarPedido(int idPedido) {
         try {
             Pedido pedido = new Pedido(idPedido);
-            pedidoDAO.inserir(pedido, 1, idPedido); // ID cliente temporário
+            pedidoDAO.inserir(pedido, 1, idPedido); //Insere no banco, ID cliente temporário
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao criar pedido: " + e.getMessage());
@@ -27,23 +28,24 @@ public class PedidoController {
         }
     }
 
+    //ADICIONAR PRODUTOS AO PEDIDO
     public boolean adicionarProdutoAoPedido(int idPedido, int idProduto) {
         try {
-            Pedido pedido = pedidoDAO.buscarPorId(idPedido);
-            Produto produto = produtoDAO.buscarPorId(idProduto);
+            Pedido pedido = pedidoDAO.buscarPorId(idPedido); //Busca pedido
+            Produto produto = produtoDAO.buscarPorId(idProduto); //Busca produto
 
-            if (pedido == null || produto == null) {
+            if (pedido == null || produto == null) { //Verifica se existem
                 System.out.println("Pedido ou produto não encontrado");
                 return false;
             }
 
-            if (!produto.isDisponivel()) {
+            if (!produto.isDisponivel()) { //Verifica se está disponivel
                 System.out.println("Produto indisponível: " + produto.getNome());
                 return false;
             }
 
-            pedido.adicionarProduto(produto);
-            pedidoDAO.atualizar(pedido);
+            pedido.adicionarProduto(produto); //Adiciona produto ao pedido
+            pedidoDAO.atualizar(pedido); //Atualiza pedido no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao adicionar produto ao pedido: " + e.getMessage());
@@ -51,50 +53,54 @@ public class PedidoController {
         }
     }
 
+    //BUSCAR PEDIDO POR ID
     public Pedido buscarPedidoPorId(int idPedido) {
         return pedidoDAO.buscarPorId(idPedido);
     }
 
+    //LISTAR TODOS OS PEDIDOS
     public List<Pedido> listarTodosPedidos() {
         return pedidoDAO.listarTodos();
     }
 
+    //CALCULAR O TOTAL DO PEDIDO
     public double calcularTotalPedido(int idPedido) {
-        Pedido pedido = pedidoDAO.buscarPorId(idPedido);
-        if (pedido == null) {
+        Pedido pedido = pedidoDAO.buscarPorId(idPedido); //Busca pedido
+        if (pedido == null) { //Verifica se existe
             return 0.0;
         }
 
-        double total = 0.0;
-        for (Produto produto : pedido.getProdutos()) {
-            total += produto.getPreco();
+        double total = 0.0; //Inicializa total
+        for (Produto produto : pedido.getProdutos()) { //Percorre os produtos
+            total += produto.getPreco(); //Soma preços
         }
-        return total;
+        return total; //Retorna o total
     }
 
+    //REMOVER PRODUTO DO PEDIDO
     public boolean removerProdutoDoPedido(int idPedido, int idProduto) {
         try {
-            Pedido pedido = pedidoDAO.buscarPorId(idPedido);
-            if (pedido == null) {
+            Pedido pedido = pedidoDAO.buscarPorId(idPedido); //Buscar pedido
+            if (pedido == null) { //Verifica se existe
                 return false;
             }
 
-            // Encontrar o produto a ser removido
+            // Encontrar o produto para remover
             Produto produtoRemover = null;
-            for (Produto produto : pedido.getProdutos()) {
-                if (produto.getId() == idProduto) {
-                    produtoRemover = produto;
+            for (Produto produto : pedido.getProdutos()) { //Percorre produtos
+                if (produto.getId() == idProduto) { //Encontra pelo id
+                    produtoRemover = produto; //Armazena
                     break;
                 }
             }
 
-            if (produtoRemover == null) {
+            if (produtoRemover == null) { //Verifica se encontrou
                 return false;
             }
 
-            // Remover o produto da lista
-            pedido.getProdutos().remove(produtoRemover);
-            pedidoDAO.atualizar(pedido);
+            //REMOVER PRODUTO DA LISTA
+            pedido.getProdutos().remove(produtoRemover); //Remove produto
+            pedidoDAO.atualizar(pedido); //Atualiza pedido no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao remover produto do pedido: " + e.getMessage());
@@ -102,15 +108,16 @@ public class PedidoController {
         }
     }
 
-    public boolean limparPedido(int idPedido) {
+    //LIMPAR PEDIDO
+    public boolean limparPedido(int idPedido) { //Busca pedido
         try {
             Pedido pedido = pedidoDAO.buscarPorId(idPedido);
-            if (pedido == null) {
+            if (pedido == null) { //Verifica se existe
                 return false;
             }
 
-            pedido.getProdutos().clear();
-            pedidoDAO.atualizar(pedido);
+            pedido.getProdutos().clear(); //Limpa a lista de produtos 
+            pedidoDAO.atualizar(pedido); //Atualiza pedido no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao limpar pedido: " + e.getMessage());
@@ -118,6 +125,7 @@ public class PedidoController {
         }
     }
 
+    //DELETAR PEDIDO
     public boolean deletarPedido(int idPedido) {
         try {
             pedidoDAO.deletar(idPedido);
@@ -128,6 +136,7 @@ public class PedidoController {
         }
     }
 
+    //EXIBIR DETALHES DO PEDIDO
     public void exibirDetalhesPedido(int idPedido) {
         Pedido pedido = buscarPedidoPorId(idPedido);
         if (pedido != null) {
@@ -138,17 +147,17 @@ public class PedidoController {
                 System.out.println("- " + produto.getNome() + ": R$ " + String.format("%.2f", produto.getPreco()));
             }
             System.out.println("Total: R$ " + String.format("%.2f", calcularTotalPedido(idPedido)));
-            System.out.println("========================");
         } else {
             System.out.println("Pedido não encontrado!");
         }
     }
 
+    //QUANTIDADE DE PRODUTOS NO PEDIDO
     public int obterQuantidadeProdutosNoPedido(int idPedido) {
-        Pedido pedido = buscarPedidoPorId(idPedido);
+        Pedido pedido = buscarPedidoPorId(idPedido); //Busca pedido
         if (pedido == null) {
             return 0;
         }
-        return pedido.getProdutos().size();
+        return pedido.getProdutos().size(); //Retorna qntd de produtos
     }
 }

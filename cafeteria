@@ -1,0 +1,107 @@
+-- CLIENTE (CORRETO de verdade)
+CREATE TABLE cliente ( 
+    id_cliente SERIAL PRIMARY KEY,
+    telefone VARCHAR(20),  
+    nome VARCHAR(60) NOT NULL,  
+    email VARCHAR(60) UNIQUE,  
+    cpf VARCHAR(11) UNIQUE,
+    senha VARCHAR(100) NOT NULL
+);
+
+-- PRODUTO (CORRETO)
+CREATE TABLE produto ( 
+    nome VARCHAR(100) NOT NULL,  
+    preco DECIMAL(10,2) NOT NULL,  
+    disponivel BOOLEAN DEFAULT TRUE,  
+    id_produto SERIAL PRIMARY KEY
+);
+
+-- ENTREGADOR (CORRIGIDO)
+CREATE TABLE entregador ( 
+    veiculo VARCHAR(60) NOT NULL,  
+    nome VARCHAR(100) NOT NULL,  
+    placa VARCHAR(10) UNIQUE NOT NULL,  
+    cnh VARCHAR(20) PRIMARY KEY UNIQUE NOT NULL
+);
+
+-- ENTREGA (CORRIGIDO)
+CREATE TABLE entrega ( 
+    cod_rastreio VARCHAR(20) PRIMARY KEY,  
+    cnh_entregador VARCHAR(20) REFERENCES entregador(cnh)
+);
+
+-- ENDEREÇO (CORRIGIDO)
+CREATE TABLE endereco ( 
+    rua VARCHAR(40) NOT NULL,  
+    numero INT NOT NULL,  
+    bairro VARCHAR(40),  
+    cep VARCHAR(10) NOT NULL,  
+    cidade VARCHAR(60),  
+    estado VARCHAR(2),  
+    ponto_ref VARCHAR(100),  
+    id_endereco SERIAL PRIMARY KEY,
+    id_cliente INT REFERENCES cliente(id_cliente)
+);
+
+-- PEDIDO (CORRIGIDO)
+CREATE TABLE pedido ( 
+    data_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
+    status VARCHAR(20) DEFAULT 'PENDENTE', -- 'PENDENTE', 'PREPARANDO', 'ENTREGUE', etc.
+    id_pedido SERIAL PRIMARY KEY,  
+    id_cliente INT REFERENCES cliente(id_cliente),  
+    cod_rastreio VARCHAR(20) REFERENCES entrega(cod_rastreio),  
+    id_endereco INT REFERENCES endereco(id_endereco)
+);
+
+-- ITEM_PEDIDO (CORRIGIDO)
+CREATE TABLE item_pedido(
+    id_item_pedido SERIAL PRIMARY KEY,
+    id_produto INT REFERENCES produto(id_produto),
+    id_pedido INT REFERENCES pedido(id_pedido),
+    quantidade INT NOT NULL DEFAULT 1,
+    preco_unitario DECIMAL(10,2) NOT NULL,
+    UNIQUE(id_produto, id_pedido) -- Evita duplicatas
+);
+
+CREATE TABLE cafe (
+    id_produto INT PRIMARY KEY REFERENCES produto(id_produto),
+    tipo_cafe VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE flores (
+    id_produto INT PRIMARY KEY REFERENCES produto(id_produto),
+    cor VARCHAR(30) NOT NULL,
+    tipo_flor VARCHAR(50) NOT NULL
+);
+
+INSERT INTO produto (nome, preco, disponivel) VALUES
+-- Cafés
+('Café Expresso', 8.90, true),
+('Cappuccino Italiano', 12.50, true),
+('Café com Leite', 9.90, true),
+('Café Filtrado ou Coado', 7.90, true),
+('Café Gelado', 10.90, true),
+('Café Java', 11.90, true),
+('Chá', 8.50, true),
+('Chocolate Quente', 10.50, true),
+('Machiatto', 13.90, true),
+('Nesquik', 9.50, true),
+
+-- Flores
+('Astromélia', 45.90, true),
+('Flores do Campo', 39.90, true),
+('Girassois', 42.90, true),
+('Lírio Rosa', 49.90, true),
+('Margaridas', 35.90, true),
+('Orquidea Azul', 89.90, true),
+('Rosas Brancas Buquê', 79.90, true),
+('Tulipas', 55.90, true),
+
+-- Combos
+('Caixa de Café da Manhã', 65.90, true),
+('Cesta Romance', 120.00, true),
+('Combo Café e Croissant', 35.90, true),
+('Combo de Girassois', 95.90, true),
+('Kit Presente com Flores', 85.90, true);
+
+SELECT * FROM cliente;

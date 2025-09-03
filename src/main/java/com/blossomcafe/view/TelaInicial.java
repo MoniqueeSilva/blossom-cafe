@@ -22,7 +22,7 @@ public class TelaInicial {
         // LOGO COM IMAGEM
         ImageView logoView = null;
         Text logoTexto = null;
-        
+
         try {
             Image logoImage = new Image(getClass().getResourceAsStream("/images/logo-blossom.jpeg"));
             logoView = new ImageView(logoImage);
@@ -30,7 +30,6 @@ public class TelaInicial {
             logoView.setPreserveRatio(true);
             logoView.setSmooth(true);
         } catch (Exception e) {
-            System.err.println("Erro ao carregar imagem: " + e.getMessage());
             logoTexto = new Text("🌺 BLOSSOM CAFÉ 🌸");
             logoTexto.getStyleClass().add("logo-texto");
         }
@@ -40,14 +39,14 @@ public class TelaInicial {
 
         // BOTÕES
         Button btnEntrar = new Button("ENTRAR");
-        btnEntrar.getStyleClass().add("btn-entrar");
+        btnEntrar.getStyleClass().add("btn-primario");
 
         Hyperlink linkPedirSemLogin = new Hyperlink("Pedir sem logar");
-        linkPedirSemLogin.getStyleClass().add("link-sem-login");
+        linkPedirSemLogin.getStyleClass().add("link");
 
-        //pedir sem logar. vai jogar ditero para a tela de menu de produtos
+        // ação: pedir sem logar → produtos
         linkPedirSemLogin.setOnAction(event -> {
-            TelaProdutos telaProdutos = new TelaProdutos(stage,null);
+            TelaProdutos telaProdutos = new TelaProdutos(stage, null);
             telaProdutos.mostrar();
         });
 
@@ -55,6 +54,8 @@ public class TelaInicial {
         VBox layout = new VBox(28);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(40));
+        layout.getStyleClass().add("layout-principal");
+
         if (logoView != null) {
             layout.getChildren().add(logoView);
         } else {
@@ -70,7 +71,7 @@ public class TelaInicial {
 
         // SCENE
         Scene scene = new Scene(layout, 450, 550);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/inicial.css").toExternalForm());
 
         stage.setTitle("Blossom Café");
         stage.setScene(scene);

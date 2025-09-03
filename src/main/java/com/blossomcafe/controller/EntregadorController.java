@@ -11,7 +11,9 @@ public class EntregadorController {
         this.entregadorDAO = new EntregadorDAO();
     }
 
+    //CADASTRAR ENTREGADOR
     public boolean cadastrarEntregador(String nome, String veiculo, String placa, String cnh) {
+        //Validações de campos obrigatórios
         if (nome == null || nome.isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
@@ -26,7 +28,7 @@ public class EntregadorController {
         }
 
         try {
-            // Verificar se já existe entregador com mesma CNH ou placa
+            //Verificar se já existe entregador com mesma CNH ou placa
             if (entregadorDAO.buscarPorCnh(cnh) != null) {
                 throw new IllegalArgumentException("Já existe entregador com esta CNH");
             }
@@ -35,7 +37,8 @@ public class EntregadorController {
             }
 
             Entregador entregador = new Entregador(nome, veiculo, placa, cnh);
-            entregadorDAO.inserir(entregador);
+
+            entregadorDAO.inserir(entregador); //Insere no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao cadastrar entregador: " + e.getMessage());
@@ -43,50 +46,53 @@ public class EntregadorController {
         }
     }
 
+    //BUSCAR ENTREGADOR 
     public Entregador buscarEntregadorPorCnh(String cnh) {
-        if (cnh == null || cnh.isEmpty()) {
+        if (cnh == null || cnh.isEmpty()) { //Valida cnh
             throw new IllegalArgumentException("CNH não pode ser vazia");
         }
-        return entregadorDAO.buscarPorCnh(cnh);
+        return entregadorDAO.buscarPorCnh(cnh); //Busca no DAO
     }
 
     public Entregador buscarEntregadorPorPlaca(String placa) {
-        if (placa == null || placa.isEmpty()) {
+        if (placa == null || placa.isEmpty()) { //Valida placa
             throw new IllegalArgumentException("Placa não pode ser vazia");
         }
-        return entregadorDAO.buscarPorPlaca(placa);
+        return entregadorDAO.buscarPorPlaca(placa); //Busca no DAO
     }
 
+    //LISTA TODOS OS ENTREGADORES
     public List<Entregador> listarTodosEntregadores() {
         return entregadorDAO.listarTodos();
     }
 
+    //ATUALIZA NOVO ENTREGADOR
     public boolean atualizarEntregador(String cnhAtual, String novoNome, String novoVeiculo, String novaPlaca, String novaCnh) {
         if (cnhAtual == null || cnhAtual.isEmpty()) {
             throw new IllegalArgumentException("CNH atual não pode ser vazia");
         }
 
         try {
-            Entregador entregadorAtual = entregadorDAO.buscarPorCnh(cnhAtual);
+            Entregador entregadorAtual = entregadorDAO.buscarPorCnh(cnhAtual); //Busca entregador atual
             if (entregadorAtual == null) {
                 return false;
             }
 
-            // Verificar se nova CNH já existe (se for diferente da atual)
+            //Verificar se nova cnh já existe
             if (!novaCnh.equals(cnhAtual) && entregadorDAO.buscarPorCnh(novaCnh) != null) {
                 throw new IllegalArgumentException("Já existe entregador com a nova CNH");
             }
 
-            // Verificar se nova placa já existe (se for diferente da atual)
+            // Verificar se nova placa já existe
             if (!novaPlaca.equals(entregadorAtual.getPlaca()) && entregadorDAO.buscarPorPlaca(novaPlaca) != null) {
                 throw new IllegalArgumentException("Já existe entregador com a nova placa");
             }
 
             Entregador entregadorAtualizado = new Entregador(
                 novoNome, novoVeiculo, novaPlaca, novaCnh
-            );
+            ); //Cria novo objeto atualizado
 
-            entregadorDAO.atualizarPorCnh(cnhAtual, entregadorAtualizado);
+            entregadorDAO.atualizarPorCnh(cnhAtual, entregadorAtualizado);//Atualiza no banco
             return true;
         } catch (Exception e) {
             System.out.println("Erro ao atualizar entregador: " + e.getMessage());
@@ -94,6 +100,7 @@ public class EntregadorController {
         }
     }
 
+    //DELETAR ENTREGADOR POR CNH
     public boolean deletarEntregadorPorCnh(String cnh) {
         if (cnh == null || cnh.isEmpty()) {
             throw new IllegalArgumentException("CNH não pode ser vazia");
@@ -108,6 +115,7 @@ public class EntregadorController {
         }
     }
 
+    //DELETAR ENTREGADOR POR PLACA
     public boolean deletarEntregadorPorPlaca(String placa) {
         if (placa == null || placa.isEmpty()) {
             throw new IllegalArgumentException("Placa não pode ser vazia");

@@ -1,36 +1,35 @@
 package com.blossomcafe.controller;
 
 import java.util.List;
-
-import com.blossomcafe.dao.ClienteDAO;
-import com.blossomcafe.model.Cliente;
+import com.blossomcafe.dao.ClienteDAO; //Acesso aos DAOS
+import com.blossomcafe.model.Cliente; //Modelo cliente
 
 public class ClienteController {
-    private ClienteDAO clienteDAO;
+    private ClienteDAO clienteDAO; //Instância do DAO
 
     public ClienteController() {
         this.clienteDAO = new ClienteDAO();
     }
 
-    // Login com email e senha
+    //LOGIN COM EMAIL E SENHA
     public Cliente fazerLogin(String email, String senha) {
-        if (email == null || email.trim().isEmpty()) {
+        if (email == null || email.trim().isEmpty()) { //trim: espaços brancos. isEmpty: string vazios
             throw new IllegalArgumentException("Email não pode ser vazio");
         }
         if (senha == null || senha.trim().isEmpty()) {
             throw new IllegalArgumentException("Senha não pode ser vazia");
         }
         
-        if (!email.contains("@")) {
+        if (!email.contains("@")) { //contains: procurando certo caracteres
             throw new IllegalArgumentException("Email deve ser válido");
         }
         
-        return clienteDAO.buscarPorEmailSenha(email.trim(), senha.trim());
+        return clienteDAO.buscarPorEmailSenha(email.trim(), senha.trim()); //Chama o DAO para autenticar
     }
 
-    // Cadastrar cliente
+    //CADASTRAR CLIENTE
     public boolean cadastrarCliente(String nome, String telefone, String email, String cpf, String senha) {
-        // Validações
+        //Validações de campos obrigatórios
         if (nome == null || nome.trim().isEmpty()) {
             throw new IllegalArgumentException("Nome não pode ser vazio");
         }
@@ -55,35 +54,35 @@ public class ClienteController {
             throw new IllegalArgumentException("Senha deve ter pelo menos 4 caracteres");
         }
 
-        // Verificar se email já existe
+        //VERIFICA SE EMAIL JÁ EXISTE
         if (clienteDAO.emailExiste(email.trim())) {
             throw new IllegalArgumentException("Email já cadastrado");
         }
 
-        // Verificar se CPF já existe
+        //VERIFICA SE CPF JÁ EXISTE
         if (clienteDAO.cpfExiste(cpf.trim())) {
             throw new IllegalArgumentException("CPF já cadastrado");
         }
 
         Cliente cliente = new Cliente(0, nome.trim(), telefone.trim(), email.trim(), cpf.trim(), senha.trim());
-        return clienteDAO.inserir(cliente);
+        return clienteDAO.inserir(cliente); //Insere no banco via DAO
     }
 
-    // Atualizar cliente
+    //ATUALIZAR CLIENTE
     public boolean atualizarCliente(Cliente cliente) {
         if (cliente == null) {
             throw new IllegalArgumentException("Cliente não pode ser nulo");
         }
         
         try {
-            return clienteDAO.atualizar(cliente);
+            return clienteDAO.atualizar(cliente); //Chama o DAO para atualizar
         } catch (Exception e) {
             System.err.println("Erro ao atualizar cliente: " + e.getMessage());
             return false;
         }
     }
 
-    // Alterar senha
+    //ALTERAR SENHA
     public boolean alterarSenha(int idCliente, String novaSenha) {
         if (novaSenha == null || novaSenha.trim().isEmpty()) {
             throw new IllegalArgumentException("Nova senha não pode ser vazia");
@@ -93,41 +92,41 @@ public class ClienteController {
             throw new IllegalArgumentException("Nova senha deve ter pelo menos 4 caracteres");
         }
         
-        return clienteDAO.atualizarSenha(idCliente, novaSenha.trim());
+        return clienteDAO.atualizarSenha(idCliente, novaSenha.trim()); //Chama o DAO
     }
 
-    // Buscar cliente por ID
+    //BUSCAR CLIENTE POR ID
     public Cliente buscarClientePorId(int id) {
-        return clienteDAO.buscarPorId(id);
+        return clienteDAO.buscarPorId(id); //Transfere execução para o DAO
     }
 
-    // Listar todos os clientes
+    //LISTAR TODOS OS CLIENTES
     public List<Cliente> listarTodosClientes() {
-        return clienteDAO.listarTodos();
+        return clienteDAO.listarTodos(); //Transfere execução para o DAO
     }
 
-    // Deletar cliente
+    //DELETAR CLIENTE
     public boolean deletarCliente(int id) {
         try {
-            return clienteDAO.deletar(id);
+            return clienteDAO.deletar(id); //Chama cliente para deletar
         } catch (Exception e) {
             System.err.println("Erro ao deletar cliente: " + e.getMessage());
             return false;
         }
     }
 
-    // Verificar se email existe
+    //VERIFICAR SE EMAIL EXISTE
     public boolean emailExiste(String email) {
-        return clienteDAO.emailExiste(email);
+        return clienteDAO.emailExiste(email); //Transfere para o DAO
     }
 
-    // Verificar se CPF existe
+    //VERIFICA SE CPF EXISTE
     public boolean cpfExiste(String cpf) {
-        return clienteDAO.cpfExiste(cpf);
+        return clienteDAO.cpfExiste(cpf); //Transfere para o DAO
     }
 
-    // Fechar conexão
+    //FECHAR CONEXÃO
     public void fecharConexao() {
-        clienteDAO.fecharConexao();
+        clienteDAO.fecharConexao(); //Fecha a conexão com o banco
     }
 }
