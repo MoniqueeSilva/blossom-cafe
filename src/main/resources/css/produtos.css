@@ -1,0 +1,113 @@
+/* ===== ESTILOS GERAIS ===== */
+.layout-principal {
+    -fx-background-color: linear-gradient(to bottom, #F8F6F2 0%, #E8E2D6 100%);
+    -fx-padding: 0;
+}
+
+.conteudo-principal {
+    -fx-alignment: top-center;
+    -fx-spacing: 30;
+    -fx-padding: 20;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    -fx-background-color: #8B4513;
+    -fx-padding: 15 20;
+    -fx-alignment: center-left;
+}
+
+.logo-navbar {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.btn-nav {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border: none;
+    -fx-cursor: hand;
+}
+
+.btn-nav:hover {
+    -fx-background-color: #D2691E;
+    -fx-background-radius: 5;
+}
+
+/* ===== TÍTULOS ===== */
+.titulo-principal {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4C2B0B;
+}
+
+.titulo-categoria {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B4C35;
+    -fx-padding: 0 0 10 0;
+}
+
+/* ===== SECÕES ===== */
+.secao {
+    -fx-alignment: top-center;
+    -fx-spacing: 15;
+    -fx-padding: 20;
+}
+
+/* ===== CARDS DE PRODUTO ===== */
+.card-produto {
+    -fx-alignment: top-center;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #D2B48C;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-padding: 15;
+    -fx-spacing: 12;
+    -fx-min-width: 200;
+    -fx-max-width: 200;
+    -fx-min-height: 250;
+}
+
+.nome-produto {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4C2B0B;
+    -fx-alignment: center;
+}
+
+.preco-produto {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B4C35;
+    -fx-font-weight: bold;
+}
+
+.btn-adicionar {
+    -fx-background-color: #8B4513;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 15;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.btn-adicionar:hover {
+    -fx-background-color: #6B2F0F;
+}
+
+/* ===== LABELS E MENSAGENS ===== */
+.label-vazio {
+    -fx-font-size: 14px;
+    -fx-text-fill: #A89F8E;
+}
+
+/* ===== SCROLLPANE ===== */
+.scroll {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
