@@ -80,6 +80,11 @@ public class TelaPerfil {
         // Botões
         Button btnEditar = new Button("Editar Perfil");
         btnEditar.getStyleClass().add("btn-primario");
+        btnEditar.setOnAction(e -> {
+            TelaEditarPerfil telaEditar = new TelaEditarPerfil(stage, cliente);
+            telaEditar.mostrar();
+        });
+
 
         Button btnVoltar = new Button("Voltar ao Menu");
         btnVoltar.getStyleClass().add("btn-secundario");
@@ -99,7 +104,7 @@ public class TelaPerfil {
         layoutPrincipal.setBackground(background);
 
         Scene scene = new Scene(layoutPrincipal, 400, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/perfil.css").toExternalForm());
 
         stage.setTitle("Perfil - " + cliente.getNome());
         stage.setScene(scene);

@@ -71,7 +71,7 @@ public class TelaInicial {
 
         // SCENE
         Scene scene = new Scene(layout, 450, 550);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/inicial.css").toExternalForm());
 
         stage.setTitle("Blossom Café");
         stage.setScene(scene);

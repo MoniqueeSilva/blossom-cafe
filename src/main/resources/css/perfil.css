@@ -1,0 +1,63 @@
+/* Header */
+.header {
+    -fx-background-color: #F8F2EA;
+    -fx-background-radius: 15;
+}
+
+.nome-usuario {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4C2B0B;
+}
+
+.email-usuario {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6B4C35;
+}
+
+/* Seções */
+.secoes {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+}
+
+.item-perfil {
+    -fx-background-color: #F8F2EA;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+.item-perfil:hover {
+    -fx-background-color: #EADED0;
+}
+
+.item-titulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4C2B0B;
+}
+
+.item-desc {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B4C35;
+}
+
+/* Botões */
+.btn-primario {
+    -fx-background-color: #4C2B0B;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+}
+.btn-primario:hover {
+    -fx-background-color: #8B5A2B;
+}
+
+.btn-secundario {
+    -fx-background-color: #CCB9A3;
+    -fx-text-fill: #4C2B0B;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20;
+}
+.btn-secundario:hover {
+    -fx-background-color: #B39A7D;
+}

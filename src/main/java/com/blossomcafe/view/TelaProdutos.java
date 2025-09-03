@@ -18,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -98,7 +99,7 @@ public class TelaProdutos {
 
         // ==================== SCENE ====================
         Scene scene = new Scene(layoutPrincipal, 1000, 700);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/produtos.css").toExternalForm());
 
         stage.setTitle("Blossom Café - Cardápio");
         stage.setScene(scene);
@@ -106,38 +107,65 @@ public class TelaProdutos {
     }
 
     private VBox criarSecaoCategoria(String tituloCategoria, String tipo, int maxProdutos) {
-        VBox secao = new VBox(15);
-        secao.setAlignment(Pos.TOP_CENTER);
-        secao.setPadding(new Insets(20, 20, 30, 20));
-        secao.getStyleClass().add("secao");
+    VBox secao = new VBox(15);
+    secao.setAlignment(Pos.TOP_CENTER);
+    secao.setPadding(new Insets(20, 20, 30, 20));
+    secao.getStyleClass().add("secao");
 
-        Text titulo = new Text(tituloCategoria);
-        titulo.getStyleClass().add("titulo-categoria");
+    // ----- TÍTULO -----
+    Text titulo = new Text(tituloCategoria);
+    titulo.getStyleClass().add("titulo-categoria");
 
-        FlowPane containerProdutos = new FlowPane();
-        containerProdutos.setAlignment(Pos.TOP_CENTER);
-        containerProdutos.setHgap(20);
-        containerProdutos.setVgap(20);
-        containerProdutos.setPadding(new Insets(10));
+    // ----- CAMPO DE BUSCA -----
+    TextField campoBusca = new TextField();
+    campoBusca.setPromptText("Buscar nesta categoria...");
+    campoBusca.getStyleClass().add("campo-busca");
+    campoBusca.setMaxWidth(300);
 
-        List<Produto> produtosFiltrados = filtrarProdutosPorCategoria(tipo);
+    // ----- CONTAINER DE PRODUTOS -----
+    FlowPane containerProdutos = new FlowPane();
+    containerProdutos.setAlignment(Pos.TOP_CENTER);
+    containerProdutos.setHgap(20);
+    containerProdutos.setVgap(20);
+    containerProdutos.setPadding(new Insets(10));
 
-        int limite = Math.min(maxProdutos, produtosFiltrados.size());
-        for (int i = 0; i < limite; i++) {
-            VBox card = criarCardProduto(produtosFiltrados.get(i));
-            card.getStyleClass().add("card-produto");
-            containerProdutos.getChildren().add(card);
+    // ----- LISTA INICIAL DE PRODUTOS -----
+    List<Produto> produtosFiltrados = filtrarProdutosPorCategoria(tipo);
+    exibirProdutosNoContainer(produtosFiltrados, containerProdutos, maxProdutos);
+
+    // ----- FILTRAGEM EM TEMPO REAL -----
+    campoBusca.textProperty().addListener((observable, oldValue, newValue) -> {
+        String busca = newValue.toLowerCase().trim();
+        List<Produto> filtrados = new ArrayList<>();
+        for (Produto produto : produtosFiltrados) {
+            if (produto.getNome().toLowerCase().contains(busca)) {
+                filtrados.add(produto);
+            }
         }
+        containerProdutos.getChildren().clear();
+        exibirProdutosNoContainer(filtrados, containerProdutos, maxProdutos);
+    });
 
-        if (produtosFiltrados.isEmpty()) {
-            Label labelVazio = new Label("Em breve novidades nesta categoria...");
-            labelVazio.getStyleClass().add("label-vazio");
-            containerProdutos.getChildren().add(labelVazio);
-        }
+    secao.getChildren().addAll(titulo, campoBusca, containerProdutos);
+    return secao;
+}
 
-        secao.getChildren().addAll(titulo, containerProdutos);
-        return secao;
+// ----- MÉTODO AUXILIAR PARA ADICIONAR CARDS -----
+private void exibirProdutosNoContainer(List<Produto> produtos, FlowPane container, int maxProdutos) {
+    int limite = Math.min(maxProdutos, produtos.size());
+    for (int i = 0; i < limite; i++) {
+        VBox card = criarCardProduto(produtos.get(i));
+        card.getStyleClass().add("card-produto");
+        container.getChildren().add(card);
     }
+
+    if (produtos.isEmpty()) {
+        Label labelVazio = new Label("Nenhum produto encontrado...");
+        labelVazio.getStyleClass().add("label-vazio");
+        container.getChildren().add(labelVazio);
+    }
+}
+
 
     private List<Produto> filtrarProdutosPorCategoria(String tipo) {
         List<Produto> todosProdutos = produtoController.listarProdutosDisponiveis();
@@ -217,7 +245,7 @@ public class TelaProdutos {
         Button btnContato = criarBotaoNav("Contato");
 
         // Ícone do carrinho
-        Button btnCarrinho = new Button("🛒");
+        Button btnCarrinho = new Button("Carrinho");
         btnCarrinho.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; " +
                             "-fx-border: none; -fx-cursor: hand; -fx-padding: 8;");
         btnCarrinho.setOnMouseEntered(e -> btnCarrinho.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8; -fx-background-radius: 5;"));
@@ -236,7 +264,7 @@ public class TelaProdutos {
         });
 
         // Ícone de perfil
-        Button btnPerfil = new Button("👤");
+        Button btnPerfil = new Button("Perfil");
         btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; -fx-border: none; -fx-cursor: hand; -fx-padding: 8;");
         btnPerfil.setOnMouseEntered(e -> btnPerfil.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8; -fx-background-radius: 5;"));
         btnPerfil.setOnMouseExited(e -> btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8;"));
@@ -259,11 +287,14 @@ public class TelaProdutos {
     }
 
 
+
     private Button criarBotaoNav(String texto) {
         Button button = new Button(texto);
         button.getStyleClass().add("btn-nav");
         return button;
     }
+
+    
 
     private VBox criarCardProduto(Produto produto) {
         VBox card = new VBox(12);

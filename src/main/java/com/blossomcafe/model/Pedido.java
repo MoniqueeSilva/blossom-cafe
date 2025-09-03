@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Pedido {
     private int id;
+    private String enderecoEntrega;
     private List<Produto> produtos;
     private String status; // "Preparando", "A caminho", "Entregue"
 
@@ -21,6 +22,15 @@ public class Pedido {
     public void setId(int id){
         this.id = id;
     }
+
+    public String getEnderecoEntrega() {
+    return enderecoEntrega;
+    }
+
+    public void setEnderecoEntrega(String enderecoEntrega) {
+        this.enderecoEntrega = enderecoEntrega;
+    }
+
 
     public List<Produto> getProdutos(){
         return produtos;
