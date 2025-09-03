@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.blossomcafe.controller.ProdutoController;
+import com.blossomcafe.model.Cliente;
 import com.blossomcafe.model.Produto;
 import com.blossomcafe.model.Cliente;
+import com.blossomcafe.util.Sessao;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -40,6 +42,7 @@ public class TelaProdutos {
         this.clienteLogado = cliente;
         this.produtoController = new ProdutoController();
         this.mapeamentoImagens = new HashMap<>();
+        this.cliente = Sessao.getClienteLogado(); 
         
         // Inicializar o mapeamento de imagens apenas para alguns produtos principais
         inicializarMapeamentoImagensLimitado();
@@ -209,6 +212,12 @@ public class TelaProdutos {
         // Espaço flexível
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
+        if (cliente != null) {
+        Label nomeUsuario = new Label("Olá, " + cliente.getNome() + "!");
+        nomeUsuario.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+        navbar.getChildren().add(nomeUsuario);
+    }
+    
         
         // Links de navegação
         HBox linksContainer = new HBox(20);
