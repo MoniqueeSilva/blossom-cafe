@@ -32,14 +32,16 @@ public class TelaProdutos {
     private Stage stage;
     private ProdutoController produtoController;
     private Map<String, String> mapeamentoImagens;
-    private Cliente clienteLogado;
+    private Cliente cliente;
 
     public TelaProdutos(Stage stage, Cliente cliente) {
         this.stage = stage;
         this.clienteLogado = cliente;
         this.produtoController = new ProdutoController();
         this.mapeamentoImagens = new HashMap<>();
-        this.clienteLogado = Sessao.getClienteLogado(); 
+        this.cliente = Sessao.getClienteLogado(); 
+        
+        // Inicializar o mapeamento de imagens apenas para alguns produtos principais
         inicializarMapeamentoImagensLimitado();
     }
 
@@ -52,6 +54,14 @@ public class TelaProdutos {
     }
 
     public void mostrar() {
+        // Inicializar a tela de carrinho se ainda não foi inicializada
+        if (telaCarrinho == null) {
+            telaCarrinho = new TelaCarrinho(stage, labelContadorCarrinho);
+        }
+        
+        // Atualizar o contador do carrinho
+        atualizarContadorCarrinho();
+        
         // ==================== NAVBAR ====================
         HBox navbar = criarNavbar();
 
@@ -185,28 +195,38 @@ public class TelaProdutos {
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        navbar.getChildren().add(spacer);
-
-        if (clienteLogado != null) {
-            Label nomeUsuario = new Label("Olá, " + clienteLogado.getNome() + "!");
-            nomeUsuario.getStyleClass().add("nome-usuario");
-            navbar.getChildren().add(nomeUsuario);
-        }
-
+        if (cliente != null) {
+        Label nomeUsuario = new Label("Olá, " + cliente.getNome() + "!");
+        nomeUsuario.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+        navbar.getChildren().add(nomeUsuario);
+    }
+    
+        
+        // Links de navegação
         HBox linksContainer = new HBox(20);
         linksContainer.setAlignment(Pos.CENTER_RIGHT);
 
         Button btnHome = criarBotaoNav("Home");
         Button btnSobre = criarBotaoNav("Sobre");
         Button btnContato = criarBotaoNav("Contato");
-
-        Button btnPerfil = new Button("Perfil");
-        btnPerfil.getStyleClass().add("btn-perfil");
-
+        
+        // Ícone de perfil
+        Button btnPerfil = new Button("👤");
+        btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; " +
+                          "-fx-border: none; -fx-cursor: hand; -fx-padding: 8;");
+        btnPerfil.setOnMouseEntered(e -> btnPerfil.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8; -fx-background-radius: 5;"));
+        btnPerfil.setOnMouseExited(e -> btnPerfil.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16; -fx-padding: 8;"));
+        
         linksContainer.getChildren().addAll(btnHome, btnSobre, btnContato, btnPerfil);
-        navbar.getChildren().add(linksContainer);
-
-        btnHome.setOnAction(e -> new TelaProdutos(stage, clienteLogado).mostrar());
+        
+        navbar.getChildren().addAll(spacer, linksContainer);
+        
+        // Eventos dos botoes
+        btnHome.setOnAction(e -> {
+            TelaProdutos telaProdutos = new TelaProdutos(stage);
+            telaProdutos.mostrar();
+        });
+        
         btnPerfil.setOnAction(e -> {
             if (clienteLogado != null) {
                 new TelaPerfil(stage, clienteLogado).mostrar();
@@ -228,7 +248,14 @@ public class TelaProdutos {
         VBox card = new VBox(12);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPadding(new Insets(15));
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 10; " +
+                     "-fx-border-color: #D2B48C; -fx-border-radius: 10; -fx-border-width: 1; " +
+                     "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        card.setMinWidth(200);
+        card.setMaxWidth(200);
+        card.setMinHeight(250);
 
+        // Usar placeholder para economizar memória pois tivemos problemas de gerenciamento de memoria
         ImageView imgProduto = criarPlaceholder(produto);
         imgProduto.setFitWidth(80);
         imgProduto.setFitHeight(80);
@@ -244,9 +271,11 @@ public class TelaProdutos {
         Label preco = new Label(String.format("R$ %.2f", produto.getPreco()));
         preco.getStyleClass().add("preco-produto");
 
+        // Botão de adicionar ao carrinho, carrinho ainda em processo
         Button btnAdicionar = new Button("Adicionar");
         btnAdicionar.getStyleClass().add("btn-adicionar");
         btnAdicionar.setOnAction(e -> {
+            System.out.println("✅ " + produto.getNome() + " adicionado ao carrinho!");
             mostrarAlerta("Sucesso", produto.getNome() + " adicionado ao carrinho!");
         });
 
@@ -285,7 +314,7 @@ public class TelaProdutos {
 
         return new ImageView(); // apenas placeholder visual
     }
-
+    
     private void mostrarAlerta(String titulo, String mensagem) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
