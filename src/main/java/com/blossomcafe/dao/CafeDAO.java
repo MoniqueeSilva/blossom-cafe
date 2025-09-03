@@ -1,11 +1,15 @@
 package com.blossomcafe.dao;
 
-import com.blossomcafe.model.Cafe;
-import com.blossomcafe.util.ConexaoBD;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.blossomcafe.model.Cafe;
+import com.blossomcafe.util.ConexaoBD;
 
 public class CafeDAO {
 
@@ -44,7 +48,7 @@ public class CafeDAO {
 
         } catch (SQLException e) {
             try {
-                if (conn != null) conn.rollback(); // Rollback em caso de erro
+                if (conn != null) conn.rollback(); // Rollback em caso de erro, reverter
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

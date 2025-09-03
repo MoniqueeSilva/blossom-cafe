@@ -215,7 +215,7 @@ public class ClienteDAO {
         return false;
     }
 
-    // Método auxiliar para criar objeto Cliente do ResultSet
+    // Método auxiliar para criar objeto Cliente do ResultSet, do jdbc
     private Cliente criarClienteFromResultSet(ResultSet rs) throws SQLException {
         return new Cliente(
             rs.getInt("id_cliente"),

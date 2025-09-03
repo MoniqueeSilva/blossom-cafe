@@ -1,15 +1,19 @@
 package com.blossomcafe.dao;
 
-import com.blossomcafe.model.Entregador;
-import com.blossomcafe.util.ConexaoBD;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.blossomcafe.model.Entregador;
+import com.blossomcafe.util.ConexaoBD;
+
 public class EntregadorDAO {
 
-    // ====================== CREATE ======================
+    // CREATE
     public void inserir(Entregador entregador) {
         String sql = "INSERT INTO entregador (nome, veiculo, placa, cnh) VALUES (?, ?, ?, ?)";
         try (Connection conn = ConexaoBD.getConnection();
@@ -24,7 +28,7 @@ public class EntregadorDAO {
         }
     }
 
-    // ====================== READ ======================
+    // READ 
     public Entregador buscarPorCnh(String cnh) {
         String sql = "SELECT * FROM entregador WHERE cnh = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -67,7 +71,7 @@ public class EntregadorDAO {
         return entregadores;
     }
 
-    // ====================== UPDATE ======================
+    // UPDATE 
     public void atualizarPorCnh(String cnh, Entregador entregador) {
         String sql = "UPDATE entregador SET nome = ?, veiculo = ?, placa = ? WHERE cnh = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -96,7 +100,7 @@ public class EntregadorDAO {
         }
     }
 
-    // ====================== DELETE ======================
+    // DELETE
     public void deletarPorCnh(String cnh) {
         String sql = "DELETE FROM entregador WHERE cnh = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -119,7 +123,7 @@ public class EntregadorDAO {
         }
     }
 
-    // ====================== HELPER ======================
+    //HELPER
     private Entregador montarEntregador(ResultSet rs) throws SQLException {
         return new Entregador(
             rs.getString("nome"),

@@ -235,126 +235,109 @@ public class TelaCarrinho {
         return secao;
     }
 
-private VBox criarSecaoResumo() {
-    VBox secao = new VBox(20);
-    secao.setAlignment(Pos.TOP_CENTER);
-    secao.setPadding(new Insets(20));
-    secao.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
-                   "-fx-border-color: #D2B48C; -fx-border-radius: 15; -fx-border-width: 1;");
-    secao.setPrefWidth(300);
+    private VBox criarSecaoResumo() {
+        VBox secao = new VBox(20);
+        secao.setAlignment(Pos.TOP_CENTER);
+        secao.setPadding(new Insets(20));
+        secao.setStyle("-fx-background-color: white; -fx-background-radius: 15; " +
+                    "-fx-border-color: #D2B48C; -fx-border-radius: 15; -fx-border-width: 1;");
+        secao.setPrefWidth(300);
 
-    // Título da seção
-    Label titulo = new Label("Resumo do Pedido");
-    titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4C2B0B;");
+        // Título da seção
+        Label titulo = new Label("Resumo do Pedido");
+        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4C2B0B;");
 
-    // Container para os itens do resumo
-    VBox containerResumo = new VBox(10);
-    containerResumo.setAlignment(Pos.TOP_CENTER);
+        // Container para os itens do resumo
+        VBox containerResumo = new VBox(10);
+        containerResumo.setAlignment(Pos.TOP_CENTER);
 
-    // Linha Subtotal
-    labelSubtotal = new Label("R$ 0,00");
-    labelSubtotal.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-    HBox linhaSubtotal = new HBox();
-    linhaSubtotal.setAlignment(Pos.CENTER_LEFT);
-    Label labelSubtotalTexto = new Label("Subtotal");
-    labelSubtotalTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-    Region spacerSubtotal = new Region();
-    HBox.setHgrow(spacerSubtotal, Priority.ALWAYS);
-    linhaSubtotal.getChildren().addAll(labelSubtotalTexto, spacerSubtotal, labelSubtotal);
+        // Linha Subtotal
+        labelSubtotal = new Label("R$ 0,00");
+        labelSubtotal.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
+        HBox linhaSubtotal = new HBox();
+        linhaSubtotal.setAlignment(Pos.CENTER_LEFT);
+        Label labelSubtotalTexto = new Label("Subtotal");
+        labelSubtotalTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
+        Region spacerSubtotal = new Region();
+        HBox.setHgrow(spacerSubtotal, Priority.ALWAYS);
+        linhaSubtotal.getChildren().addAll(labelSubtotalTexto, spacerSubtotal, labelSubtotal);
 
-    // Linha Taxa de entrega
-    Label labelTaxa = new Label("R$ 8,50");
-    labelTaxa.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-    HBox linhaTaxa = new HBox();
-    linhaTaxa.setAlignment(Pos.CENTER_LEFT);
-    Label labelTaxaTexto = new Label("Taxa de entrega");
-    labelTaxaTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-    Region spacerTaxa = new Region();
-    HBox.setHgrow(spacerTaxa, Priority.ALWAYS);
-    linhaTaxa.getChildren().addAll(labelTaxaTexto, spacerTaxa, labelTaxa);
+        // Linha Taxa de entrega
+        Label labelTaxa = new Label("R$ 8,50");
+        labelTaxa.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
+        HBox linhaTaxa = new HBox();
+        linhaTaxa.setAlignment(Pos.CENTER_LEFT);
+        Label labelTaxaTexto = new Label("Taxa de entrega");
+        labelTaxaTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
+        Region spacerTaxa = new Region();
+        HBox.setHgrow(spacerTaxa, Priority.ALWAYS);
+        linhaTaxa.getChildren().addAll(labelTaxaTexto, spacerTaxa, labelTaxa);
 
-    // Linha Desconto
-    Label labelDesconto = new Label("R$ 0,00");
-    labelDesconto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-    HBox linhaDesconto = new HBox();
-    linhaDesconto.setAlignment(Pos.CENTER_LEFT);
-    Label labelDescontoTexto = new Label("Desconto");
-    labelDescontoTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-    Region spacerDesconto = new Region();
-    HBox.setHgrow(spacerDesconto, Priority.ALWAYS);
-    linhaDesconto.getChildren().addAll(labelDescontoTexto, spacerDesconto, labelDesconto);
+        // Linha Desconto
+        Label labelDesconto = new Label("R$ 0,00");
+        labelDesconto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
+        HBox linhaDesconto = new HBox();
+        linhaDesconto.setAlignment(Pos.CENTER_LEFT);
+        Label labelDescontoTexto = new Label("Desconto");
+        labelDescontoTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
+        Region spacerDesconto = new Region();
+        HBox.setHgrow(spacerDesconto, Priority.ALWAYS);
+        linhaDesconto.getChildren().addAll(labelDescontoTexto, spacerDesconto, labelDesconto);
 
-    // Separador
-    Separator separator = new Separator();
-    separator.setPadding(new Insets(10, 0, 10, 0));
+        // Separador
+        Separator separator = new Separator();
+        separator.setPadding(new Insets(10, 0, 10, 0));
 
-    // Linha Total
-    HBox linhaTotal = new HBox();
-    linhaTotal.setAlignment(Pos.CENTER_LEFT);
-    linhaTotal.setPadding(new Insets(10, 0, 0, 0));
-    Label labelTotalTexto = new Label("Total:");
-    labelTotalTexto.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4C2B0B;");
-    labelTotal = new Label("R$ 0,00");
-    labelTotal.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4C2B0B;");
-    Region spacerTotal = new Region();
-    HBox.setHgrow(spacerTotal, Priority.ALWAYS);
-    linhaTotal.getChildren().addAll(labelTotalTexto, spacerTotal, labelTotal);
+        // Linha Total
+        HBox linhaTotal = new HBox();
+        linhaTotal.setAlignment(Pos.CENTER_LEFT);
+        linhaTotal.setPadding(new Insets(10, 0, 0, 0));
+        Label labelTotalTexto = new Label("Total:");
+        labelTotalTexto.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4C2B0B;");
+        labelTotal = new Label("R$ 0,00");
+        labelTotal.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4C2B0B;");
+        Region spacerTotal = new Region();
+        HBox.setHgrow(spacerTotal, Priority.ALWAYS);
+        linhaTotal.getChildren().addAll(labelTotalTexto, spacerTotal, labelTotal);
 
-    containerResumo.getChildren().addAll(linhaSubtotal, linhaTaxa, linhaDesconto, separator, linhaTotal);
+        containerResumo.getChildren().addAll(linhaSubtotal, linhaTaxa, linhaDesconto, separator, linhaTotal);
 
-    // Campo para o usuário digitar o endereço
-    Label lblEndereco = new Label("Endereço de entrega:");
-    lblEndereco.setStyle("-fx-font-size: 14px; -fx-text-fill: #6B4C35;");
+        // Campo para o usuário digitar o endereço
+        Label lblEndereco = new Label("Endereço de entrega:");
+        lblEndereco.setStyle("-fx-font-size: 14px; -fx-text-fill: #6B4C35;");
 
-    txtEnderecoEntrega = new TextField();
-    txtEnderecoEntrega.setPromptText("Digite seu endereço aqui");
-    txtEnderecoEntrega.setPrefWidth(250);
-    txtEnderecoEntrega.setStyle("-fx-background-radius: 10; -fx-border-radius: 10; -fx-padding: 5;");
+        txtEnderecoEntrega = new TextField();
+        txtEnderecoEntrega.setPromptText("Digite seu endereço aqui");
+        txtEnderecoEntrega.setPrefWidth(250);
+        txtEnderecoEntrega.setStyle("-fx-background-radius: 10; -fx-border-radius: 10; -fx-padding: 5;");
 
-// Adicionar ao containerResumo
-containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
+    // Adicionar ao containerResumo
+    containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
 
-    // Botão Finalizar Compra
-    Button btnFinalizar = new Button("Finalizar Compra");
-    btnFinalizar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; -fx-font-weight: bold; " +
-                          "-fx-padding: 12 30; -fx-background-radius: 25; -fx-font-size: 16;");
-    btnFinalizar.setOnMouseEntered(e -> btnFinalizar.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; " +
-                                                              "-fx-font-weight: bold; -fx-padding: 12 30; -fx-background-radius: 25; -fx-font-size: 16;"));
-    btnFinalizar.setOnMouseExited(e -> btnFinalizar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; " +
-                                                             "-fx-font-weight: bold; -fx-padding: 12 30; -fx-background-radius: 25; -fx-font-size: 16;"));
-    btnFinalizar.setOnAction(e -> finalizarPedido());
+        // Botão Finalizar Compra
+        Button btnFinalizar = new Button("Finalizar Compra");
+        btnFinalizar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; -fx-font-weight: bold; " +
+                            "-fx-padding: 12 30; -fx-background-radius: 25; -fx-font-size: 16;");
+        btnFinalizar.setOnMouseEntered(e -> btnFinalizar.setStyle("-fx-background-color: #8B5A2B; -fx-text-fill: white; " +
+                                                                "-fx-font-weight: bold; -fx-padding: 12 30; -fx-background-radius: 25; -fx-font-size: 16;"));
+        btnFinalizar.setOnMouseExited(e -> btnFinalizar.setStyle("-fx-background-color: #4C2B0B; -fx-text-fill: white; " +
+                                                                "-fx-font-weight: bold; -fx-padding: 12 30; -fx-background-radius: 25; -fx-font-size: 16;"));
+        btnFinalizar.setOnAction(e -> finalizarPedido());
 
-    // Botão Continuar Comprando
-    Button btnContinuar = new Button("Continuar Comprando");
-    btnContinuar.setStyle("-fx-background-color: transparent; -fx-text-fill: #4C2B0B; -fx-border-color: #4C2B0B; " +
-                          "-fx-border-width: 1; -fx-border-radius: 25; -fx-padding: 10 20; -fx-font-size: 14;");
-    btnContinuar.setOnAction(e -> {
-        TelaProdutos telaProdutos = new TelaProdutos(stage, cliente);
-        telaProdutos.mostrar();
-    });
+        // Botão Continuar Comprando
+        Button btnContinuar = new Button("Continuar Comprando");
+        btnContinuar.setStyle("-fx-background-color: transparent; -fx-text-fill: #4C2B0B; -fx-border-color: #4C2B0B; " +
+                            "-fx-border-width: 1; -fx-border-radius: 25; -fx-padding: 10 20; -fx-font-size: 14;");
+        btnContinuar.setOnAction(e -> {
+            TelaProdutos telaProdutos = new TelaProdutos(stage, cliente);
+            telaProdutos.mostrar();
+        });
 
-    secao.getChildren().addAll(titulo, containerResumo, btnFinalizar, btnContinuar);
+        secao.getChildren().addAll(titulo, containerResumo, btnFinalizar, btnContinuar);
 
-    return secao;
-}
-
-
-    private HBox criarLinhaResumo(String texto, String valor) {
-        HBox linha = new HBox();
-        linha.setAlignment(Pos.CENTER_LEFT);
-        
-        Label labelTexto = new Label(texto);
-        labelTexto.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-        
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        
-        Label labelValor = new Label(valor);
-        labelValor.setStyle("-fx-text-fill: #6B4C35; -fx-font-size: 14;");
-        
-        linha.getChildren().addAll(labelTexto, spacer, labelValor);
-        return linha;
+        return secao;
     }
+
 
     private void atualizarItensCarrinho() {
         containerItens.getChildren().clear();
@@ -432,7 +415,6 @@ containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
     }
 
     private ImageView criarPlaceholder(Produto produto) {
-        // Implementação similar à da TelaProdutos
         StackPane placeholder = new StackPane();
         String corFundo;
         String emoji;
@@ -471,15 +453,11 @@ containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
     }
 
     private void aumentarQuantidade(Produto produto) {
-        // Em uma implementação real, você aumentaria a quantidade do produto
-        // Por enquanto, vamos apenas adicionar outro item do mesmo produto
         pedidoAtual.adicionarProduto(produto);
         atualizarItensCarrinho();
     }
 
     private void diminuirQuantidade(Produto produto) {
-        // Em uma implementação real, você diminuiria a quantidade do produto
-        // Por enquanto, vamos apenas remover um item do produto
         pedidoAtual.removerProduto(produto);
         atualizarItensCarrinho();
     }
@@ -514,7 +492,7 @@ containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
             mostrarAlerta("Endereço Obrigatório", "Por favor, informe o endereço de entrega.");
             return;
         }
-        pedidoAtual.setEnderecoEntrega(endereco); // supondo que você adicionou esse atributo na classe Pedido
+        pedidoAtual.setEnderecoEntrega(endereco);
 
         if (pedidoAtual.getProdutos().isEmpty()) {
             mostrarAlerta("Carrinho Vazio", "Adicione produtos ao carrinho antes de finalizar o pedido.");
@@ -528,7 +506,6 @@ containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
             return;
         }
         
-        // Em uma implementação real, você salvaria o pedido no banco de dados
         boolean sucesso = pedidoController.criarPedido(pedidoAtual.getId());
         
         if (sucesso) {
@@ -554,7 +531,7 @@ containerResumo.getChildren().addAll(lblEndereco, txtEnderecoEntrega);
         alert.showAndWait();
     }
 
-    // Método para adicionar produto ao carrinho (chamado de outras telas)
+    // Método para adicionar produto ao carrinho
     public void adicionarProdutoAoCarrinho(Produto produto) {
         pedidoAtual.adicionarProduto(produto);
         atualizarItensCarrinho();

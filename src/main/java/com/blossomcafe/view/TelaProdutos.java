@@ -66,14 +66,14 @@ public class TelaProdutos {
         Carrinho.atualizarContador(); // atualiza na inicialização
 
         
-        // ==================== NAVBAR ====================
+        //NAVBAR 
         HBox navbar = criarNavbar();
 
-        // ==================== TÍTULO PRINCIPAL ====================
+        //TÍTULO PRINCIPAL
         Text tituloPrincipal = new Text("Cardápio Blossom Cafe");
         tituloPrincipal.getStyleClass().add("titulo-principal");
 
-        // ==================== CONTEÚDO PRINCIPAL ====================
+        //CONTEÚDO PRINCIPAL
         VBox conteudoPrincipal = new VBox(20);
         conteudoPrincipal.setAlignment(Pos.TOP_CENTER);
         conteudoPrincipal.setPadding(new Insets(20));
@@ -97,7 +97,7 @@ public class TelaProdutos {
         layoutPrincipal.getChildren().addAll(navbar, tituloPrincipal, scrollPane);
         VBox.setMargin(tituloPrincipal, new Insets(20, 0, 10, 0));
 
-        // ==================== SCENE ====================
+        //SCENE
         Scene scene = new Scene(layoutPrincipal, 1000, 700);
         scene.getStylesheets().add(getClass().getResource("/css/produtos.css").toExternalForm());
 
@@ -112,28 +112,28 @@ public class TelaProdutos {
     secao.setPadding(new Insets(20, 20, 30, 20));
     secao.getStyleClass().add("secao");
 
-    // ----- TÍTULO -----
+    //TÍTULO
     Text titulo = new Text(tituloCategoria);
     titulo.getStyleClass().add("titulo-categoria");
 
-    // ----- CAMPO DE BUSCA -----
+    //CAMPO DE BUSCA
     TextField campoBusca = new TextField();
     campoBusca.setPromptText("Buscar nesta categoria...");
     campoBusca.getStyleClass().add("campo-busca");
     campoBusca.setMaxWidth(300);
 
-    // ----- CONTAINER DE PRODUTOS -----
+    //CONTAINER DE PRODUTOS
     FlowPane containerProdutos = new FlowPane();
     containerProdutos.setAlignment(Pos.TOP_CENTER);
     containerProdutos.setHgap(20);
     containerProdutos.setVgap(20);
     containerProdutos.setPadding(new Insets(10));
 
-    // ----- LISTA INICIAL DE PRODUTOS -----
+    //LISTA INICIAL DE PRODUTOS
     List<Produto> produtosFiltrados = filtrarProdutosPorCategoria(tipo);
     exibirProdutosNoContainer(produtosFiltrados, containerProdutos, maxProdutos);
 
-    // ----- FILTRAGEM EM TEMPO REAL -----
+    //FILTRAGEM EM TEMPO REAL
     campoBusca.textProperty().addListener((observable, oldValue, newValue) -> {
         String busca = newValue.toLowerCase().trim();
         List<Produto> filtrados = new ArrayList<>();
@@ -150,7 +150,7 @@ public class TelaProdutos {
     return secao;
 }
 
-// ----- MÉTODO AUXILIAR PARA ADICIONAR CARDS -----
+//MÉTODO AUXILIAR PARA ADICIONAR CARDS
 private void exibirProdutosNoContainer(List<Produto> produtos, FlowPane container, int maxProdutos) {
     int limite = Math.min(maxProdutos, produtos.size());
     for (int i = 0; i < limite; i++) {
@@ -286,15 +286,11 @@ private void exibirProdutosNoContainer(List<Produto> produtos, FlowPane containe
         return navbar;
     }
 
-
-
     private Button criarBotaoNav(String texto) {
         Button button = new Button(texto);
         button.getStyleClass().add("btn-nav");
         return button;
     }
-
-    
 
     private VBox criarCardProduto(Produto produto) {
         VBox card = new VBox(12);

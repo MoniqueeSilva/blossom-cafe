@@ -94,7 +94,7 @@ public class TelaLogin {
         layoutPrincipal.getStyleClass().add("layout-principal");
         layoutPrincipal.getChildren().add(layoutForm);
 
-        // ================= EVENTOS =================
+        //EVENTOS
         ClienteController controller = new ClienteController();
 
         btnEntrar.setOnAction(event -> {
@@ -126,7 +126,7 @@ public class TelaLogin {
             telaCadastro.mostrar();
         });
 
-        // ================= SCENE ==================
+        //SCENE
         Scene scene = new Scene(layoutPrincipal, 500, 600);
         scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
 

@@ -1,8 +1,10 @@
 package com.blossomcafe.view;
 
-import com.blossomcafe.model.Pedido;
-import com.blossomcafe.model.Entregador;
+import java.util.Random;
+
 import com.blossomcafe.dao.EntregadorDAO;
+import com.blossomcafe.model.Entregador;
+import com.blossomcafe.model.Pedido;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -26,8 +28,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.util.Random;
 
 public class TelaAcompanharEntrega {
     private Stage stage;
@@ -176,8 +176,8 @@ public class TelaAcompanharEntrega {
         btnVoltar.setPrefWidth(150);
         btnVoltar.setOnAction(e -> {
             pararProgressaoAutomatica();
-            // TelaProdutos telaProdutos = new TelaProdutos(stage, null);
-            // telaProdutos.mostrar();
+            TelaProdutos telaProdutos = new TelaProdutos(stage, null);
+            telaProdutos.mostrar();
             System.out.println("Voltando ao menu...");
         });
         
@@ -282,23 +282,30 @@ public class TelaAcompanharEntrega {
     }
     
     private void atribuirEntregador() {
-        // Simular busca de entregador no banco de dados
-        EntregadorDAO entregadorDAO = new EntregadorDAO();
-        java.util.List<Entregador> entregadores = entregadorDAO.listarTodos();
-        
-        if (entregadores != null && !entregadores.isEmpty()) {
-            // Selecionar um entregador aleatório
-            Random random = new Random();
-            Entregador entregador = entregadores.get(random.nextInt(entregadores.size()));
-            pedido.setEntregador(entregador);
-        } else {
-            // Entregador padrão caso não haja no banco
-            Entregador entregadorPadrao = new Entregador("João Silva", "Moto", "ABC-1234", "123456789");
+        try {
+            EntregadorDAO entregadorDAO = new EntregadorDAO();
+            java.util.List<Entregador> entregadores = entregadorDAO.listarTodos();
+            
+            if (entregadores != null && !entregadores.isEmpty()) {
+                Random random = new Random();
+                Entregador entregador = entregadores.get(random.nextInt(entregadores.size()));
+                pedido.setEntregador(entregador);
+                System.out.println("Entregador atribuído: " + entregador.getNome());
+            } else {
+                // Entregador padrão para teste
+                Entregador entregadorPadrao = new Entregador("João Silva", "Moto", "ABC-1234", "123456789");
+                pedido.setEntregador(entregadorPadrao);
+                System.out.println("Usando entregador padrão: " + entregadorPadrao.getNome());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao atribuir entregador: " + e.getMessage());
+            // Entregador padrão em caso de erro
+            Entregador entregadorPadrao = new Entregador("Entregador Padrão", "Carro", "XYZ-0000", "000000000");
             pedido.setEntregador(entregadorPadrao);
         }
     }
 
-    // ====================== ATUALIZAÇÃO DA INTERFACE ======================
+    //ATUALIZAÇÃO DA INTERFACE
 
     private void atualizarInterface() {
         timelineContainer.getChildren().clear();
@@ -373,21 +380,24 @@ public class TelaAcompanharEntrega {
     private void atualizarInformacoesEntregador() {
         Entregador entregador = pedido.getEntregador();
         
-        // Mostrar informações do entregador apenas quando o pedido estiver a caminho ou entregue
-        boolean mostrarEntregador = "a caminho".equalsIgnoreCase(pedido.getStatus()) || 
-                                  "entregue".equalsIgnoreCase(pedido.getStatus());
+        boolean mostrarEntregador = ("a caminho".equalsIgnoreCase(pedido.getStatus()) || 
+                                "entregue".equalsIgnoreCase(pedido.getStatus())) && 
+                                entregador != null;
         
         entregadorContainer.setVisible(mostrarEntregador);
         entregadorContainer.setManaged(mostrarEntregador);
         
-        if (mostrarEntregador && entregador != null) {
+        if (mostrarEntregador) {
             entregadorNome.setText("Entregador: " + entregador.getNome());
             entregadorVeiculo.setText("Veículo: " + entregador.getVeiculo());
             entregadorPlaca.setText("Placa: " + entregador.getPlaca());
+            
+            // Debug no console
+            System.out.println("Entregador exibido: " + entregador.getNome());
         }
     }
 
-    // ====================== MÉTODOS AUXILIARES ======================
+    //MÉTODOS AUXILIARES
 
     private boolean isEtapaAtiva(int index, String status) {
         String[] statusMap = {"Confirmado", "Preparando", "A caminho", "Entregue"};

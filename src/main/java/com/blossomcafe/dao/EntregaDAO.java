@@ -1,13 +1,16 @@
 package com.blossomcafe.dao;
 
-import com.blossomcafe.model.Entrega;
-import com.blossomcafe.model.Entregador;
-import com.blossomcafe.util.ConexaoBD;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.blossomcafe.model.Entrega;
+import com.blossomcafe.model.Entregador;
+import com.blossomcafe.util.ConexaoBD;
 public class EntregaDAO {
 
     // CREATE

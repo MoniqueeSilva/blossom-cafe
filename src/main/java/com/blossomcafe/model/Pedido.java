@@ -49,7 +49,7 @@ public class Pedido {
         return entregador;
     }
 
-    public void setEntregador(Entregador entregador){
+    public void setEntregador(Entregador entregador) {
         this.entregador = entregador;
     }
 

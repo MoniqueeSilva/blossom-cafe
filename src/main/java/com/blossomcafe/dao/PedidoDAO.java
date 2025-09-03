@@ -14,7 +14,7 @@ import com.blossomcafe.util.ConexaoBD;
 
 public class PedidoDAO {
 
-    // ====================== CREATE ======================
+    // CREATE 
     public boolean inserir(Pedido pedido, int idCliente, int idEndereco) {
         String sqlPedido = "INSERT INTO pedido (id_cliente, id_endereco, status) VALUES (?, ?, ?)";
         Connection conn = null;
@@ -64,7 +64,7 @@ public class PedidoDAO {
         }
     }
 
-    // ====================== READ ======================
+    // READ 
     public Pedido buscarPorId(int id) {
         String sql = "SELECT * FROM pedido WHERE id = ?";
         try (Connection conn = ConexaoBD.getConnection();
@@ -124,7 +124,7 @@ public class PedidoDAO {
         return pedidos;
     }
 
-    // ====================== UPDATE ======================
+    // UPDATE
     public boolean atualizar(Pedido pedido) {
         String sqlPedido = "UPDATE pedido SET status = ? WHERE id = ?";
         Connection conn = null;
@@ -163,7 +163,7 @@ public class PedidoDAO {
         }
     }
 
-    // ====================== DELETE ======================
+    //DELETE
     public boolean deletar(int id) {
         Connection conn = null;
         try {

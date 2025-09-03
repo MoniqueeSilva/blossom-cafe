@@ -30,7 +30,7 @@ public class TelaCadastro {
     }
 
     public void mostrar() {
-        // ==================== LOGO ====================
+        //LOGO
         ImageView logoView = null;
         try {
             Image logoImage = new Image(getClass().getResourceAsStream("/images/logo-blossom.jpeg"));
@@ -44,11 +44,11 @@ public class TelaCadastro {
             logoTxt.getStyleClass().add("logo-texto");
         }
 
-        // ==================== TÍTULO ====================
+        // TÍTULO
         Text titulo = new Text("Criar Nova Conta");
         titulo.getStyleClass().add("titulo");
 
-        // ==================== CAMPOS DO FORMULÁRIO ====================
+        // CAMPOS DO FORMULÁRIO
         Label labelNome = new Label("Nome completo:");
         TextField campoNome = new TextField();
         campoNome.setPromptText("Seu nome completo");
@@ -79,14 +79,14 @@ public class TelaCadastro {
         campoConfirmarSenha.setPromptText("Digite a senha novamente");
         campoConfirmarSenha.getStyleClass().add("campo-texto");
 
-        // ==================== BOTÕES ====================
+        // BOTÕES
         Button btnCadastrar = new Button("✅ Criar Conta");
         btnCadastrar.getStyleClass().add("btn-primario");
 
         Button btnVoltar = new Button("← Voltar para Login");
         btnVoltar.getStyleClass().add("btn-secundario");
 
-        // ==================== LAYOUT ====================
+        // LAYOUT
         GridPane formulario = new GridPane();
         formulario.setHgap(10);
         formulario.setVgap(10);
@@ -120,7 +120,7 @@ public class TelaCadastro {
 
         layoutPrincipal.getChildren().addAll(titulo, formulario);
 
-        // ==================== EVENTOS ====================
+        // EVENTOS
         btnCadastrar.setOnAction(event -> {
             if (validarCampos(campoNome, campoEmail, campoTelefone, campoCPF, campoSenha, campoConfirmarSenha)) {
                 try {
@@ -161,7 +161,7 @@ public class TelaCadastro {
             telaLogin.mostrar();
         });
 
-        // ==================== EXIBIR TELA ====================
+        //EXIBIR TELA 
         Scene scene = new Scene(layoutPrincipal, 500, 650);
         scene.getStylesheets().add(getClass().getResource("/css/cadastro.css").toExternalForm());
 
@@ -170,7 +170,7 @@ public class TelaCadastro {
         stage.show();
     }
 
-    // ==================== MÉTODOS AUXILIARES ====================
+    // MÉTODOS AUXILIARES
     private boolean validarCampos(TextField nome, TextField email, TextField telefone,
                                  TextField cpf, PasswordField senha, PasswordField confirmarSenha) {
         if (nome.getText().trim().isEmpty()) {
