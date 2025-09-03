@@ -109,11 +109,7 @@ public class TelaAcompanharEntrega {
             telaProdutos.mostrar();
         });
 
-        Button btnAcelerar = new Button("⏩ Simular Progresso");
-        btnAcelerar.getStyleClass().add("btn-acelerar");
-        btnAcelerar.setOnAction(e -> avancarStatus());
-
-        botoesContainer.getChildren().addAll(btnVoltar, btnAcelerar);
+        botoesContainer.getChildren().addAll(btnVoltar);
 
         // Montagem Final
         card.getChildren().addAll(titulo, numeroPedido, timelineContainer, progressoContainer, tempoEstimado, botoesContainer);
@@ -265,8 +261,8 @@ public class TelaAcompanharEntrega {
         switch (status.toLowerCase()) {
             case "confirmado": return "Pedido confirmado!";
             case "preparando": return "Preparando seu pedido...";
-            case "a caminho": return "Seu pedido está a caminho! 🚗";
-            case "entregue": return "Entrega realizada com sucesso! 🎉";
+            case "a caminho": return "Seu pedido está a caminho!";
+            case "entregue": return "Entrega realizada com sucesso!";
             default: return "Processando seu pedido...";
         }
     }
