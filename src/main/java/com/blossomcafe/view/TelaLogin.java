@@ -128,7 +128,7 @@ public class TelaLogin {
 
         // ================= SCENE ==================
         Scene scene = new Scene(layoutPrincipal, 500, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/login.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
         stage.setTitle("Blossom Café - Login");
         stage.setScene(scene);

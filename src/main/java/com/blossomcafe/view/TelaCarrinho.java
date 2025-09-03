@@ -5,6 +5,7 @@ import com.blossomcafe.controller.ProdutoController;
 import com.blossomcafe.model.Cliente;
 import com.blossomcafe.model.Pedido;
 import com.blossomcafe.model.Produto;
+import com.blossomcafe.util.Carrinho;
 import com.blossomcafe.util.Sessao;
 
 import javafx.geometry.Insets;
@@ -43,12 +44,12 @@ public class TelaCarrinho {
         this.produtoController = new ProdutoController();
         this.cliente = Sessao.getClienteLogado();
         this.labelContadorCarrinho = labelContadorCarrinho;
-        this.pedidoAtual = obterPedidoAtual();
+        this.pedidoAtual = Carrinho.getPedidoAtual();
+
     }
 
     private Pedido obterPedidoAtual() {
-        // Em uma implementação real, você buscaria o pedido em andamento do cliente
-        // Por enquanto, vamos criar um novo pedido
+        // ajustar
         Pedido pedido = new Pedido(gerarIdPedido());
         return pedido;
     }
@@ -167,7 +168,7 @@ public class TelaCarrinho {
 
         // Eventos dos botões
         btnHome.setOnAction(e -> {
-            TelaProdutos telaProdutos = new TelaProdutos(stage);
+            TelaProdutos telaProdutos = new TelaProdutos(stage, cliente);
             telaProdutos.mostrar();
         });
         
@@ -289,7 +290,7 @@ public class TelaCarrinho {
         btnContinuar.setStyle("-fx-background-color: transparent; -fx-text-fill: #4C2B0B; -fx-border-color: #4C2B0B; " +
                             "-fx-border-width: 1; -fx-border-radius: 25; -fx-padding: 10 20; -fx-font-size: 14;");
         btnContinuar.setOnAction(e -> {
-            TelaProdutos telaProdutos = new TelaProdutos(stage);
+            TelaProdutos telaProdutos = new TelaProdutos(stage, cliente);
             telaProdutos.mostrar();
         });
 
@@ -457,7 +458,7 @@ public class TelaCarrinho {
         labelTotal.setText(String.format("R$ %.2f", total));
     }
 
-    private void atualizarContadorCarrinho() {
+    public void atualizarContadorCarrinho() {
         if (labelContadorCarrinho != null) {
             int quantidade = pedidoAtual.getQuantidadeProdutos();
             labelContadorCarrinho.setText(quantidade > 0 ? String.valueOf(quantidade) : "");
@@ -465,7 +466,7 @@ public class TelaCarrinho {
         }
     }
 
-    private void finalizarPedido() {
+    public void finalizarPedido() {
         if (pedidoAtual.getProdutos().isEmpty()) {
             mostrarAlerta("Carrinho Vazio", "Adicione produtos ao carrinho antes de finalizar o pedido.");
             return;

@@ -1,6 +1,7 @@
 package com.blossomcafe.view;
 
 import com.blossomcafe.model.Cliente;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,7 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -94,7 +99,7 @@ public class TelaPerfil {
         layoutPrincipal.setBackground(background);
 
         Scene scene = new Scene(layoutPrincipal, 400, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/perfil.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
         stage.setTitle("Perfil - " + cliente.getNome());
         stage.setScene(scene);

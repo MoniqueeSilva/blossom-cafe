@@ -1,1 +1,21 @@
+# Arquivos compilados
 target/
+*.class
+bin/
+build/
+
+# Arquivos de IDE
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+
+# Logs
+*.log
+logs/
+
+# Arquivos temporários
+*.tmp
+*.temp

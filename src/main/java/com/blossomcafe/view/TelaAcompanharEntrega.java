@@ -1,6 +1,7 @@
 package com.blossomcafe.view;
 
 import com.blossomcafe.model.Pedido;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -12,7 +13,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -128,7 +132,7 @@ public class TelaAcompanharEntrega {
         Scene scene = new Scene(containerPrincipal, 550, 700);
 
         try {
-            scene.getStylesheets().add(getClass().getResource("/css/style-acompanhamento.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
         } catch (Exception e) {
             System.out.println("CSS não carregado: " + e.getMessage());
         }
